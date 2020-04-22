@@ -10,7 +10,7 @@ import ch.bader.budget.server.entity.Transaction;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
 
-	@Query("SELECT t FROM Transaction t WHERE t.date < ?1 AND t.date > ?2")
-	List<Transaction> findAllTransactionsInInterval(LocalDate from, LocalDate to);
+	@Query("SELECT t FROM Transaction t WHERE t.date < ?1 AND t.date > ?2 AND (t.creditedAccount = ?3 OR t.debitedAccount = ?3)")
+	List<Transaction> findAllTransactionsInInterval(LocalDate from, LocalDate to, int accountId);
 
 }

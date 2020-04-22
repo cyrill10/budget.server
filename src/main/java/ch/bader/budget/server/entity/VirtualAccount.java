@@ -1,28 +1,23 @@
 package ch.bader.budget.server.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.springframework.lang.NonNull;
 
-import ch.bader.budget.server.type.AccountType;
-
 @Entity
-public class VirtualAccount implements Account {
+public class VirtualAccount implements Account<VirtualAccount> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-
-	@NonNull
-	@Enumerated(EnumType.STRING)
-	private AccountType accountType;
 
 	@NonNull
 	private String name;
@@ -31,20 +26,17 @@ public class VirtualAccount implements Account {
 	private float balance;
 
 	@NonNull
+	@ManyToOne
 	private RealAccount underlyingAccount;
 
-	private LocalDateTime balanceDate;
+	@OneToMany
+	private List<Transaction> creditedTransactions;
+
+	@OneToMany
+	private List<Transaction> debitedTransactions;
 
 	public Integer getId() {
 		return id;
-	}
-
-	public AccountType getAccountType() {
-		return accountType;
-	}
-
-	public void setAccountType(AccountType accountType) {
-		this.accountType = accountType;
 	}
 
 	public String getName() {
@@ -53,14 +45,6 @@ public class VirtualAccount implements Account {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public LocalDateTime getBalanceDate() {
-		return balanceDate;
-	}
-
-	public void setBalanceDate(LocalDateTime balanceDate) {
-		this.balanceDate = balanceDate;
 	}
 
 	public float getBalance() {
@@ -83,5 +67,10 @@ public class VirtualAccount implements Account {
 	public float getBalance(LocalDateTime date) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public int compareTo(VirtualAccount o) {
+		return this.getName().compareTo(o.getName());
 	}
 }

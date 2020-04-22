@@ -2,45 +2,88 @@ package ch.bader.budget.server.entity;
 
 import java.time.LocalDate;
 
+import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
+import javax.persistence.Transient;
 
 import org.springframework.lang.NonNull;
 
+import ch.bader.budget.server.type.EnumUtil;
 import ch.bader.budget.server.type.PaymentStatus;
 import ch.bader.budget.server.type.PaymentType;
 import ch.bader.budget.server.type.TransactionIndication;
 
 @Entity
-public class Transaction {
+public class Transaction implements Comparable<Transaction> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
 	@NonNull
+	@ManyToOne
 	private VirtualAccount creditedAccount;
 
 	@NonNull
+	@ManyToOne
 	private VirtualAccount debitedAccount;
 
 	@NonNull
 	private LocalDate date;
 
-	@NonNull
+	@Basic
+	private int paymentStatusValue;
+
+	@Transient
 	private PaymentStatus paymentStatus;
 
-	@NonNull
+	@Basic
+	private int indicationValue;
+
+	@Transient
 	private TransactionIndication indication;
 
-	@NonNull
+	@Basic
+	private int paymentTypeValue;
+
+	@Transient
 	private PaymentType paymentType;
 
 	private float budgetedAmount;
 
 	private float effectiveAmount;
+
+	@PostLoad
+	void fillTransient() {
+		if (paymentStatusValue > 0) {
+			this.paymentStatus = EnumUtil.getEnumForValue(PaymentStatus.class, paymentStatusValue);
+		}
+		if (paymentTypeValue > 0) {
+			this.paymentType = EnumUtil.getEnumForValue(PaymentType.class, paymentTypeValue);
+		}
+		if (indicationValue > 0) {
+			this.indication = EnumUtil.getEnumForValue(TransactionIndication.class, indicationValue);
+		}
+	}
+
+	@PrePersist
+	void fillPersistent() {
+		if (paymentStatus != null) {
+			this.paymentStatusValue = paymentStatus.getValue();
+		}
+		if (paymentType != null) {
+			this.paymentTypeValue = paymentType.getValue();
+		}
+		if (indication != null) {
+			this.indicationValue = indication.getValue();
+		}
+	}
 
 	public Transaction(VirtualAccount creditedAccount, VirtualAccount debitedAccount, LocalDate date) {
 		this.creditedAccount = creditedAccount;
@@ -114,5 +157,11 @@ public class Transaction {
 
 	public void setPaymentType(PaymentType paymentType) {
 		this.paymentType = paymentType;
+	}
+
+	@Override
+	public int compareTo(Transaction o) {
+		return this.getDate().compareTo(o.getDate());
+
 	}
 }
