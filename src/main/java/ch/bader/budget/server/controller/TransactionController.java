@@ -1,5 +1,6 @@
 package ch.bader.budget.server.controller;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,12 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.bader.budget.server.entity.Transaction;
 import ch.bader.budget.server.repository.TransactionRepository;
 import ch.bader.budget.server.repository.VirtualAccountRepository;
+import ch.bader.budget.server.time.MonthGenerator;
 import ch.bader.budget.server.type.PaymentStatus;
 import ch.bader.budget.server.type.PaymentType;
 import ch.bader.budget.server.type.TransactionIndication;
@@ -40,6 +43,12 @@ public class TransactionController {
 		return transactionRepository.findAll();
 	}
 
+	@GetMapping(path = "/listByMonthAndAccont")
+	public Iterable<Transaction> getAllTransactionsForMonthAndAccount(@RequestParam LocalDate from,
+			@RequestParam int accountId) {
+		return transactionRepository.findAllTransactionsInInterval(from, from.plusMonths(1), accountId);
+	}
+
 	@GetMapping(path = "/type/list")
 	public List<PaymentType> getAllPaymentTypes() {
 		return Arrays.asList(PaymentType.values());
@@ -53,6 +62,11 @@ public class TransactionController {
 	@GetMapping(path = "/status/list")
 	public List<PaymentStatus> getAllStatusTypes() {
 		return Arrays.asList(PaymentStatus.values());
+	}
+
+	@GetMapping(path = "/month/list")
+	public List<LocalDate> getAllMonths() {
+		return MonthGenerator.getallMonths();
 	}
 
 }
