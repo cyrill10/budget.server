@@ -1,15 +1,20 @@
 package ch.bader.budget.server.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
 
 import org.springframework.lang.NonNull;
@@ -23,19 +28,25 @@ import ch.bader.budget.server.type.TransactionIndication;
 public class Transaction implements Comparable<Transaction> {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@SequenceGenerator(name = "transaction_seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_seq")
 	private Integer id;
 
 	@NonNull
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "credited_account_id")
 	private VirtualAccount creditedAccount;
 
 	@NonNull
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "debited_account_id")
 	private VirtualAccount debitedAccount;
 
 	@NonNull
 	private LocalDate date;
+
+	@NonNull
+	private String description;
 
 	@Basic
 	private int paymentStatusValue;
@@ -58,6 +69,10 @@ public class Transaction implements Comparable<Transaction> {
 	private float budgetedAmount;
 
 	private float effectiveAmount;
+
+	private LocalDateTime creationDate;
+
+	private LocalDateTime updateDate;
 
 	@PostLoad
 	void fillTransient() {
@@ -83,12 +98,12 @@ public class Transaction implements Comparable<Transaction> {
 		if (indication != null) {
 			this.indicationValue = indication.getValue();
 		}
+		creationDate = LocalDateTime.now();
 	}
 
-	public Transaction(VirtualAccount creditedAccount, VirtualAccount debitedAccount, LocalDate date) {
-		this.creditedAccount = creditedAccount;
-		this.debitedAccount = debitedAccount;
-		this.date = date;
+	@PreUpdate
+	void fillUpdate() {
+		updateDate = LocalDateTime.now();
 	}
 
 	public VirtualAccount getCreditedAccount() {
@@ -159,9 +174,37 @@ public class Transaction implements Comparable<Transaction> {
 		this.paymentType = paymentType;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public LocalDateTime getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(LocalDateTime creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public LocalDateTime getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(LocalDateTime updateDate) {
+		this.updateDate = updateDate;
+	}
+
 	@Override
 	public int compareTo(Transaction o) {
 		return this.getDate().compareTo(o.getDate());
 
+	}
+
+	public void updateEnums() {
+		fillPersistent();
 	}
 }

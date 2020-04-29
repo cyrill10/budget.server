@@ -31,8 +31,13 @@ public class VirtualAccountController {
 	}
 
 	@PutMapping(path = "/update")
-	public VirtualAccount updateAccount(@RequestBody VirtualAccount account) {
-		return virtualAccountRepository.save(account);
+	public VirtualAccount updateAccount(@RequestBody VirtualAccount virtualAccount) {
+		return virtualAccountRepository.save(virtualAccount);
+	}
+
+	@GetMapping(path = "/")
+	public VirtualAccount getAccountById(@RequestParam Integer id) {
+		return virtualAccountRepository.findById(id).orElseThrow();
 	}
 
 	@GetMapping(path = "/list")

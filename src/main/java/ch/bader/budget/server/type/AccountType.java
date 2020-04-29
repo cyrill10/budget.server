@@ -1,11 +1,15 @@
 package ch.bader.budget.server.type;
 
+import java.util.Arrays;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum AccountType implements ValueEnum<Integer> {
 
 	CHECKING(1, "Checking"), SAVING(2, "Saving", 1), CREDIT(3, "Credit"), ALIEN(4, "Alien");
+
+	private static AccountType[] internalTypes = { CHECKING, SAVING, CREDIT };
 
 	private Integer value;
 
@@ -50,6 +54,11 @@ public enum AccountType implements ValueEnum<Integer> {
 		}
 
 		return null;
+	}
+
+	public boolean isInternalAccount() {
+		return Arrays.asList(internalTypes).contains(this);
+
 	}
 
 }
