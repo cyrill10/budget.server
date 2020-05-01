@@ -207,4 +207,20 @@ public class Transaction implements Comparable<Transaction> {
 	public void updateEnums() {
 		fillPersistent();
 	}
+
+	public Transaction createDublicate(LocalDate newDate) {
+		Transaction newTransaction = new Transaction();
+		newTransaction.creditedAccount = this.creditedAccount;
+		newTransaction.debitedAccount = this.debitedAccount;
+		newTransaction.description = this.description;
+		newTransaction.paymentStatus = this.paymentStatus;
+		newTransaction.indication = this.indication;
+		newTransaction.paymentType = this.paymentType;
+		newTransaction.budgetedAmount = this.budgetedAmount;
+		newTransaction.effectiveAmount = this.effectiveAmount;
+
+		newTransaction.date = newDate;
+
+		return newTransaction;
+	}
 }

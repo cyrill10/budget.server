@@ -3,6 +3,7 @@ package ch.bader.budget.server.controller;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,8 +46,8 @@ public class TransactionController {
 
 	@PostMapping(path = "/add")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createTransaction(@RequestBody Transaction transaction) {
-		transactionRepository.save(transaction);
+	public Transaction createTransaction(@RequestBody Transaction transaction) {
+		return transactionRepository.save(transaction);
 	}
 
 	@PutMapping(path = "/update")
@@ -58,6 +59,20 @@ public class TransactionController {
 	@DeleteMapping(path = "/delete")
 	public void deleteTransaction(@RequestParam Integer transactionId) {
 		transactionRepository.deleteById(transactionId);
+	}
+
+	@PostMapping(path = "/dublicate")
+	@ResponseStatus(HttpStatus.CREATED)
+	public void dublicateTransaction(@RequestBody Transaction transaction) {
+		LocalDate startDate = transaction.getDate();
+		LocalDate endDate = transaction.getDate().plusYears(1).withDayOfMonth(1).withMonth(1);
+		List<Transaction> newTransactions = new ArrayList<>();
+
+		while (startDate.isBefore(endDate)) {
+			startDate = startDate.plusMonths(1);
+			newTransactions.add(transaction.createDublicate(startDate));
+		}
+		transactionRepository.saveAll(newTransactions);
 	}
 
 	@GetMapping(path = "/")
