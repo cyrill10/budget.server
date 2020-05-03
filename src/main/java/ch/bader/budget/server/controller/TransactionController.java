@@ -26,7 +26,6 @@ import ch.bader.budget.server.json.TransactionElement;
 import ch.bader.budget.server.repository.RealAccountRepository;
 import ch.bader.budget.server.repository.TransactionRepository;
 import ch.bader.budget.server.repository.VirtualAccountRepository;
-import ch.bader.budget.server.time.MonthGenerator;
 import ch.bader.budget.server.type.PaymentStatus;
 import ch.bader.budget.server.type.PaymentType;
 import ch.bader.budget.server.type.TransactionIndication;
@@ -125,11 +124,6 @@ public class TransactionController {
 	@GetMapping(path = "/status/list")
 	public List<PaymentStatus> getAllStatusTypes() {
 		return Arrays.asList(PaymentStatus.values());
-	}
-
-	@GetMapping(path = "/month/list")
-	public List<LocalDate> getAllMonths() {
-		return MonthGenerator.getallMonths();
 	}
 
 }
