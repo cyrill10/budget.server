@@ -27,10 +27,10 @@ public class VirtaulAccountMonthData {
 
 	protected VirtaulAccountMonthData(VirtualAccount virtualAccount, LocalDate startDate) {
 		Predicate<Transaction> transactionInMonth = new TransactionInMonthPredicate(startDate);
-		List<Transaction> credited = virtualAccount.getCreditedTransactions().stream().filter(transactionInMonth)
-				.collect(Collectors.toList());
-		List<Transaction> debited = virtualAccount.getDebitedTransactions().stream().filter(transactionInMonth)
-				.collect(Collectors.toList());
+		List<Transaction> credited = virtualAccount.getCreditedTransactions().stream().distinct()
+				.filter(transactionInMonth).collect(Collectors.toList());
+		List<Transaction> debited = virtualAccount.getDebitedTransactions().stream().distinct()
+				.filter(transactionInMonth).collect(Collectors.toList());
 
 		this.balanceBefore = VirtaulAccountCalculator.getBalanceAt(virtualAccount, startDate,
 				new EffectiveAmountFunction());
@@ -44,11 +44,11 @@ public class VirtaulAccountMonthData {
 		this.budgetedBalanceAfter = VirtaulAccountCalculator.getBalanceAfterTransactions(budgetedBalanceBefore,
 				credited, debited, new BudgetedAmountFunction());
 
-		this.projection = VirtaulAccountCalculator.getBalanceAt(virtualAccount, startDate.withMonth(12),
-				new EffectiveAmountFunction());
+		this.projection = VirtaulAccountCalculator.getBalanceAt(virtualAccount,
+				startDate.withMonth(1).withDayOfMonth(1).plusYears(1), new EffectiveAmountFunction());
 
-		this.budgetedProjection = VirtaulAccountCalculator.getBalanceAt(virtualAccount, startDate.withMonth(12),
-				new BudgetedAmountFunction());
+		this.budgetedProjection = VirtaulAccountCalculator.getBalanceAt(virtualAccount,
+				startDate.withMonth(1).withDayOfMonth(1).plusYears(1), new BudgetedAmountFunction());
 
 	}
 

@@ -1,10 +1,6 @@
 package ch.bader.budget.server.json;
 
-import java.util.List;
-
-import ch.bader.budget.server.calculation.Balance;
 import ch.bader.budget.server.calculation.VirtaulAccountMonthData;
-import ch.bader.budget.server.entity.RealAccount;
 import ch.bader.budget.server.entity.VirtualAccount;
 
 public class OverviewElement {
@@ -44,34 +40,18 @@ public class OverviewElement {
 		this.id = account.getId();
 	}
 
-	public OverviewElement(RealAccount account, List<OverviewElement> elements) {
-		this.name = account.getName();
-		Balance balance = new Balance(0);
-		elements.stream().map(e -> e.balanceBefore).forEach(balance::add);
-		balanceBefore = balance.getBalance();
-
-		balance = new Balance(0);
-		elements.stream().map(e -> e.balanceAfter).forEach(balance::add);
-		balanceAfter = balance.getBalance();
-
-		balance = new Balance(0);
-		elements.stream().map(e -> e.budgetedBalanceBefore).forEach(balance::add);
-		budgetedBalanceBefore = balance.getBalance();
-
-		balance = new Balance(0);
-		elements.stream().map(e -> e.budgetedBalanceAfter).forEach(balance::add);
-		budgetedBalanceAfter = balance.getBalance();
-
-		balance = new Balance(0);
-		elements.stream().map(e -> e.projection).forEach(balance::add);
-		projection = balance.getBalance();
-
-		balance = new Balance(0);
-		elements.stream().map(e -> e.budgetedProjection).forEach(balance::add);
-		budgetedProjection = balance.getBalance();
-
-		this.isRealAccount = true;
-		this.id = account.getId();
+	public OverviewElement(String name, Number balanceBefore, Number balanceAfter, Number budgetedBalanceBefore,
+			Number budgetedBalanceAfter, Number projection, Number budgetedProjection, boolean isRealAccount,
+			Number id) {
+		this.name = name;
+		this.balanceBefore = balanceBefore;
+		this.balanceAfter = balanceAfter;
+		this.budgetedBalanceBefore = budgetedBalanceBefore;
+		this.budgetedBalanceAfter = budgetedBalanceAfter;
+		this.projection = projection;
+		this.budgetedProjection = budgetedProjection;
+		this.isRealAccount = isRealAccount;
+		this.id = id;
 	}
 
 	public String getName() {

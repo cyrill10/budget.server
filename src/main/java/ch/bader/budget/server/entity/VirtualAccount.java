@@ -123,4 +123,9 @@ public class VirtualAccount implements Account<VirtualAccount> {
 	public int compareTo(VirtualAccount o) {
 		return this.getName().compareTo(o.getName());
 	}
+
+	@Override
+	public String toString() {
+		return this.getName() + " (" + this.getUnderlyingAccount().getName() + ")";
+	}
 }

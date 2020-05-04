@@ -27,7 +27,7 @@ public class TransactionCalculator {
 				VirtaulAccountCalculator.getBalanceAt(virtualAccounts, from, budgetedAmountFunction));
 		TransactionElement before = new TransactionElement("Before", balance.getBalance(),
 				budgetedBalance.getBalance());
-		LinkedList<TransactionElement> transactionElements = transactions.stream()
+		LinkedList<TransactionElement> transactionElements = transactions.stream().distinct()
 				.map(t -> createTransactionElement(t, virtualAccounts, balance, budgetedBalance))
 				.collect(Collectors.toCollection(LinkedList::new));
 		TransactionElement after = new TransactionElement("After", balance.getBalance(), budgetedBalance.getBalance());
@@ -65,7 +65,7 @@ public class TransactionCalculator {
 				VirtaulAccountCalculator.getBalanceAt(virtualAccount, from, budgetedAmountFunction));
 		TransactionElement before = new TransactionElement("Before", balance.getBalance(),
 				budgetedBalance.getBalance());
-		LinkedList<TransactionElement> transactionElements = transactions.stream()
+		LinkedList<TransactionElement> transactionElements = transactions.stream().distinct()
 				.map(t -> createTransactionElement(t, virtualAccount, balance, budgetedBalance))
 				.collect(Collectors.toCollection(LinkedList::new));
 		TransactionElement after = new TransactionElement("After", balance.getBalance(), budgetedBalance.getBalance());

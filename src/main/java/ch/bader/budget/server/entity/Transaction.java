@@ -204,6 +204,17 @@ public class Transaction implements Comparable<Transaction> {
 
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Id: " + this.getId());
+		sb.append(" Date: " + this.getDate().toString());
+		sb.append(" B-Amount: " + this.getBudgetedAmount());
+		sb.append(" From: " + this.getCreditedAccount().getName());
+		sb.append(" To: " + this.getDebitedAccount().getName());
+		return sb.toString();
+	}
+
 	public void updateEnums() {
 		fillPersistent();
 	}

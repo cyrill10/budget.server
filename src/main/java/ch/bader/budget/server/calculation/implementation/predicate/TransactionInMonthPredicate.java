@@ -15,7 +15,7 @@ public class TransactionInMonthPredicate implements Predicate<Transaction> {
 
 	@Override
 	public boolean test(Transaction t) {
-		return t.getDate().isAfter(date) && t.getDate().isBefore(date.plusMonths(1));
+		return t.getDate().isAfter(date.minusDays(1)) && t.getDate().isBefore(date.plusMonths(1));
 	}
 
 }

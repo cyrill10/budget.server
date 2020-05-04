@@ -16,9 +16,9 @@ public class VirtaulAccountCalculator {
 		Balance balance = new Balance(account.getBalance());
 		Predicate<Transaction> beforePredicate = new TransactionBeforePredicate(date);
 
-		account.getCreditedTransactions().stream().filter(beforePredicate).map(balanceTypeFunction)
+		account.getCreditedTransactions().stream().distinct().filter(beforePredicate).map(balanceTypeFunction)
 				.forEach(balance::subtract);
-		account.getDebitedTransactions().stream().filter(beforePredicate).map(balanceTypeFunction)
+		account.getDebitedTransactions().stream().distinct().filter(beforePredicate).map(balanceTypeFunction)
 				.forEach(balance::add);
 		return balance.getBalance();
 
@@ -27,7 +27,9 @@ public class VirtaulAccountCalculator {
 	public static float getBalanceAt(List<VirtualAccount> accounts, LocalDate date,
 			Function<Transaction, Number> balanceTypeFunction) {
 		Balance balance = new Balance(0);
-		accounts.stream().forEach(account -> balance.add(getBalanceAt(account, date, balanceTypeFunction)));
+		accounts.stream().distinct().forEach(account -> {
+			balance.add(getBalanceAt(account, date, balanceTypeFunction));
+		});
 		return balance.getBalance();
 
 	}
@@ -36,8 +38,8 @@ public class VirtaulAccountCalculator {
 			Function<Transaction, Number> balanceTypeFunction) {
 		Balance balance = new Balance(value);
 
-		credited.stream().map(balanceTypeFunction).forEach(balance::subtract);
-		debited.stream().map(balanceTypeFunction).forEach(balance::add);
+		credited.stream().distinct().map(balanceTypeFunction).forEach(balance::subtract);
+		debited.stream().distinct().map(balanceTypeFunction).forEach(balance::add);
 		return balance.getBalance();
 
 	}
