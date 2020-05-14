@@ -2,7 +2,7 @@ package ch.bader.budget.server.json;
 
 import ch.bader.budget.server.entity.Transaction;
 
-public class TransactionElement {
+public class TransactionElement implements Comparable<TransactionElement> {
 
 	private String name;
 	private Float amount;
@@ -59,5 +59,11 @@ public class TransactionElement {
 
 	public Integer getId() {
 		return id;
+	}
+
+	@Override
+	public int compareTo(TransactionElement o) {
+		return this.name.compareTo(o.name);
+
 	}
 }

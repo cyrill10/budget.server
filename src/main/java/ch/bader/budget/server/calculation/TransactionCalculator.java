@@ -28,7 +28,7 @@ public class TransactionCalculator {
 		TransactionElement before = new TransactionElement("Before", balance.getBalance(),
 				budgetedBalance.getBalance());
 		LinkedList<TransactionElement> transactionElements = transactions.stream().distinct()
-				.map(t -> createTransactionElement(t, virtualAccounts, balance, budgetedBalance))
+				.map(t -> createTransactionElement(t, virtualAccounts, balance, budgetedBalance)).sorted()
 				.collect(Collectors.toCollection(LinkedList::new));
 		TransactionElement after = new TransactionElement("After", balance.getBalance(), budgetedBalance.getBalance());
 		transactionElements.push(before);
@@ -66,7 +66,7 @@ public class TransactionCalculator {
 		TransactionElement before = new TransactionElement("Before", balance.getBalance(),
 				budgetedBalance.getBalance());
 		LinkedList<TransactionElement> transactionElements = transactions.stream().distinct()
-				.map(t -> createTransactionElement(t, virtualAccount, balance, budgetedBalance))
+				.map(t -> createTransactionElement(t, virtualAccount, balance, budgetedBalance)).sorted()
 				.collect(Collectors.toCollection(LinkedList::new));
 		TransactionElement after = new TransactionElement("After", balance.getBalance(), budgetedBalance.getBalance());
 		transactionElements.push(before);
