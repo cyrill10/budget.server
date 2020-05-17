@@ -13,6 +13,11 @@ public class VirtaulAccountCalculator {
 
 	public static float getBalanceAt(VirtualAccount account, LocalDate date,
 			Function<Transaction, Number> balanceTypeFunction) {
+
+		if (account.getUnderlyingAccount().getAccountType().isAlienAccount()) {
+			return 0;
+		}
+
 		Balance balance = new Balance(account.getBalance());
 		Predicate<Transaction> beforePredicate = new TransactionBeforePredicate(date);
 

@@ -200,7 +200,7 @@ public class Transaction implements Comparable<Transaction> {
 
 	@Override
 	public int compareTo(Transaction o) {
-		return this.getDate().compareTo(o.getDate());
+		return this.id.compareTo(o.id);
 
 	}
 

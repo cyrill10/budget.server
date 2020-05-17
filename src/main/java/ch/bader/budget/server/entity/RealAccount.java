@@ -110,12 +110,6 @@ public class RealAccount implements Account<RealAccount> {
 	}
 
 	@Override
-	public float getBalance(LocalDateTime date) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public int compareTo(RealAccount o) {
 		int compareType = this.getAccountType().getValue().compareTo(o.getAccountType().getValue());
 		if (compareType == 0) {

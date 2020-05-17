@@ -63,7 +63,7 @@ public class TransactionElement implements Comparable<TransactionElement> {
 
 	@Override
 	public int compareTo(TransactionElement o) {
-		return this.name.compareTo(o.name);
+		return this.id.compareTo(o.id);
 
 	}
 }

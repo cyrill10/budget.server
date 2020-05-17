@@ -114,12 +114,6 @@ public class VirtualAccount implements Account<VirtualAccount> {
 	}
 
 	@Override
-	public float getBalance(LocalDateTime date) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public int compareTo(VirtualAccount o) {
 		return this.getName().compareTo(o.getName());
 	}
