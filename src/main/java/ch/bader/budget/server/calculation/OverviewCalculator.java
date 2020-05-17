@@ -28,37 +28,38 @@ public class OverviewCalculator {
 
 	public static OverviewElement getOverviewElementFromVirtualAccount(VirtualAccount account,
 			LocalDate withDayOfMonth) {
-		VirtaulAccountMonthData data = new VirtaulAccountMonthData(account, withDayOfMonth);
+		OverviewData data = new OverviewData(account, withDayOfMonth);
 		return new OverviewElement(account, data);
 	}
 
 	private static OverviewElement createOverviewElement(RealAccount account, List<OverviewElement> elements) {
 		Balance balance = new Balance(0);
-		elements.stream().distinct().map(e -> e.getBalanceBefore()).forEach(balance::add);
-		float balanceBefore = balance.getBalance();
-
-		balance = new Balance(0);
 		elements.stream().distinct().map(e -> e.getBalanceAfter()).forEach(balance::add);
 		float balanceAfter = balance.getBalance();
-
-		balance = new Balance(0);
-		elements.stream().distinct().map(e -> e.getBudgetedBalanceBefore()).forEach(balance::add);
-		float budgetedBalanceBefore = balance.getBalance();
 
 		balance = new Balance(0);
 		elements.stream().distinct().map(e -> e.getBudgetedBalanceAfter()).forEach(balance::add);
 		float budgetedBalanceAfter = balance.getBalance();
 
-		balance = new Balance(0);
-		elements.stream().distinct().map(e -> e.getProjection()).forEach(balance::add);
-		float projection = balance.getBalance();
+		Number projection = 0;
+		Number budgetedProjection = 0;
 
-		balance = new Balance(0);
-		elements.stream().distinct().map(e -> e.getBudgetedProjection()).forEach(balance::add);
-		float budgetedProjection = balance.getBalance();
+		if (account.isPrebudgetedAccount()) {
+			projection = budgetedBalanceAfter - balanceAfter;
+			budgetedProjection = null;
 
-		return new OverviewElement(account.getName(), balanceBefore, balanceAfter, budgetedBalanceBefore,
-				budgetedBalanceAfter, projection, budgetedProjection, true, account.getId());
+		} else {
+			balance = new Balance(0);
+			elements.stream().distinct().map(e -> e.getProjection()).forEach(balance::add);
+			projection = balance.getBalance();
+
+			balance = new Balance(0);
+			elements.stream().distinct().map(e -> e.getBudgetedProjection()).forEach(balance::add);
+			budgetedProjection = balance.getBalance();
+		}
+
+		return new OverviewElement(account.getName(), balanceAfter, budgetedBalanceAfter, projection,
+				budgetedProjection, true, account.getId());
 	}
 
 }

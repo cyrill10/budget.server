@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>ch.bader.budget</groupId>
 	<artifactId>server</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<name>server</name>
 	<description>Budget Server</description>
 

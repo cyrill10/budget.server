@@ -109,6 +109,10 @@ public class RealAccount implements Account<RealAccount> {
 		return virtualAccounts.stream().sorted().collect(Collectors.toList());
 	}
 
+	public boolean isPrebudgetedAccount() {
+		return this.getAccountType().isPrebudgetedAccount();
+	}
+
 	@Override
 	public int compareTo(RealAccount o) {
 		int compareType = this.getAccountType().getValue().compareTo(o.getAccountType().getValue());

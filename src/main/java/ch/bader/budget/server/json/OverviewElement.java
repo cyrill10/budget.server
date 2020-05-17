@@ -1,26 +1,22 @@
 package ch.bader.budget.server.json;
 
-import ch.bader.budget.server.calculation.VirtaulAccountMonthData;
+import ch.bader.budget.server.calculation.OverviewData;
 import ch.bader.budget.server.entity.VirtualAccount;
 
 public class OverviewElement {
 
 	private String name;
-	private Number balanceBefore;
 	private Number balanceAfter;
-	private Number budgetedBalanceBefore;
 	private Number budgetedBalanceAfter;
 	private Number projection;
 	private Number budgetedProjection;
 	private boolean isRealAccount;
 	private Number id;
 
-	public OverviewElement(String name, Number balanceBefore, Number balanceAfter, Number budgetedBalanceBefore,
-			Number budgetedBalanceAfter, Number projection, Number budgetedProjection, Number id) {
+	public OverviewElement(String name, Number balanceAfter, Number budgetedBalanceAfter, Number projection,
+			Number budgetedProjection, Number id) {
 		this.name = name;
-		this.balanceBefore = balanceBefore;
 		this.balanceAfter = balanceAfter;
-		this.budgetedBalanceBefore = budgetedBalanceBefore;
 		this.budgetedBalanceAfter = budgetedBalanceAfter;
 		this.projection = projection;
 		this.budgetedProjection = budgetedProjection;
@@ -28,11 +24,9 @@ public class OverviewElement {
 		this.id = id;
 	}
 
-	public OverviewElement(VirtualAccount account, VirtaulAccountMonthData data) {
+	public OverviewElement(VirtualAccount account, OverviewData data) {
 		this.name = account.getName();
-		this.balanceBefore = data.getBalanceBefore();
 		this.balanceAfter = data.getBalanceAfter();
-		this.budgetedBalanceBefore = data.getBudgetedBalanceBefore();
 		this.budgetedBalanceAfter = data.getBudgetedBalanceAfter();
 		this.projection = data.getProjection();
 		this.budgetedProjection = data.getBudgetedProjection();
@@ -40,13 +34,10 @@ public class OverviewElement {
 		this.id = account.getId();
 	}
 
-	public OverviewElement(String name, Number balanceBefore, Number balanceAfter, Number budgetedBalanceBefore,
-			Number budgetedBalanceAfter, Number projection, Number budgetedProjection, boolean isRealAccount,
-			Number id) {
+	public OverviewElement(String name, Number balanceAfter, Number budgetedBalanceAfter, Number projection,
+			Number budgetedProjection, boolean isRealAccount, Number id) {
 		this.name = name;
-		this.balanceBefore = balanceBefore;
 		this.balanceAfter = balanceAfter;
-		this.budgetedBalanceBefore = budgetedBalanceBefore;
 		this.budgetedBalanceAfter = budgetedBalanceAfter;
 		this.projection = projection;
 		this.budgetedProjection = budgetedProjection;
@@ -62,28 +53,12 @@ public class OverviewElement {
 		this.name = name;
 	}
 
-	public Number getBalanceBefore() {
-		return balanceBefore;
-	}
-
-	public void setBalanceBefore(Number balanceBefore) {
-		this.balanceBefore = balanceBefore;
-	}
-
 	public Number getBalanceAfter() {
 		return balanceAfter;
 	}
 
 	public void setBalanceAfter(Number balanceAfter) {
 		this.balanceAfter = balanceAfter;
-	}
-
-	public Number getBudgetedBalanceBefore() {
-		return budgetedBalanceBefore;
-	}
-
-	public void setBudgetedBalanceBefore(Number budgetedBalanceBefore) {
-		this.budgetedBalanceBefore = budgetedBalanceBefore;
 	}
 
 	public Number getBudgetedBalanceAfter() {

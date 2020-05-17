@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.bader.budget.server.calculation.OverviewCalculator;
-import ch.bader.budget.server.calculation.implementation.predicate.InternalAccountPredicate;
+import ch.bader.budget.server.calculation.implementation.predicate.OverviewAccountPredicate;
 import ch.bader.budget.server.entity.RealAccount;
 import ch.bader.budget.server.json.OverviewElement;
 import ch.bader.budget.server.repository.RealAccountRepository;
@@ -28,7 +28,7 @@ public class OverviewController {
 	@GetMapping(path = "/list")
 	public Iterable<OverviewElement> getAllTransactions(@RequestParam long dateLong) {
 		LocalDate date = Instant.ofEpochMilli(dateLong).atZone(ZoneId.systemDefault()).toLocalDate();
-		List<RealAccount> accounts = realAccountRepository.findAll().stream().filter(new InternalAccountPredicate())
+		List<RealAccount> accounts = realAccountRepository.findAll().stream().filter(new OverviewAccountPredicate())
 				.collect(Collectors.toList());
 		return OverviewCalculator.getOverviewForMonth(accounts, date.withDayOfMonth(1));
 	}

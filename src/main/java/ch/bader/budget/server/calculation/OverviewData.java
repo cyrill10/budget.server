@@ -11,31 +11,27 @@ import ch.bader.budget.server.calculation.implementation.predicate.TransactionIn
 import ch.bader.budget.server.entity.Transaction;
 import ch.bader.budget.server.entity.VirtualAccount;
 
-public class VirtaulAccountMonthData {
+public class OverviewData {
 
-	private float balanceBefore;
+	private Number balanceAfter;
 
-	private float budgetedBalanceBefore;
+	private Number budgetedBalanceAfter;
 
-	private float balanceAfter;
+	private Number projection;
 
-	private float budgetedBalanceAfter;
+	private Number budgetedProjection;
 
-	private float projection;
-
-	private float budgetedProjection;
-
-	protected VirtaulAccountMonthData(VirtualAccount virtualAccount, LocalDate startDate) {
+	protected OverviewData(VirtualAccount virtualAccount, LocalDate startDate) {
 		Predicate<Transaction> transactionInMonth = new TransactionInMonthPredicate(startDate);
 		List<Transaction> credited = virtualAccount.getCreditedTransactions().stream().distinct()
 				.filter(transactionInMonth).collect(Collectors.toList());
 		List<Transaction> debited = virtualAccount.getDebitedTransactions().stream().distinct()
 				.filter(transactionInMonth).collect(Collectors.toList());
 
-		this.balanceBefore = VirtaulAccountCalculator.getBalanceAt(virtualAccount, startDate,
+		float balanceBefore = VirtaulAccountCalculator.getBalanceAt(virtualAccount, startDate,
 				new EffectiveAmountFunction());
 
-		this.budgetedBalanceBefore = VirtaulAccountCalculator.getBalanceAt(virtualAccount, startDate,
+		float budgetedBalanceBefore = VirtaulAccountCalculator.getBalanceAt(virtualAccount, startDate,
 				new BudgetedAmountFunction());
 
 		this.balanceAfter = VirtaulAccountCalculator.getBalanceAfterTransactions(balanceBefore, credited, debited,
@@ -44,43 +40,39 @@ public class VirtaulAccountMonthData {
 		this.budgetedBalanceAfter = VirtaulAccountCalculator.getBalanceAfterTransactions(budgetedBalanceBefore,
 				credited, debited, new BudgetedAmountFunction());
 
-		this.projection = VirtaulAccountCalculator.getBalanceAt(virtualAccount,
-				startDate.withMonth(1).withDayOfMonth(1).plusYears(1), new EffectiveAmountFunction());
+		if (virtualAccount.isPrebudgetedAccount()) {
+			this.projection = budgetedBalanceAfter.floatValue() - balanceAfter.floatValue();
+			this.budgetedProjection = null;
+		} else {
+			this.projection = VirtaulAccountCalculator.getBalanceAt(virtualAccount,
+					startDate.withMonth(1).withDayOfMonth(1).plusYears(1), new EffectiveAmountFunction());
 
-		this.budgetedProjection = VirtaulAccountCalculator.getBalanceAt(virtualAccount,
-				startDate.withMonth(1).withDayOfMonth(1).plusYears(1), new BudgetedAmountFunction());
-
+			this.budgetedProjection = VirtaulAccountCalculator.getBalanceAt(virtualAccount,
+					startDate.withMonth(1).withDayOfMonth(1).plusYears(1), new BudgetedAmountFunction());
+		}
 	}
 
-	public float getBudgetedBalanceBefore() {
-		return budgetedBalanceBefore;
-	}
-
-	public float getBalanceBefore() {
-		return balanceBefore;
-	}
-
-	public float getBalanceAfter() {
+	public Number getBalanceAfter() {
 		return balanceAfter;
 	}
 
-	public float getBudgetedBalanceAfter() {
+	public Number getBudgetedBalanceAfter() {
 		return budgetedBalanceAfter;
 	}
 
-	public float getProjection() {
+	public Number getProjection() {
 		return projection;
 	}
 
-	public void setProjection(float projection) {
+	public void setProjection(Number projection) {
 		this.projection = projection;
 	}
 
-	public float getBudgetedProjection() {
+	public Number getBudgetedProjection() {
 		return budgetedProjection;
 	}
 
-	public void setBudgetedProjection(float budgetedProjection) {
+	public void setBudgetedProjection(Number budgetedProjection) {
 		this.budgetedProjection = budgetedProjection;
 	}
 

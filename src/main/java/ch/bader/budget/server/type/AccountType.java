@@ -7,13 +7,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum AccountType implements ValueEnum<Integer> {
 
-	CHECKING(1, "Checking"), SAVING(2, "Saving", 1), CREDIT(3, "Credit"), ALIEN(4, "Alien"), GROCERIES(5, "Groceries");
+	CHECKING(1, "Checking"), SAVING(2, "Saving", 1), CREDIT(3, "Credit"), ALIEN(4, "Alien"),
+	PREBUDGETED(5, "Prebudgeted");
 
 	private static AccountType[] internalTypes = { CHECKING, SAVING, CREDIT };
 
-	private static AccountType[] groceriesTypes = { GROCERIES };
+	private static AccountType[] overviewTypes = { CHECKING, SAVING, CREDIT, PREBUDGETED };
 
-	private static AccountType[] alienTypes = { ALIEN, GROCERIES };
+	private static AccountType[] PrebudgetedTypes = { PREBUDGETED };
+
+	private static AccountType[] alienTypes = { ALIEN, PREBUDGETED };
 
 	private Integer value;
 
@@ -64,13 +67,16 @@ public enum AccountType implements ValueEnum<Integer> {
 		return Arrays.asList(internalTypes).contains(this);
 	}
 
-	public boolean isGroceriesAccount() {
-		return Arrays.asList(groceriesTypes).contains(this);
+	public boolean isPrebudgetedAccount() {
+		return Arrays.asList(PrebudgetedTypes).contains(this);
 	}
 
 	public boolean isAlienAccount() {
 		return Arrays.asList(alienTypes).contains(this);
+	}
 
+	public boolean isOverviewAccount() {
+		return Arrays.asList(overviewTypes).contains(this);
 	}
 
 }

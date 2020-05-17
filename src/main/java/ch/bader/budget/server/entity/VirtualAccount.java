@@ -113,6 +113,10 @@ public class VirtualAccount implements Account<VirtualAccount> {
 		return debitedTransactions.stream().sorted().collect(Collectors.toList());
 	}
 
+	public boolean isPrebudgetedAccount() {
+		return this.getUnderlyingAccount().isPrebudgetedAccount();
+	}
+
 	@Override
 	public int compareTo(VirtualAccount o) {
 		return this.getName().compareTo(o.getName());
