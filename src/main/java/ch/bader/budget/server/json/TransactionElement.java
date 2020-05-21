@@ -37,6 +37,16 @@ public class TransactionElement implements Comparable<TransactionElement> {
 		this.id = 0;
 	}
 
+	public TransactionElement(float in, float out, float budgetedIn, float budgetedOut) {
+		this.name = "In/Out";
+		this.balance = out;
+		this.budgetedBalance = budgetedOut;
+		this.hasAmount = true;
+		this.amount = in;
+		this.budgetedAmount = budgetedIn;
+		this.id = 0;
+	}
+
 	public boolean isHasAmount() {
 		return hasAmount;
 	}

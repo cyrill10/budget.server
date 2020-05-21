@@ -59,6 +59,11 @@ public class TransactionCalculator {
 
 	public static Iterable<TransactionElement> getTransactionsForMonth(VirtualAccount virtualAccount,
 			List<Transaction> transactions, LocalDate from) {
+		Balance in = new Balance(0);
+		Balance out = new Balance(0);
+		Balance budgetedIn = new Balance(0);
+		Balance budgetedOut = new Balance(0);
+
 		Balance balance = new Balance(
 				VirtaulAccountCalculator.getBalanceAt(virtualAccount, from, effectiveAmountFunction));
 		Balance budgetedBalance = new Balance(
@@ -66,11 +71,24 @@ public class TransactionCalculator {
 		TransactionElement before = new TransactionElement("Before", balance.getBalance(),
 				budgetedBalance.getBalance());
 		LinkedList<TransactionElement> transactionElements = transactions.stream().distinct()
-				.map(t -> createTransactionElement(t, virtualAccount, balance, budgetedBalance)).sorted()
-				.collect(Collectors.toCollection(LinkedList::new));
+				.map(t -> createTransactionElement(t, virtualAccount, balance, budgetedBalance)).sorted().peek(t -> {
+					if (t.getAmount() >= 0) {
+						in.add(t.getAmount());
+					} else {
+						out.subtract(t.getAmount());
+					}
+					if (t.getBudgetedAmount() >= 0) {
+						budgetedIn.add(t.getBudgetedAmount());
+					} else {
+						budgetedOut.subtract(t.getBudgetedAmount());
+					}
+				}).collect(Collectors.toCollection(LinkedList::new));
 		TransactionElement after = new TransactionElement("After", balance.getBalance(), budgetedBalance.getBalance());
+		TransactionElement in_out = new TransactionElement(in.getBalance(), out.getBalance(), budgetedIn.getBalance(),
+				budgetedOut.getBalance());
 		transactionElements.push(before);
 		transactionElements.add(after);
+		transactionElements.add(in_out);
 		return transactionElements;
 	}
 
