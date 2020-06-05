@@ -234,4 +234,8 @@ public class Transaction implements Comparable<Transaction> {
 
 		return newTransaction;
 	}
+
+	public boolean isNotPrebudgetedAccount() {
+		return !this.creditedAccount.isPrebudgetedAccount() && !this.debitedAccount.isPrebudgetedAccount();
+	}
 }

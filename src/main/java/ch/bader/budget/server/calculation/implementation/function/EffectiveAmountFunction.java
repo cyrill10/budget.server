@@ -8,6 +8,9 @@ public class EffectiveAmountFunction implements Function<Transaction, Number> {
 
 	@Override
 	public Number apply(Transaction t) {
+		if (t.getEffectiveAmount() == 0 && t.isNotPrebudgetedAccount()) {
+			return t.getBudgetedAmount();
+		}
 		return t.getEffectiveAmount();
 	}
 }
