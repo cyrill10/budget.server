@@ -15,9 +15,9 @@ import ch.bader.budget.server.json.TransactionElement;
 
 public class TransactionCalculator {
 
-	private static Function<Transaction, Number> effectiveAmountFunction = new EffectiveAmountFunction();
+	private static final Function<Transaction, Number> effectiveAmountFunction = new EffectiveAmountFunction();
 
-	private static Function<Transaction, Number> budgetedAmountFunction = new BudgetedAmountFunction();
+	private static final Function<Transaction, Number> budgetedAmountFunction = new BudgetedAmountFunction();
 
 	public static Iterable<TransactionElement> getTransactionsForMonth(RealAccount realAccount,
 			List<Transaction> transactions, List<VirtualAccount> virtualAccounts, LocalDate from) {

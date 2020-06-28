@@ -4,7 +4,7 @@ import java.util.function.Predicate;
 
 import ch.bader.budget.server.entity.RealAccount;
 
-public class OverviewAccountPredicate implements Predicate<RealAccount> {
+public class OverviewRealAccountPredicate implements Predicate<RealAccount> {
 
 	@Override
 	public boolean test(RealAccount a) {

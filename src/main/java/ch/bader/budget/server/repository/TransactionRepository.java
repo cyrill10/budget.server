@@ -18,4 +18,9 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
 	@Query("SELECT t FROM Transaction t WHERE t.date >= ?1 AND t.date < ?2 AND (t.creditedAccount.underlyingAccount.id = ?3 OR t.debitedAccount.underlyingAccount.id = ?3)")
 	List<Transaction> findAllTransactionsInIntervalForRealAccount(LocalDate from, LocalDate to, int accountId);
+
+	@Query("SELECT t FROM Transaction t WHERE t.date >= ?1 AND t.date < ?2 AND t.creditedAccount.id = ?3")
+	List<Transaction> findAllCreditedTransactionsInIntervalForVirtualAccount(LocalDate from, LocalDate to,
+			int accountId);
+
 }

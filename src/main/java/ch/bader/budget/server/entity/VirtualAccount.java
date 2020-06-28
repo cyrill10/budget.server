@@ -124,6 +124,10 @@ public class VirtualAccount implements Account<VirtualAccount> {
 
 	@Override
 	public String toString() {
+		return getCleanName();
+	}
+
+	public String getCleanName() {
 		return this.getName() + " (" + this.getUnderlyingAccount().getName() + ")";
 	}
 }
