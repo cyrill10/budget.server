@@ -35,6 +35,9 @@ public class VirtualAccount implements Account<VirtualAccount> {
 	private float balance;
 
 	@NonNull
+	private boolean isDeleted;
+
+	@NonNull
 	@ManyToOne
 	@JoinColumn(name = "underlyingAccount_id")
 	private RealAccount underlyingAccount;
@@ -103,6 +106,14 @@ public class VirtualAccount implements Account<VirtualAccount> {
 
 	public void setUpdateDate(LocalDateTime updateDate) {
 		this.updateDate = updateDate;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		isDeleted = deleted;
 	}
 
 	public List<Transaction> getCreditedTransactions() {

@@ -19,6 +19,7 @@ public class OverviewCalculator {
 	public static List<OverviewElement> getOverviewElementListFromRealAccount(RealAccount account,
 			LocalDate withDayOfMonth) {
 		LinkedList<OverviewElement> elements = account.getVirtualAccounts().stream().distinct()
+				.filter(va -> !va.isDeleted())
 				.map(virtualAccount -> getOverviewElementFromVirtualAccount(virtualAccount, withDayOfMonth))
 				.collect(Collectors.toCollection(LinkedList::new));
 		elements.push(createOverviewElement(account, elements));
