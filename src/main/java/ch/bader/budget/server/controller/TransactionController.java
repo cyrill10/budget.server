@@ -81,8 +81,7 @@ public class TransactionController {
 
 	@GetMapping(path = "/list")
 	public Iterable<Transaction> getAllTransactions(@RequestParam long date) {
-		LocalDate from = Instant.ofEpochMilli(date).atZone(ZoneId.systemDefault()).toLocalDate();
-		from = from.withDayOfMonth(1);
+		LocalDate from = Instant.ofEpochMilli(date).atZone(ZoneId.systemDefault()).toLocalDate().withDayOfMonth(1);
 		return transactionRepository.findAllTransactionsInInterval(from, from.plusMonths(1));
 	}
 
