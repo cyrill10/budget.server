@@ -1,17 +1,16 @@
 package ch.bader.budget.server.calculation;
 
+import ch.bader.budget.server.calculation.implementation.function.BudgetedAmountFunction;
+import ch.bader.budget.server.calculation.implementation.function.EffectiveAmountFunction;
+import ch.bader.budget.server.entity.Transaction;
+import ch.bader.budget.server.entity.VirtualAccount;
+import ch.bader.budget.server.json.TransactionElement;
+
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import ch.bader.budget.server.calculation.implementation.function.BudgetedAmountFunction;
-import ch.bader.budget.server.calculation.implementation.function.EffectiveAmountFunction;
-import ch.bader.budget.server.entity.RealAccount;
-import ch.bader.budget.server.entity.Transaction;
-import ch.bader.budget.server.entity.VirtualAccount;
-import ch.bader.budget.server.json.TransactionElement;
 
 public class TransactionCalculator {
 
@@ -19,8 +18,7 @@ public class TransactionCalculator {
 
 	private static final Function<Transaction, Number> budgetedAmountFunction = new BudgetedAmountFunction();
 
-	public static Iterable<TransactionElement> getTransactionsForMonth(RealAccount realAccount,
-			List<Transaction> transactions, List<VirtualAccount> virtualAccounts, LocalDate from) {
+	public static Iterable<TransactionElement> getTransactionsForMonth(List<Transaction> transactions, List<VirtualAccount> virtualAccounts, LocalDate from) {
 		Balance balance = new Balance(
 				VirtaulAccountCalculator.getBalanceAt(virtualAccounts, from, effectiveAmountFunction));
 		Balance budgetedBalance = new Balance(
@@ -94,8 +92,8 @@ public class TransactionCalculator {
 
 	public static TransactionElement createTransactionElement(Transaction transaction, VirtualAccount virtualAccount,
 			Balance balance, Balance budgetedBalance) {
-		float amount = 0;
-		float budgetedAmount = 0;
+		float amount;
+		float budgetedAmount;
 		if (transaction.getDebitedAccount().equals(virtualAccount)) {
 			amount = transaction.getEffectiveAmount();
 			budgetedAmount = transaction.getBudgetedAmount();

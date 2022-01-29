@@ -7,7 +7,7 @@ import ch.bader.budget.server.entity.Transaction;
 
 public class TransactionInMonthPredicate implements Predicate<Transaction> {
 
-	private LocalDate date;
+	private final LocalDate date;
 
 	public TransactionInMonthPredicate(LocalDate date) {
 		this.date = date;

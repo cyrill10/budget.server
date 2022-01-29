@@ -69,7 +69,7 @@ public class TransactionController {
 
 		while (startDate.isBefore(endDate)) {
 			startDate = startDate.plusMonths(1);
-			newTransactions.add(transaction.createDublicate(startDate));
+			newTransactions.add(transaction.createDuplicate(startDate));
 		}
 		transactionRepository.saveAll(newTransactions);
 	}
@@ -89,9 +89,7 @@ public class TransactionController {
 	@GetMapping(path = "/listByMonthAndVirtualAccount")
 	public Iterable<TransactionElement> getAllTransactionsForMonthAndVirtualAccount(@RequestParam long date,
 			@RequestParam int accountId) {
-		LocalDate from = Instant.ofEpochMilli(date).atZone(ZoneId.systemDefault()).toLocalDate();
-		from.withDayOfMonth(1);
-		from.atTime(0, 0);
+		LocalDate from = Instant.ofEpochMilli(date).atZone(ZoneId.systemDefault()).toLocalDate().withDayOfMonth(1);
 		return TransactionCalculator.getTransactionsForMonth(virtualAccountRepository.findById(accountId).orElseThrow(),
 				transactionRepository
 						.findAllTransactionsInIntervalForVirtualAccount(from, from.plusMonths(1), accountId).stream()
@@ -102,10 +100,8 @@ public class TransactionController {
 	@GetMapping(path = "/listByMonthAndRealAccount")
 	public Iterable<TransactionElement> getAllTransactionsForMonthAndRealAccount(@RequestParam long date,
 			@RequestParam int accountId) {
-		LocalDate from = Instant.ofEpochMilli(date).atZone(ZoneId.systemDefault()).toLocalDate();
-		from.withDayOfMonth(1);
-		from.atTime(0, 0);
-		return TransactionCalculator.getTransactionsForMonth(realAccountRepository.findById(accountId).orElseThrow(),
+		LocalDate from = Instant.ofEpochMilli(date).atZone(ZoneId.systemDefault()).toLocalDate().withDayOfMonth(1);
+		return TransactionCalculator.getTransactionsForMonth(
 				transactionRepository.findAllTransactionsInIntervalForRealAccount(from, from.plusMonths(1), accountId)
 						.stream().sorted().collect(Collectors.toList()),
 				virtualAccountRepository.findAllByUnderlyingAccountId(accountId), from);

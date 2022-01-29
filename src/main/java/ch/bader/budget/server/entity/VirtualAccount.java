@@ -31,10 +31,8 @@ public class VirtualAccount implements Account<VirtualAccount> {
 	@NonNull
 	private String name;
 
-	@NonNull
 	private float balance;
 
-	@NonNull
 	private boolean isDeleted;
 
 	@NonNull
@@ -68,11 +66,12 @@ public class VirtualAccount implements Account<VirtualAccount> {
 		return id;
 	}
 
+	@NonNull
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(@NonNull String name) {
 		this.name = name;
 	}
 
@@ -84,11 +83,12 @@ public class VirtualAccount implements Account<VirtualAccount> {
 		this.balance = balance;
 	}
 
+	@NonNull
 	public RealAccount getUnderlyingAccount() {
 		return underlyingAccount;
 	}
 
-	public void setUnderlyingAccount(RealAccount underlyingAccount) {
+	public void setUnderlyingAccount(@NonNull RealAccount underlyingAccount) {
 		this.underlyingAccount = underlyingAccount;
 	}
 

@@ -1,11 +1,13 @@
 package ch.bader.budget.server;
 
 import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.lang.Nullable;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,17 +24,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.httpBasic().and().authorizeRequests().antMatchers(HttpMethod.GET, "/budget/**").hasRole("USER")
 				.antMatchers(HttpMethod.POST, "/budget/**").hasRole("USER").antMatchers(HttpMethod.PUT, "/budget/**")
 				.hasRole("USER").and().csrf().disable().formLogin().disable().cors()
-				.configurationSource(new CorsConfigurationSource() {
-
-					@Override
-					public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-						CorsConfiguration config = new CorsConfiguration();
-						config.setAllowedHeaders(Collections.singletonList("*"));
-						config.setAllowedMethods(Collections.singletonList("*"));
-						config.addAllowedOrigin("*");
-						config.setAllowCredentials(true);
-						return config;
-					}
+				.configurationSource(request -> {
+					CorsConfiguration config = new CorsConfiguration();
+					config.setAllowedHeaders(Collections.singletonList("*"));
+					config.setAllowedMethods(Collections.singletonList("*"));
+					config.setAllowedOriginPatterns(List.of("*"));
+					config.setAllowCredentials(true);
+					return config;
 				});
 	}
 

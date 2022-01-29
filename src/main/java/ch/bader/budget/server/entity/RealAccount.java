@@ -81,11 +81,12 @@ public class RealAccount implements Account<RealAccount> {
 		this.accountType = accountType;
 	}
 
+	@NonNull
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(@NonNull String name) {
 		this.name = name;
 	}
 

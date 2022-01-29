@@ -13,9 +13,9 @@ import ch.bader.budget.server.entity.VirtualAccount;
 
 public class OverviewData {
 
-	private Number balanceAfter;
+	private final Number balanceAfter;
 
-	private Number budgetedBalanceAfter;
+	private final Number budgetedBalanceAfter;
 
 	private Number projection;
 

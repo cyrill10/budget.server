@@ -1,6 +1,7 @@
 package ch.bader.budget.server.calculation;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +14,7 @@ public class OverviewCalculator {
 
 	public static Iterable<OverviewElement> getOverviewForMonth(List<RealAccount> accounts, LocalDate withDayOfMonth) {
 		return accounts.stream().distinct().map(accout -> getOverviewElementListFromRealAccount(accout, withDayOfMonth))
-				.flatMap(l -> l.stream()).collect(Collectors.toList());
+				.flatMap(Collection::stream).collect(Collectors.toList());
 	}
 
 	public static List<OverviewElement> getOverviewElementListFromRealAccount(RealAccount account,
@@ -35,15 +36,15 @@ public class OverviewCalculator {
 
 	private static OverviewElement createOverviewElement(RealAccount account, List<OverviewElement> elements) {
 		Balance balance = new Balance(0);
-		elements.stream().distinct().map(e -> e.getBalanceAfter()).forEach(balance::add);
+		elements.stream().distinct().map(OverviewElement::getBalanceAfter).forEach(balance::add);
 		float balanceAfter = balance.getBalance();
 
 		balance = new Balance(0);
-		elements.stream().distinct().map(e -> e.getBudgetedBalanceAfter()).forEach(balance::add);
+		elements.stream().distinct().map(OverviewElement::getBudgetedBalanceAfter).forEach(balance::add);
 		float budgetedBalanceAfter = balance.getBalance();
 
-		Number projection = 0;
-		Number budgetedProjection = 0;
+		Number projection;
+		Number budgetedProjection;
 
 		if (account.isPrebudgetedAccount()) {
 			projection = budgetedBalanceAfter - balanceAfter;
@@ -51,11 +52,11 @@ public class OverviewCalculator {
 
 		} else {
 			balance = new Balance(0);
-			elements.stream().distinct().map(e -> e.getProjection()).forEach(balance::add);
+			elements.stream().distinct().map(OverviewElement::getProjection).forEach(balance::add);
 			projection = balance.getBalance();
 
 			balance = new Balance(0);
-			elements.stream().distinct().map(e -> e.getBudgetedProjection()).forEach(balance::add);
+			elements.stream().distinct().map(OverviewElement::getBudgetedProjection).forEach(balance::add);
 			budgetedProjection = balance.getBalance();
 		}
 

@@ -106,27 +106,30 @@ public class Transaction implements Comparable<Transaction> {
 		updateDate = LocalDateTime.now();
 	}
 
+	@NonNull
 	public VirtualAccount getCreditedAccount() {
 		return creditedAccount;
 	}
 
-	public void setCreditedAccount(VirtualAccount creditedAccount) {
+	public void setCreditedAccount(@NonNull VirtualAccount creditedAccount) {
 		this.creditedAccount = creditedAccount;
 	}
 
+	@NonNull
 	public VirtualAccount getDebitedAccount() {
 		return debitedAccount;
 	}
 
-	public void setDebitedAccount(VirtualAccount debitedAccount) {
+	public void setDebitedAccount(@NonNull VirtualAccount debitedAccount) {
 		this.debitedAccount = debitedAccount;
 	}
 
+	@NonNull
 	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(@NonNull LocalDate date) {
 		this.date = date;
 	}
 
@@ -174,11 +177,12 @@ public class Transaction implements Comparable<Transaction> {
 		this.paymentType = paymentType;
 	}
 
+	@NonNull
 	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(@NonNull String description) {
 		this.description = description;
 	}
 
@@ -206,20 +210,30 @@ public class Transaction implements Comparable<Transaction> {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Id: " + this.getId());
-		sb.append(" Date: " + this.getDate().toString());
-		sb.append(" B-Amount: " + this.getBudgetedAmount());
-		sb.append(" From: " + this.getCreditedAccount().getName());
-		sb.append(" To: " + this.getDebitedAccount().getName());
-		return sb.toString();
+		return "Transaction{" +
+				"id=" + id +
+				", creditedAccount=" + creditedAccount +
+				", debitedAccount=" + debitedAccount +
+				", date=" + date +
+				", description='" + description + '\'' +
+				", paymentStatusValue=" + paymentStatusValue +
+				", paymentStatus=" + paymentStatus +
+				", indicationValue=" + indicationValue +
+				", indication=" + indication +
+				", paymentTypeValue=" + paymentTypeValue +
+				", paymentType=" + paymentType +
+				", budgetedAmount=" + budgetedAmount +
+				", effectiveAmount=" + effectiveAmount +
+				", creationDate=" + creationDate +
+				", updateDate=" + updateDate +
+				'}';
 	}
 
 	public void updateEnums() {
 		fillPersistent();
 	}
 
-	public Transaction createDublicate(LocalDate newDate) {
+	public Transaction createDuplicate(LocalDate newDate) {
 		Transaction newTransaction = new Transaction();
 		newTransaction.creditedAccount = this.creditedAccount;
 		newTransaction.debitedAccount = this.debitedAccount;
