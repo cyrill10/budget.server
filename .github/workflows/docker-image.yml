@@ -23,7 +23,7 @@ jobs:
     
     - name: Build the Docker image
       run: |
-        docker build . --file Dockerfile --tag budget-server:${{ env.RELEASE_VERSION }}
+        docker build . --file Dockerfile --tag cyrillbader/budget-server:${{ env.RELEASE_VERSION }}
         docker push cyrillbader/budget-server:${{ env.RELEASE_VERSION }}
 
   
