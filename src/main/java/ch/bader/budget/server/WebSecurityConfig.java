@@ -16,12 +16,11 @@ import java.util.List;
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	@Value("${auth.username}")
+	private String authUsername;
 
-    @Value("${auth.username}")
-    private String authUsername;
-
-    @Value("${auth.password}")
-    private String authPassword;
+	@Value("${auth.password}")
+	private String authPassword;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -39,8 +38,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 });
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser(authUsername).password(authPassword).roles("USER");
-    }
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		System.err.println(authUsername);
+		auth.inMemoryAuthentication().withUser(authUsername).password(authPassword).roles("USER");
+	}
 }
