@@ -16,30 +16,33 @@ import java.util.List;
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Value("${auth.username}")
-	private String authUsername;
+    @Value("${auth.username}")
+    private String authUsername;
 
-	@Value("${auth.password}")
-	private String authPassword;
+    @Value("${auth.password}")
+    private String authPassword;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http.httpBasic().and().authorizeRequests().antMatchers(HttpMethod.GET, "/budget/**").hasRole("USER")
-                .antMatchers(HttpMethod.POST, "/budget/**").hasRole("USER").antMatchers(HttpMethod.PUT, "/budget/**")
-                .hasRole("USER").and().csrf().disable().formLogin().disable().cors()
-                .configurationSource(request -> {
-                    CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedHeaders(Collections.singletonList("*"));
-                    config.setAllowedMethods(Collections.singletonList("*"));
-                    config.setAllowedOriginPatterns(List.of("*"));
-                    config.setAllowCredentials(true);
-                    return config;
-                });
+            .antMatchers(HttpMethod.POST, "/budget/**")
+            .hasRole("USER")
+            .antMatchers(HttpMethod.PUT, "/budget/**")
+            .hasRole("USER")
+            .and().csrf().disable().formLogin().disable().cors()
+            .configurationSource(request -> {
+                CorsConfiguration config = new CorsConfiguration();
+                config.setAllowedHeaders(Collections.singletonList("*"));
+                config.setAllowedMethods(Collections.singletonList("*"));
+                config.setAllowedOriginPatterns(List.of("*"));
+                config.setAllowCredentials(true);
+                return config;
+            });
     }
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication().withUser(authUsername).password("{noop}" + authPassword).roles("USER");
-	}
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().withUser(authUsername).password("{noop}" + authPassword).roles("USER");
+    }
 }
