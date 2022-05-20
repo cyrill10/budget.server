@@ -13,10 +13,6 @@ import ch.bader.budget.server.time.MonthGenerator;
 @RequestMapping("/budget/date/")
 public class DateController {
 
-	@GetMapping(path = "/current")
-	public int getCurrentDate() {
-		return MonthGenerator.getCurrentMonthInt();
-	}
 
 	@GetMapping(path = "/month/list")
 	public List<LocalDate> getAllMonths() {
