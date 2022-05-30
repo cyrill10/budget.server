@@ -3,6 +3,8 @@ package ch.bader.budget.server.type;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Arrays;
+
 public enum PaymentStatus implements ValueEnum<Integer> {
 
     OPEN(1, "open", "red"), SETUP(2, "set up", "yellow"), PAID(3, "paid", "green");
@@ -31,6 +33,11 @@ public enum PaymentStatus implements ValueEnum<Integer> {
     @Override
     public String getName() {
         return name;
+    }
+
+
+    public static PaymentStatus forValue(Integer value) {
+        return Arrays.stream(PaymentStatus.values()).filter(p -> p.getValue().equals(value)).findFirst().orElseThrow();
     }
 
     @JsonCreator

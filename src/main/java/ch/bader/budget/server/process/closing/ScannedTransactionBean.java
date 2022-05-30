@@ -1,7 +1,7 @@
 package ch.bader.budget.server.process.closing;
 
-import ch.bader.budget.server.entity.ClosingProcess;
-import ch.bader.budget.server.entity.ScannedTransaction;
+import ch.bader.budget.server.domain.ClosingProcess;
+import ch.bader.budget.server.domain.ScannedTransaction;
 import ch.bader.budget.server.type.CardType;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvDate;
@@ -10,7 +10,6 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 public class ScannedTransactionBean {
@@ -34,7 +33,6 @@ public class ScannedTransactionBean {
 
     public ScannedTransaction mapTopScannedTransaction(ClosingProcess closingProcess) {
         return ScannedTransaction.builder()
-                                 .creationDate(LocalDateTime.now())
                                  .date(transactionDate)
                                  .transactionCreated(false)
                                  .amount(amount)

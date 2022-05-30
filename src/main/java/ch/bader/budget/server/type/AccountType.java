@@ -1,82 +1,71 @@
 package ch.bader.budget.server.type;
 
-import java.util.Arrays;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Arrays;
+
 public enum AccountType implements ValueEnum<Integer> {
 
-	CHECKING(1, "Checking"), SAVING(2, "Saving", 1), CREDIT(3, "Credit"), ALIEN(4, "Alien"),
-	PREBUDGETED(5, "Prebudgeted");
+    CHECKING(1, "Checking"), SAVING(2, "Saving"), CREDIT(3, "Credit"), ALIEN(4, "Alien"),
+    PREBUDGETED(5, "Prebudgeted");
 
-	private static AccountType[] internalTypes = { CHECKING, SAVING, CREDIT };
+    private static final AccountType[] internalTypes = {CHECKING, SAVING, CREDIT};
 
-	private static AccountType[] overviewTypes = { CHECKING, SAVING, CREDIT, PREBUDGETED };
+    private static final AccountType[] overviewTypes = {CHECKING, SAVING, CREDIT, PREBUDGETED};
 
-	private static AccountType[] PrebudgetedTypes = { PREBUDGETED };
+    private static final AccountType[] PrebudgetedTypes = {PREBUDGETED};
 
-	private static AccountType[] alienTypes = { ALIEN, PREBUDGETED };
+    private static final AccountType[] alienTypes = {ALIEN};
 
-	private Integer value;
+    private final Integer value;
 
-	private String name;
+    private final String name;
 
-	private Integer transactionLimit;
+    AccountType(int value, String name) {
+        this.value = value;
+        this.name = name;
+    }
 
-	private AccountType(int value, String name) {
-		this.value = value;
-		this.name = name;
-		this.transactionLimit = 0;
-	}
+    @Override
+    public Integer getValue() {
+        return value;
+    }
 
-	private AccountType(int value, String name, int transactionLimit) {
-		this.value = value;
-		this.name = name;
-		this.transactionLimit = transactionLimit;
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public Integer getValue() {
-		return value;
-	}
+    public static AccountType forValue(Integer value) {
+        return Arrays.stream(AccountType.values()).filter(p -> p.getValue().equals(value)).findFirst().orElseThrow();
+    }
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    @JsonCreator
+    public static AccountType forValues(@JsonProperty("name") String name, @JsonProperty("value") double value) {
+        for (AccountType accountType : AccountType.values()) {
+            if (accountType.name.equals(name) && Double.compare(accountType.value, value) == 0) {
+                return accountType;
+            }
+        }
 
-	public Integer getTransactionLimit() {
-		return transactionLimit;
-	}
+        return null;
+    }
 
-	@JsonCreator
-	public static AccountType forValues(@JsonProperty("name") String name, @JsonProperty("value") double value,
-			@JsonProperty("transactionLimit") double transactionLimit) {
-		for (AccountType accountType : AccountType.values()) {
-			if (accountType.name.equals(name) && Double.compare(accountType.value, value) == 0
-					&& Double.compare(accountType.transactionLimit, transactionLimit) == 0) {
-				return accountType;
-			}
-		}
+    public boolean isInternalAccount() {
+        return Arrays.asList(internalTypes).contains(this);
+    }
 
-		return null;
-	}
+    public boolean isPrebudgetedAccount() {
+        return Arrays.asList(PrebudgetedTypes).contains(this);
+    }
 
-	public boolean isInternalAccount() {
-		return Arrays.asList(internalTypes).contains(this);
-	}
+    public boolean isAlienAccount() {
+        return Arrays.asList(alienTypes).contains(this);
+    }
 
-	public boolean isPrebudgetedAccount() {
-		return Arrays.asList(PrebudgetedTypes).contains(this);
-	}
-
-	public boolean isAlienAccount() {
-		return Arrays.asList(alienTypes).contains(this);
-	}
-
-	public boolean isOverviewAccount() {
-		return Arrays.asList(overviewTypes).contains(this);
-	}
+    public boolean isOverviewAccount() {
+        return Arrays.asList(overviewTypes).contains(this);
+    }
 
 }
