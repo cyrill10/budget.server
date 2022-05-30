@@ -28,7 +28,6 @@ public class OverviewIntegrationTest extends AbstractIntegrationTest {
 
         String mills2022May1 = "1651363200000";
         String expectedJson = TestUtils.loadFile("json/overview.json");
-        System.out.println(expectedJson);
 
         // When & Then
         mockMvc.perform(get("/budget/overview/list")
