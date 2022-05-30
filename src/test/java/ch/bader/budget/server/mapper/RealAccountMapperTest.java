@@ -1,7 +1,7 @@
 package ch.bader.budget.server.mapper;
 
-import ch.bader.budget.server.adapter.cosmos.entity.RealAccountDbo;
 import ch.bader.budget.server.adapter.sql.entity.RealAccountDboSql;
+import ch.bader.budget.server.boundary.dto.RealAccountBoundaryDto;
 import ch.bader.budget.server.domain.RealAccount;
 import ch.bader.budget.server.type.AccountType;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ class RealAccountMapperTest {
     private RealAccountMapperImpl sut;
 
     @Test
-    public void shouldMapDtoToRealAccount() {
+    public void shouldMapRealAccountToDto() {
         //given
         RealAccount domain = RealAccount.builder()
                                         .id("id")
@@ -26,7 +26,7 @@ class RealAccountMapperTest {
                                         .build();
 
         //when
-        RealAccountDbo account = sut.mapToEntity(domain);
+        RealAccountBoundaryDto account = sut.mapToDto(domain);
 
         //then
         assertThat(account).isNotNull();
