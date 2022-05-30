@@ -3,16 +3,16 @@ package ch.bader.budget.server.core.virtualAccount;
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.repository.VirtualAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 public class VirtualAccountService {
 
     @Autowired
     private VirtualAccountRepository virtualAccountRepository;
-    
+
 
     public VirtualAccount addVirtualAccount(VirtualAccount account) {
         return virtualAccountRepository.save(account);
