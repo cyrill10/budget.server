@@ -15,11 +15,21 @@
 /*!40101 SET @OLD_SQL_MODE = @@SQL_MODE, SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES = @@SQL_NOTES, SQL_NOTES = 0 */;
 
+DROP TABLE IF EXISTS `scanned_transaction`;
+DROP TABLE IF EXISTS `scanned_transaction_seq`;
+DROP TABLE IF EXISTS `closing_process`;
+DROP TABLE IF EXISTS `closing_process_seq`;
+DROP TABLE IF EXISTS `transaction`;
+DROP TABLE IF EXISTS `transaction_seq`;
+DROP TABLE IF EXISTS `virtual_account`;
+DROP TABLE IF EXISTS `virtual_account_seq`;
+DROP TABLE IF EXISTS `real_account`;
+DROP TABLE IF EXISTS `real_account_seq`;
+
 --
 -- Table structure for table `closing_process`
 --
 
-DROP TABLE IF EXISTS `closing_process`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `closing_process`
@@ -56,7 +66,7 @@ UNLOCK TABLES;
 -- Table structure for table `closing_process_seq`
 --
 
-DROP TABLE IF EXISTS `closing_process_seq`;
+
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `closing_process_seq`
@@ -84,7 +94,7 @@ UNLOCK TABLES;
 -- Table structure for table `real_account`
 --
 
-DROP TABLE IF EXISTS `real_account`;
+
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `real_account`
@@ -124,7 +134,7 @@ UNLOCK TABLES;
 -- Table structure for table `real_account_seq`
 --
 
-DROP TABLE IF EXISTS `real_account_seq`;
+
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `real_account_seq`
@@ -152,7 +162,6 @@ UNLOCK TABLES;
 -- Table structure for table `scanned_transaction`
 --
 
-DROP TABLE IF EXISTS `scanned_transaction`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `scanned_transaction`
@@ -659,7 +668,6 @@ UNLOCK TABLES;
 -- Table structure for table `scanned_transaction_seq`
 --
 
-DROP TABLE IF EXISTS `scanned_transaction_seq`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `scanned_transaction_seq`
@@ -688,7 +696,7 @@ UNLOCK TABLES;
 -- Table structure for table `virtual_account`
 --
 
-DROP TABLE IF EXISTS `virtual_account`;
+
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `virtual_account`
@@ -758,7 +766,7 @@ UNLOCK TABLES;
 -- Table structure for table `virtual_account_seq`
 --
 
-DROP TABLE IF EXISTS `virtual_account_seq`;
+
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `virtual_account_seq`
@@ -785,7 +793,7 @@ UNLOCK TABLES;
 -- Table structure for table `transaction`
 --
 
-DROP TABLE IF EXISTS `transaction`;
+
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `transaction`
@@ -1595,7 +1603,7 @@ UNLOCK TABLES;
 -- Table structure for table `transaction_seq`
 --
 
-DROP TABLE IF EXISTS `transaction_seq`;
+
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `transaction_seq`
