@@ -9,13 +9,13 @@ import ch.bader.budget.server.repository.RealAccountRepository;
 import ch.bader.budget.server.repository.TransactionRepository;
 import ch.bader.budget.server.repository.VirtualAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-@Component
+@Service
 public class OverviewService {
 
 

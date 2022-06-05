@@ -1,0 +1,209 @@
+[
+  {
+    "name": "Checking",
+    "balanceAfter": 2337.54,
+    "budgetedBalanceAfter": 2535.44,
+    "projection": 1987.54,
+    "budgetedProjection": 9548.59,
+    "id": "1",
+    "realAccount": true
+  },
+  {
+    "name": "Checking",
+    "balanceAfter": 121.82,
+    "budgetedBalanceAfter": 234.12,
+    "projection": -228.18,
+    "budgetedProjection": -242.73,
+    "id": "4",
+    "realAccount": false
+  },
+  {
+    "name": "Electricity/ Laundry",
+    "balanceAfter": 503.05,
+    "budgetedBalanceAfter": 503.05,
+    "projection": 503.05,
+    "budgetedProjection": 1343.05,
+    "id": "5",
+    "realAccount": false
+  },
+  {
+    "name": "General Expenses",
+    "balanceAfter": 219.87,
+    "budgetedBalanceAfter": 248.37,
+    "projection": 219.87,
+    "budgetedProjection": 3748.37,
+    "id": "6",
+    "realAccount": false
+  },
+  {
+    "name": "Health Savings",
+    "balanceAfter": -468.35,
+    "budgetedBalanceAfter": -411.25,
+    "projection": -468.35,
+    "budgetedProjection": 2738.75,
+    "id": "7",
+    "realAccount": false
+  },
+  {
+    "name": "_13th Salary",
+    "balanceAfter": 1961.15,
+    "budgetedBalanceAfter": 1961.15,
+    "projection": 1961.15,
+    "budgetedProjection": 1961.15,
+    "id": "52",
+    "realAccount": false
+  },
+  {
+    "name": "Cyrill Saving",
+    "balanceAfter": 1398.22,
+    "budgetedBalanceAfter": 1563.22,
+    "projection": 1398.22,
+    "budgetedProjection": 2998.22,
+    "id": "2",
+    "realAccount": true
+  },
+  {
+    "name": "Insurance",
+    "balanceAfter": 640.22,
+    "budgetedBalanceAfter": 640.22,
+    "projection": 640.22,
+    "budgetedProjection": 1060.22,
+    "id": "31",
+    "realAccount": false
+  },
+  {
+    "name": "Libera Lyka",
+    "balanceAfter": 3.0,
+    "budgetedBalanceAfter": 168.0,
+    "projection": 3.0,
+    "budgetedProjection": 728.0,
+    "id": "33",
+    "realAccount": false
+  },
+  {
+    "name": "Libero Cyrill",
+    "balanceAfter": 755.0,
+    "budgetedBalanceAfter": 755.0,
+    "projection": 755.0,
+    "budgetedProjection": 1210.0,
+    "id": "32",
+    "realAccount": false
+  },
+  {
+    "name": "Lyka Saving",
+    "balanceAfter": 1791.1,
+    "budgetedBalanceAfter": 2287.8,
+    "projection": 1791.1,
+    "budgetedProjection": 14498.6,
+    "id": "3",
+    "realAccount": true
+  },
+  {
+    "name": "Taxes",
+    "balanceAfter": 2888.8,
+    "budgetedBalanceAfter": 2888.8,
+    "projection": 2888.8,
+    "budgetedProjection": 12999.6,
+    "id": "1",
+    "realAccount": false
+  },
+  {
+    "name": "Tuition",
+    "balanceAfter": 100.0,
+    "budgetedBalanceAfter": 100.0,
+    "projection": 100.0,
+    "budgetedProjection": 100.0,
+    "id": "14",
+    "realAccount": false
+  },
+  {
+    "name": "Vacation",
+    "balanceAfter": -1197.7,
+    "budgetedBalanceAfter": -701.0,
+    "projection": -1197.7,
+    "budgetedProjection": 1399.0,
+    "id": "13",
+    "realAccount": false
+  },
+  {
+    "name": "Credit Cards",
+    "balanceAfter": 0.00,
+    "budgetedBalanceAfter": 0.00,
+    "projection": 0.00,
+    "budgetedProjection": 0.00,
+    "id": "4",
+    "realAccount": true
+  },
+  {
+    "name": "Bonviva",
+    "balanceAfter": 0.0,
+    "budgetedBalanceAfter": 0.0,
+    "projection": 0.0,
+    "budgetedProjection": 0.0,
+    "id": "3",
+    "realAccount": false
+  },
+  {
+    "name": "Miles & More",
+    "balanceAfter": 0.00,
+    "budgetedBalanceAfter": 0.00,
+    "projection": 0.00,
+    "budgetedProjection": 0.00,
+    "id": "2",
+    "realAccount": false
+  },
+  {
+    "name": "Prebudget",
+    "balanceAfter": 2218.20,
+    "budgetedBalanceAfter": 1900.0,
+    "projection": 0.0,
+    "budgetedProjection": null,
+    "id": "5",
+    "realAccount": true
+  },
+  {
+    "name": "Going Out",
+    "balanceAfter": 718.9,
+    "budgetedBalanceAfter": 300.0,
+    "projection": -418.9,
+    "budgetedProjection": null,
+    "id": "8",
+    "realAccount": false
+  },
+  {
+    "name": "Groceries",
+    "balanceAfter": 626.30,
+    "budgetedBalanceAfter": 800.0,
+    "projection": 173.70,
+    "budgetedProjection": null,
+    "id": "9",
+    "realAccount": false
+  },
+  {
+    "name": "Lunch Cyrill",
+    "balanceAfter": 300.00,
+    "budgetedBalanceAfter": 300.0,
+    "projection": 0.00,
+    "budgetedProjection": null,
+    "id": "10",
+    "realAccount": false
+  },
+  {
+    "name": "Lunch Lyka",
+    "balanceAfter": 300.00,
+    "budgetedBalanceAfter": 300.0,
+    "projection": 0.00,
+    "budgetedProjection": null,
+    "id": "11",
+    "realAccount": false
+  },
+  {
+    "name": "Transportation",
+    "balanceAfter": 273.0,
+    "budgetedBalanceAfter": 200.0,
+    "projection": -73.0,
+    "budgetedProjection": null,
+    "id": "12",
+    "realAccount": false
+  }
+]
