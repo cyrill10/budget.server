@@ -2,18 +2,18 @@
   {
     "name": "Checking",
     "balanceAfter": 2337.54,
-    "budgetedBalanceAfter": 2535.44,
+    "budgetedBalanceAfter": 2337.54,
     "projection": 1987.54,
-    "budgetedProjection": 9548.59,
+    "budgetedProjection": 9350.69,
     "id": "1",
     "realAccount": true
   },
   {
     "name": "Checking",
     "balanceAfter": 121.82,
-    "budgetedBalanceAfter": 234.12,
+    "budgetedBalanceAfter": 121.82,
     "projection": -228.18,
-    "budgetedProjection": -242.73,
+    "budgetedProjection": -355.03,
     "id": "4",
     "realAccount": false
   },
@@ -29,18 +29,18 @@
   {
     "name": "General Expenses",
     "balanceAfter": 219.87,
-    "budgetedBalanceAfter": 248.37,
+    "budgetedBalanceAfter": 219.87,
     "projection": 219.87,
-    "budgetedProjection": 3748.37,
+    "budgetedProjection": 3719.87,
     "id": "6",
     "realAccount": false
   },
   {
     "name": "Health Savings",
     "balanceAfter": -468.35,
-    "budgetedBalanceAfter": -411.25,
+    "budgetedBalanceAfter": -468.35,
     "projection": -468.35,
-    "budgetedProjection": 2738.75,
+    "budgetedProjection": 2681.65,
     "id": "7",
     "realAccount": false
   },
@@ -56,9 +56,9 @@
   {
     "name": "Cyrill Saving",
     "balanceAfter": 1398.22,
-    "budgetedBalanceAfter": 1563.22,
+    "budgetedBalanceAfter": 1398.22,
     "projection": 1398.22,
-    "budgetedProjection": 2998.22,
+    "budgetedProjection": 2833.22,
     "id": "2",
     "realAccount": true
   },
@@ -74,9 +74,9 @@
   {
     "name": "Libera Lyka",
     "balanceAfter": 3.0,
-    "budgetedBalanceAfter": 168.0,
+    "budgetedBalanceAfter": 3.0,
     "projection": 3.0,
-    "budgetedProjection": 728.0,
+    "budgetedProjection": 563.0,
     "id": "33",
     "realAccount": false
   },
@@ -92,9 +92,9 @@
   {
     "name": "Lyka Saving",
     "balanceAfter": 1791.1,
-    "budgetedBalanceAfter": 2287.8,
+    "budgetedBalanceAfter": 1791.1,
     "projection": 1791.1,
-    "budgetedProjection": 14498.6,
+    "budgetedProjection": 14001.9,
     "id": "3",
     "realAccount": true
   },
@@ -119,9 +119,9 @@
   {
     "name": "Vacation",
     "balanceAfter": -1197.7,
-    "budgetedBalanceAfter": -701.0,
+    "budgetedBalanceAfter": -1197.7,
     "projection": -1197.7,
-    "budgetedProjection": 1399.0,
+    "budgetedProjection": 902.3,
     "id": "13",
     "realAccount": false
   },
@@ -155,8 +155,8 @@
   {
     "name": "Prebudget",
     "balanceAfter": 2218.20,
-    "budgetedBalanceAfter": 1900.0,
-    "projection": 0.0,
+    "budgetedBalanceAfter": 2218.20,
+    "projection": 0.00,
     "budgetedProjection": null,
     "id": "5",
     "realAccount": true
@@ -164,8 +164,8 @@
   {
     "name": "Going Out",
     "balanceAfter": 718.9,
-    "budgetedBalanceAfter": 300.0,
-    "projection": -418.9,
+    "budgetedBalanceAfter": 718.9,
+    "projection": 0.0,
     "budgetedProjection": null,
     "id": "8",
     "realAccount": false
@@ -173,8 +173,8 @@
   {
     "name": "Groceries",
     "balanceAfter": 626.30,
-    "budgetedBalanceAfter": 800.0,
-    "projection": 173.70,
+    "budgetedBalanceAfter": 626.30,
+    "projection": 0.00,
     "budgetedProjection": null,
     "id": "9",
     "realAccount": false
@@ -182,7 +182,7 @@
   {
     "name": "Lunch Cyrill",
     "balanceAfter": 300.00,
-    "budgetedBalanceAfter": 300.0,
+    "budgetedBalanceAfter": 300.00,
     "projection": 0.00,
     "budgetedProjection": null,
     "id": "10",
@@ -191,7 +191,7 @@
   {
     "name": "Lunch Lyka",
     "balanceAfter": 300.00,
-    "budgetedBalanceAfter": 300.0,
+    "budgetedBalanceAfter": 300.00,
     "projection": 0.00,
     "budgetedProjection": null,
     "id": "11",
@@ -200,8 +200,8 @@
   {
     "name": "Transportation",
     "balanceAfter": 273.0,
-    "budgetedBalanceAfter": 200.0,
-    "projection": -73.0,
+    "budgetedBalanceAfter": 273.0,
+    "projection": 0.0,
     "budgetedProjection": null,
     "id": "12",
     "realAccount": false
