@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc
-public class DateIntegrationTest extends AbstractIntegrationTest {
+public class DateIntegrationTest2 extends AbstractSqlIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -33,13 +33,13 @@ public class DateIntegrationTest extends AbstractIntegrationTest {
         LocalDate expectedLastDate = LocalDate.now().plusYears(1).withDayOfMonth(1);
 
         long diff = ChronoUnit.MONTHS.between(
-                firstDay,
-                expectedLastDate);
+            firstDay,
+            expectedLastDate);
         // When & Then
         mockMvc.perform(get("/budget/date/month/list")
-                       .contentType(MediaType.APPLICATION_JSON)
-                       .headers(getAuthHeader())
-                       .accept(MediaType.APPLICATION_JSON))
+                   .contentType(MediaType.APPLICATION_JSON)
+                   .headers(getAuthHeader())
+                   .accept(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$").isArray())
                .andExpect(jsonPath("$.[0]").value(firstDay.toString()))
