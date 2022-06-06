@@ -111,4 +111,8 @@ public class TransactionDboSql implements Comparable<TransactionDboSql> {
     public void updateEnums() {
         fillPersistent();
     }
+
+    public void reloadEnums() {
+        fillTransient();
+    }
 }

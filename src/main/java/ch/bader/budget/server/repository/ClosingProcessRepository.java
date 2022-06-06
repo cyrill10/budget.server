@@ -1,7 +1,7 @@
 package ch.bader.budget.server.repository;
 
 import ch.bader.budget.server.adapter.sql.entity.ClosingProcessDboSql;
-import ch.bader.budget.server.adapter.sql.repository.ClosingProcessJpaRepository;
+import ch.bader.budget.server.adapter.sql.repository.jpa.ClosingProcessJpaRepository;
 import ch.bader.budget.server.domain.ClosingProcess;
 import ch.bader.budget.server.mapper.ClosingProcessMapper;
 import ch.bader.budget.server.type.ClosingProcessStatus;

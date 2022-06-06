@@ -4,6 +4,7 @@ import ch.bader.budget.server.domain.RealAccount;
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.repository.RealAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Map;
 public class RealAccountService {
 
     @Autowired
+    @Qualifier("realAccountMySql")
     private RealAccountRepository realAccountRepository;
 
     public RealAccount addRealAccount(RealAccount account) {
