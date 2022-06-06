@@ -1,7 +1,7 @@
 package ch.bader.budget.server.repository;
 
 import ch.bader.budget.server.adapter.sql.entity.VirtualAccountDboSql;
-import ch.bader.budget.server.adapter.sql.repository.VirtualAccountJpaRepository;
+import ch.bader.budget.server.adapter.sql.repository.jpa.VirtualAccountJpaRepository;
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.mapper.VirtualAccountMapper;
 import org.springframework.beans.factory.annotation.Autowired;
