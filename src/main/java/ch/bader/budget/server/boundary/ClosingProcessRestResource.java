@@ -3,10 +3,10 @@ package ch.bader.budget.server.boundary;
 
 import ch.bader.budget.server.adapter.sql.entity.ClosingProcessDboSql;
 import ch.bader.budget.server.adapter.sql.entity.ScannedTransactionDboSql;
-import ch.bader.budget.server.adapter.sql.repository.ClosingProcessJpaRepository;
-import ch.bader.budget.server.adapter.sql.repository.ScannedTransactionJpaRepository;
-import ch.bader.budget.server.adapter.sql.repository.TransactionJpaRepository;
-import ch.bader.budget.server.adapter.sql.repository.VirtualAccountJpaRepository;
+import ch.bader.budget.server.adapter.sql.repository.jpa.ClosingProcessJpaRepository;
+import ch.bader.budget.server.adapter.sql.repository.jpa.ScannedTransactionJpaRepository;
+import ch.bader.budget.server.adapter.sql.repository.jpa.TransactionJpaRepository;
+import ch.bader.budget.server.adapter.sql.repository.jpa.VirtualAccountJpaRepository;
 import ch.bader.budget.server.boundary.dto.ClosingProcessBoundaryDto;
 import ch.bader.budget.server.boundary.dto.SaveScannedTransactionBoundaryDto;
 import ch.bader.budget.server.boundary.dto.ScannedTransactionBoundaryDto;

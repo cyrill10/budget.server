@@ -11,7 +11,7 @@
     </parent>
     <groupId>ch.bader.budget</groupId>
     <artifactId>server</artifactId>
-    <version>1.0.9</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>server</name>
     <description>Budget Server</description>
 
@@ -200,7 +200,7 @@
                 <configuration>
                     <images>
                         <image>
-                            <name>arm64v8/mysql:8-oracle</name>
+                            <name>mysql:8.0.13</name>
                             <alias>mysql</alias>
                             <run>
                                 <ports>
@@ -225,13 +225,15 @@
                             <name>budget-server:${project.version}</name>
                             <build>
                                 <contextDir>${project.basedir}</contextDir>
+                                <dockerFile>${project.basedir}/src/test/resources/Dockerfile</dockerFile>
                             </build>
                             <run>
                                 <dependsOn>
                                     <container>mysql-server</container>
                                 </dependsOn>
                                 <ports>
-                                    <port>8080:8085</port>
+                                    <port>8080:8080</port>
+                                    <port>8090:8090</port>
                                 </ports>
                                 <wait>
                                     <log>Started ServerApplication in</log>
@@ -266,5 +268,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

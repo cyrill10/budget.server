@@ -1,4 +1,4 @@
-package ch.bader.budget.server.adapter.sql.repository;
+package ch.bader.budget.server.adapter.sql.repository.jpa;
 
 import ch.bader.budget.server.adapter.sql.entity.ClosingProcessDboSql;
 import ch.bader.budget.server.adapter.sql.entity.ScannedTransactionDboSql;
