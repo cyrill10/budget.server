@@ -225,6 +225,7 @@
                             <name>budget-server:${project.version}</name>
                             <build>
                                 <contextDir>${project.basedir}</contextDir>
+                                <dockerFile>${project.basedir}/src/test/resources/Dockerfile</dockerFile>
                             </build>
                             <run>
                                 <dependsOn>
