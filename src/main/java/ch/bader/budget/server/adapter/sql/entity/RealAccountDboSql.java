@@ -109,4 +109,8 @@ public class RealAccountDboSql {
         fillPersistent();
     }
 
+    public void reloadEnums() {
+        fillTransient();
+    }
+
 }

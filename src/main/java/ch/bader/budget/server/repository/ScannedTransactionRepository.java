@@ -2,8 +2,8 @@ package ch.bader.budget.server.repository;
 
 import ch.bader.budget.server.adapter.sql.entity.ClosingProcessDboSql;
 import ch.bader.budget.server.adapter.sql.entity.ScannedTransactionDboSql;
-import ch.bader.budget.server.adapter.sql.repository.ClosingProcessJpaRepository;
-import ch.bader.budget.server.adapter.sql.repository.ScannedTransactionJpaRepository;
+import ch.bader.budget.server.adapter.sql.repository.jpa.ClosingProcessJpaRepository;
+import ch.bader.budget.server.adapter.sql.repository.jpa.ScannedTransactionJpaRepository;
 import ch.bader.budget.server.domain.ScannedTransaction;
 import ch.bader.budget.server.mapper.ScannedTransactionMapper;
 import ch.bader.budget.server.type.ClosingProcessStatus;

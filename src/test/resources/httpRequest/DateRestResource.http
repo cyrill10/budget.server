@@ -1,4 +1,4 @@
-GET http://budget-server:8080/budget/date/month/list
+GET http://localhost:8080/budget/date/month/list
 Authorization: Basic user password
 Accept: application/json
 

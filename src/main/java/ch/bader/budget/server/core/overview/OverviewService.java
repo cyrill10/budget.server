@@ -1,13 +1,12 @@
 package ch.bader.budget.server.core.overview;
 
+import ch.bader.budget.server.adapter.sql.repository.RealAccountRepositoryImpl;
 import ch.bader.budget.server.core.calculation.OverviewCalculator;
 import ch.bader.budget.server.domain.OverviewElement;
 import ch.bader.budget.server.domain.RealAccount;
 import ch.bader.budget.server.domain.Transaction;
 import ch.bader.budget.server.domain.VirtualAccount;
-import ch.bader.budget.server.repository.RealAccountRepository;
 import ch.bader.budget.server.repository.TransactionRepository;
-import ch.bader.budget.server.repository.VirtualAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +19,10 @@ public class OverviewService {
 
 
     @Autowired
-    private RealAccountRepository realAccountRepository;
+    private RealAccountRepositoryImpl realAccountRepository;
 
     @Autowired
     private TransactionRepository transactionRepository;
-
-    @Autowired
-    private VirtualAccountRepository virtualAccountRepository;
 
     public List<OverviewElement> getAllTransactions(LocalDate date) {
         LocalDate firstOfNextMonth = date.plusMonths(1);
