@@ -117,6 +117,34 @@
             <artifactId>opencsv</artifactId>
             <version>5.6</version>
         </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>azure</artifactId>
+            <version>1.17.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>5.1.0</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.rest-assured</groupId>
+                    <artifactId>json-path</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.rest-assured</groupId>
+                    <artifactId>xml-path</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured-all</artifactId>
+            <version>5.1.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -152,6 +180,89 @@
                         </arg>
                     </compilerArgs>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.22.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.40.0</version>
+                <configuration>
+                    <images>
+                        <image>
+                            <name>arm64v8/mysql:8-oracle</name>
+                            <alias>mysql</alias>
+                            <run>
+                                <ports>
+                                    <port>3306:3306</port>
+                                </ports>
+                                <env>
+                                    <MYSQL_DATABASE>budget</MYSQL_DATABASE>
+                                    <MYSQL_ROOT_USER>root</MYSQL_ROOT_USER>
+                                    <MYSQL_ROOT_PASSWORD>rootroot</MYSQL_ROOT_PASSWORD>
+                                </env>
+                                <wait>
+                                    <log>mysqld: ready for connections</log>
+                                    <time>20000</time>
+                                    <!-- Kill the container, if it doesn't stop before this given time
+                                        duration since a graceful stop was issued -->
+                                    <kill>100000</kill>
+                                </wait>
+                            </run>
+                        </image>
+                        <image>
+                            <alias>budget-server</alias>
+                            <name>budget-server:${project.version}</name>
+                            <build>
+                                <contextDir>${project.basedir}</contextDir>
+                            </build>
+                            <run>
+                                <dependsOn>
+                                    <container>mysql-server</container>
+                                </dependsOn>
+                                <ports>
+                                    <port>8080:8085</port>
+                                </ports>
+                                <wait>
+                                    <log>Started ServerApplication in</log>
+                                    <time>20000</time>
+                                </wait>
+                                <links>
+                                    <link>mysql:db</link>
+                                </links>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>start</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <!-- "build" should be used to create the images with the
+                                 artifact -->
+                            <goal>build</goal>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc
-public class OverviewIntegrationTest extends AbstractIntegrationTest {
+public class OverviewIntegrationTest2 extends AbstractSqlIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -31,10 +31,10 @@ public class OverviewIntegrationTest extends AbstractIntegrationTest {
 
         // When & Then
         mockMvc.perform(get("/budget/overview/list")
-                       .param("dateLong", mills2022May1)
-                       .contentType(MediaType.APPLICATION_JSON)
-                       .headers(getAuthHeader())
-                       .accept(MediaType.APPLICATION_JSON))
+                   .param("dateLong", mills2022May1)
+                   .contentType(MediaType.APPLICATION_JSON)
+                   .headers(getAuthHeader())
+                   .accept(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk())
                .andExpect(content().json(expectedJson));
     }
