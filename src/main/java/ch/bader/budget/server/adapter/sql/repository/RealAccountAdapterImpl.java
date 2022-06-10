@@ -6,7 +6,7 @@ import ch.bader.budget.server.domain.RealAccount;
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.mapper.RealAccountMapper;
 import ch.bader.budget.server.mapper.VirtualAccountMapper;
-import ch.bader.budget.server.repository.RealAccountRepository;
+import ch.bader.budget.server.repository.RealAccountAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,7 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 @Component("realAccountMySql")
-public class RealAccountRepositoryImpl implements RealAccountRepository {
+public class RealAccountAdapterImpl implements RealAccountAdapter {
 
     @Autowired
     private RealAccountMapper realAccountMapper;
@@ -35,8 +35,9 @@ public class RealAccountRepositoryImpl implements RealAccountRepository {
     }
 
     @Override
-    public RealAccount getAccountById(Integer id) {
-        RealAccountDboSql realAccountDboSql = realAccountJpaRepository.findById(id).orElseThrow();
+    public RealAccount getAccountById(String id) {
+        Integer idString = Integer.parseInt(id);
+        RealAccountDboSql realAccountDboSql = realAccountJpaRepository.findById(idString).orElseThrow();
         return realAccountMapper.mapToDomain(realAccountDboSql);
     }
 

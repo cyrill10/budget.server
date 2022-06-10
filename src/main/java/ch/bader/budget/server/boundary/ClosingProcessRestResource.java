@@ -69,13 +69,13 @@ public class ClosingProcessRestResource {
 
     @PostMapping
     public ResponseEntity<List<ScannedTransactionBoundaryDto>> uploadFile(
-            @RequestParam Integer year,
-            @RequestParam Integer month,
-            @RequestParam MultipartFile file) throws IOException {
+        @RequestParam Integer year,
+        @RequestParam Integer month,
+        @RequestParam MultipartFile file) throws IOException {
         List<ScannedTransaction> scannedTransactions = closingProcessService.uploadFile(year, month, file);
         if (scannedTransactions != null) {
             return ResponseEntity.ok(scannedTransactions.stream().map(scannedTransactionMapper::mapToDto).collect(
-                    Collectors.toList()));
+                Collectors.toList()));
         }
         return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).
                              body(null);
@@ -84,8 +84,8 @@ public class ClosingProcessRestResource {
 
     @GetMapping("/transactions")
     public List<ScannedTransactionDboSql> getTransactions(
-            @RequestParam Integer year,
-            @RequestParam Integer month) {
+        @RequestParam Integer year,
+        @RequestParam Integer month) {
         ClosingProcessDboSql closingProcess = closingProcessRepository.findClosingProcessByYearAndMonth(year, month);
         if (closingProcess.getUploadStatus().equals(ClosingProcessStatus.NEW)) {
             return List.of();

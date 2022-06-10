@@ -51,10 +51,4 @@ public class VirtualAccountRestResource {
         List<VirtualAccount> accounts = virtualAccountService.getAllVirtualAccounts();
         return accounts.stream().map(virtualAccountMapper::mapToDto).collect(Collectors.toList());
     }
-
-    @GetMapping(path = "/listForAccount")
-    public List<VirtualAccountBoundaryDto> getAllAccountsForAccount(@RequestParam Integer realAccountId) {
-        List<VirtualAccount> accounts = virtualAccountService.getAllVirtualAccountsForRealAccount(realAccountId);
-        return accounts.stream().map(virtualAccountMapper::mapToDto).collect(Collectors.toList());
-    }
 }

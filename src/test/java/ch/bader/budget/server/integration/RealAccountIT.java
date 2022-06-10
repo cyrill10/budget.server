@@ -3,14 +3,11 @@ package ch.bader.budget.server.integration;
 import ch.bader.budget.server.boundary.dto.RealAccountBoundaryDto;
 import ch.bader.budget.server.boundary.dto.ValueEnumDto;
 import ch.bader.budget.server.type.AccountType;
-import com.mysql.cj.jdbc.MysqlDataSource;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import java.io.IOException;
 
@@ -19,22 +16,21 @@ import static ch.bader.budget.server.TestUtils.asJsonString;
 import static ch.bader.budget.server.TestUtils.getAuthHeader;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.matchesRegex;
+import static org.hamcrest.Matchers.isA;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class RealAccountIT {
-
-    MysqlDataSource dataSource;
+class RealAccountIT extends AbstractIT {
 
     @BeforeAll
     void initDatabase() throws IOException {
         dataSource = getMySQLDataSource();
-
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(new ClassPathResource("/sql/fullDatabase.sql"));
-        populator.execute(dataSource);
     }
 
+    @Test
+    public void shouldLoadDb() {
+        //arrange
+        populateDatabaseFull();
+    }
 
     @Test
     public void shouldAddAccount() {
@@ -53,14 +49,17 @@ class RealAccountIT {
                .log().all()
                .statusCode(HttpStatus.SC_CREATED)
                .body("name", equalTo("TestAccount"))
-               .body("id", matchesRegex("\\d+"))
+               .body("id", isA(String.class))
                .body("accountType.value", equalTo(AccountType.CHECKING.getValue()));
     }
 
     @Test
     public void shouldUpdateAccount() {
+        //arrange
+        populateDatabaseFull();
+        //act
         RealAccountBoundaryDto input = RealAccountBoundaryDto.builder()
-                                                             .id("5")
+                                                             .id("62a2560999508e3db411c854")
                                                              .name("TestAccount2")
                                                              .accountType(ValueEnumDto.builder()
                                                                                       .value(AccountType.CREDIT.getValue())
@@ -75,52 +74,56 @@ class RealAccountIT {
                .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("name", equalTo("TestAccount2"))
-               .body("id", equalTo("5"))
+               .body("id", equalTo("62a2560999508e3db411c854"))
                .body("accountType.value", equalTo(AccountType.CREDIT.getValue()));
 
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
-               .param("id", 5)
+               .param("id", "62a2560999508e3db411c854")
                .get("/budget/realAccount/")
                .then()
                .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("name", equalTo("TestAccount2"))
-               .body("id", matchesRegex("\\d+"))
+               .body("id", equalTo("62a2560999508e3db411c854"))
                .body("accountType.value", equalTo(AccountType.CREDIT.getValue()));
     }
 
 
     @Test
     public void shouldGetAccount() {
-
+        //arrange
+        populateDatabaseFull();
+        //act
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
-               .param("id", 1)
+               .param("id", "62a2560999508e3db411c850")
                .get("/budget/realAccount/")
                .then()
                .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("name", equalTo("Checking"))
-               .body("id", matchesRegex("\\d+"))
+               .body("id", equalTo("62a2560999508e3db411c850"))
                .body("accountType.value", equalTo(AccountType.CHECKING.getValue()));
     }
 
     @Test
     public void shouldGetAllAccounts() {
-
+        //arrange
+        populateDatabaseFull();
+        //act
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
                .get("/budget/realAccount/list")
                .then()
                .log().all()
                .statusCode(HttpStatus.SC_OK)
-               .body("$.size()", equalTo(9));
+               .body("$.size()", equalTo(8));
     }
 
     @Test
     public void shouldGetAllAccountTyps() {
-
+        //act
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
                .get("/budget/realAccount/type/list")
