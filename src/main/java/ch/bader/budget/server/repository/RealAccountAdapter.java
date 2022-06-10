@@ -6,10 +6,10 @@ import ch.bader.budget.server.domain.VirtualAccount;
 import java.util.List;
 import java.util.Map;
 
-public interface RealAccountRepository {
+public interface RealAccountAdapter {
     RealAccount save(RealAccount realAccount);
 
-    RealAccount getAccountById(Integer id);
+    RealAccount getAccountById(String id);
 
     Map<RealAccount, List<VirtualAccount>> getAccountMap();
 

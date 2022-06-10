@@ -19,7 +19,7 @@ public class DataUtils {
         props.load(fis);
 
         ds = new MysqlConnectionPoolDataSource();
-        ds.setURL(props.getProperty("spring.datasource.url").replace("mysql-1", "localhost"));
+        ds.setURL(props.getProperty("spring.datasource.url").replace("mysql-db", "localhost"));
         ds.setUser(props.getProperty("spring.datasource.username"));
         ds.setPassword(props.getProperty("spring.datasource.password"));
 
