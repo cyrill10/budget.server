@@ -1,7 +1,9 @@
 package ch.bader.budget.server.adapter.mongo.adapter;
 
 import ch.bader.budget.server.adapter.mongo.entity.RealAccountDbo;
+import ch.bader.budget.server.adapter.mongo.entity.VirtualAccountDbo;
 import ch.bader.budget.server.adapter.mongo.repository.RealAccountMongoRepository;
+import ch.bader.budget.server.adapter.mongo.repository.VirtualAccountMongoRepository;
 import ch.bader.budget.server.domain.RealAccount;
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.mapper.RealAccountMapper;
@@ -12,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service("realAccountMongo")
 public class RealAccountAdapterImpl implements RealAccountAdapter {
@@ -24,6 +29,9 @@ public class RealAccountAdapterImpl implements RealAccountAdapter {
 
     @Autowired
     private RealAccountMongoRepository realAccountMongoRepository;
+
+    @Autowired
+    VirtualAccountMongoRepository virtualAccountMongoRepository;
 
     @Override
     public RealAccount save(RealAccount realAccount) {
@@ -41,18 +49,20 @@ public class RealAccountAdapterImpl implements RealAccountAdapter {
 
     @Override
     public Map<RealAccount, List<VirtualAccount>> getAccountMap() {
-        return null;
+        List<RealAccountDbo> realAccountDbos = realAccountMongoRepository.findAll();
 
-        //TODO needs to be implemented and tested
-//        List<RealAccountDboSql> accounts = realAccountJpaRepository.findAll();
-//        return accounts.stream()
-//                       .collect(Collectors.toMap(a -> realAccountMapper.mapToDomain(a),
-//                               a -> a.getVirtualAccounts()
-//                                     .stream()
-//                                     .map(virtualAccountMapper::mapToDomain)
-//                                     .sorted()
-//                                     .collect(
-//                                             Collectors.toList()), (a, b) -> a, TreeMap::new));
+        List<VirtualAccountDbo> virtualAccountDbos = virtualAccountMongoRepository.findAll();
+
+        return realAccountDbos
+            .stream()
+            .map(realAccountMapper::mapToDomain)
+            .collect(Collectors.toMap(Function.identity(), ra ->
+                virtualAccountDbos.stream().filter(va -> va.getUnderlyingAccountId().equals(ra.getId())).map((va -> {
+                    VirtualAccount virtualAccount = virtualAccountMapper.mapToDomain(va);
+                    virtualAccount.setUnderlyingAccount(ra);
+                    return virtualAccount;
+                })).sorted().collect(Collectors.toList()), (a, b) -> a, TreeMap::new)
+            );
     }
 
     @Override

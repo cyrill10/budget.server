@@ -41,7 +41,7 @@ public class VirtualAccountRestResource {
     }
 
     @GetMapping(path = "/")
-    public VirtualAccountBoundaryDto getAccountById(@RequestParam Integer id) {
+    public VirtualAccountBoundaryDto getAccountById(@RequestParam String id) {
         VirtualAccount virtualAccount = virtualAccountService.getAccountById(id);
         return virtualAccountMapper.mapToDto(virtualAccount);
     }
