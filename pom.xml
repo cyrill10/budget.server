@@ -189,7 +189,7 @@
                     <showLogs>true</showLogs>
                     <images>
                         <image>
-                            <name>arm64v8/mysql:8-oracle</name>
+                            <name>mysql:8.0.13</name>
                             <alias>mysql-db</alias>
                             <run>
                                 <network>
