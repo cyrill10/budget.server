@@ -5,8 +5,9 @@ import ch.bader.budget.server.domain.Transaction;
 import ch.bader.budget.server.domain.TransactionElement;
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.repository.TransactionRepository;
-import ch.bader.budget.server.repository.VirtualAccountRepository;
+import ch.bader.budget.server.repository.VirtualAccountAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,8 +21,8 @@ public class TransactionService {
     @Autowired
     TransactionRepository transactionRepository;
 
-    @Autowired
-    VirtualAccountRepository virtualAccountRepository;
+    @Qualifier("virtualAccountMySql")
+    private VirtualAccountAdapter virtualAccountRepository;
 
     public Transaction createTransaction(Transaction transaction) {
         return transactionRepository.createTransaction(transaction);
@@ -60,21 +61,24 @@ public class TransactionService {
     }
 
     public List<TransactionElement> getAllTransactionsForMonthAndVirtualAccount(LocalDate date, int accountId) {
-        VirtualAccount virtualAccount = virtualAccountRepository.getAccountById(accountId);
+        //TODO shoud be String as id
+        VirtualAccount virtualAccount = virtualAccountRepository.getAccountById(String.valueOf(accountId));
 
         List<Transaction> allTransactionsForAccount = transactionRepository.getAllTransactionsForAccountUntilDate(
-                accountId,
-                date.plusMonths(1));
+            accountId,
+            date.plusMonths(1));
 
         return TransactionCalculator.getTransactionsForMonth(allTransactionsForAccount, virtualAccount, date);
     }
 
     public List<TransactionElement> getAllTransactionsForMonthAndRealAccount(LocalDate date, Integer accountId) {
-        List<VirtualAccount> virtualAccounts = virtualAccountRepository.getAllVirtualAccountsForRealAccount(accountId);
+        //TODO shoud be String as id
+        List<VirtualAccount> virtualAccounts = virtualAccountRepository.getAllVirtualAccountsForRealAccount(String.valueOf(
+            accountId));
         List<Transaction> allTransactionsForRealAccount = transactionRepository.getAllTransactionsForVirtualAccountsUntilDate(
-                virtualAccounts.stream().map(VirtualAccount::getId).collect(
-                        Collectors.toList()),
-                date.plusMonths(1));
+            virtualAccounts.stream().map(VirtualAccount::getId).collect(
+                Collectors.toList()),
+            date.plusMonths(1));
 
         return TransactionCalculator.getTransactionsForMonth(allTransactionsForRealAccount, virtualAccounts, date);
     }

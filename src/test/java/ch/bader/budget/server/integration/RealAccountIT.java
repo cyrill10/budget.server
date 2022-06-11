@@ -27,7 +27,7 @@ class RealAccountIT extends AbstractIT {
     }
 
     @Test
-    public void shouldLoadDb() {
+    public void shouldLoadDb() throws IOException {
         //arrange
         populateDatabaseFull();
     }
@@ -54,7 +54,7 @@ class RealAccountIT extends AbstractIT {
     }
 
     @Test
-    public void shouldUpdateAccount() {
+    public void shouldUpdateAccount() throws IOException {
         //arrange
         populateDatabaseFull();
         //act
@@ -91,24 +91,25 @@ class RealAccountIT extends AbstractIT {
 
 
     @Test
-    public void shouldGetAccount() {
+    public void shouldGetAccount() throws IOException {
         //arrange
         populateDatabaseFull();
         //act
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
-               .param("id", "62a2560999508e3db411c850")
+               .param("id", "62a50222ce7b3719fa1aac5c")
                .get("/budget/realAccount/")
                .then()
                .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("name", equalTo("Checking"))
-               .body("id", equalTo("62a2560999508e3db411c850"))
+               //1
+               .body("id", equalTo("62a50222ce7b3719fa1aac5c"))
                .body("accountType.value", equalTo(AccountType.CHECKING.getValue()));
     }
 
     @Test
-    public void shouldGetAllAccounts() {
+    public void shouldGetAllAccounts() throws IOException {
         //arrange
         populateDatabaseFull();
         //act
@@ -118,7 +119,14 @@ class RealAccountIT extends AbstractIT {
                .then()
                .log().all()
                .statusCode(HttpStatus.SC_OK)
-               .body("$.size()", equalTo(8));
+               .body("$.size()", equalTo(8))
+               .body("[0].realAccount.name", equalTo("Checking"))
+               .body("[0].virtualAccounts.size()", equalTo(5))
+               .body("[1].virtualAccounts[1].name", equalTo("Libera Lyka"))
+               .body("[7].realAccount.name", equalTo("Prebudget"))
+               .body("[7].virtualAccounts.size()", equalTo(5))
+               .body("[7].virtualAccounts[0].name", equalTo("Going Out"))
+               .body("[7].virtualAccounts[0].underlyingAccount.accountType.value", equalTo(5));
     }
 
     @Test

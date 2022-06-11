@@ -14,12 +14,7 @@ import java.util.Map;
 public class RealAccountService {
 
     @Autowired
-    @Qualifier("realAccountMySql")
-    private RealAccountAdapter realAccountAdapter;
-
-    @Autowired
-    @Qualifier("realAccountMySql")
-//    @Qualifier("realAccountMongo")
+    @Qualifier("realAccountMongo")
     private RealAccountAdapter realAccountMongoAdapter;
 
     public RealAccount addRealAccount(RealAccount account) {
@@ -31,7 +26,7 @@ public class RealAccountService {
     }
 
     public Map<RealAccount, List<VirtualAccount>> getAccountMap() {
-        return realAccountAdapter.getAccountMap();
+        return realAccountMongoAdapter.getAccountMap();
     }
 
     public RealAccount updateRealAccount(RealAccount account) {

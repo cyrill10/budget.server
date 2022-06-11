@@ -26,5 +26,19 @@ public class DataUtils {
         return ds;
     }
 
+    public static String getMogoDataSourceString() throws IOException {
+        Properties props = new Properties();
+        FileInputStream fis;
+
+        fis = new FileInputStream("src/main/resources/application.properties");
+        props.load(fis);
+
+        return "mongodb://" +
+            props.getProperty("spring.data.mongodb.username") +
+            ":" +
+            props.getProperty("spring.data.mongodb.password") +
+            "@localhost";
+    }
+
 
 }
