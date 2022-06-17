@@ -5,13 +5,10 @@ import ch.bader.budget.server.adapter.sql.entity.ClosingProcessDboSql;
 import ch.bader.budget.server.adapter.sql.entity.ScannedTransactionDboSql;
 import ch.bader.budget.server.adapter.sql.repository.jpa.ClosingProcessJpaRepository;
 import ch.bader.budget.server.adapter.sql.repository.jpa.ScannedTransactionJpaRepository;
-import ch.bader.budget.server.adapter.sql.repository.jpa.TransactionJpaRepository;
-import ch.bader.budget.server.adapter.sql.repository.jpa.VirtualAccountJpaRepository;
 import ch.bader.budget.server.boundary.dto.ClosingProcessBoundaryDto;
 import ch.bader.budget.server.boundary.dto.SaveScannedTransactionBoundaryDto;
 import ch.bader.budget.server.boundary.dto.ScannedTransactionBoundaryDto;
 import ch.bader.budget.server.core.closingProcess.ClosingProcessService;
-import ch.bader.budget.server.core.transaction.TransactionService;
 import ch.bader.budget.server.domain.ClosingProcess;
 import ch.bader.budget.server.domain.ScannedTransaction;
 import ch.bader.budget.server.mapper.ClosingProcessMapper;
@@ -36,15 +33,6 @@ public class ClosingProcessRestResource {
 
     @Autowired
     ScannedTransactionJpaRepository scannedTransactionRepository;
-
-    @Autowired
-    VirtualAccountJpaRepository virtualAccountRepository;
-
-    @Autowired
-    TransactionJpaRepository transactionRepository;
-
-    @Autowired
-    TransactionService transactionService;
 
     @Autowired
     ClosingProcessService closingProcessService;
