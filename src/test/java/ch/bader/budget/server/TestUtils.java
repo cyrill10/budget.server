@@ -1,6 +1,7 @@
 package ch.bader.budget.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.http.HttpHeaders;
 import org.testcontainers.shaded.org.apache.commons.io.FileUtils;
 
@@ -18,8 +19,11 @@ public class TestUtils {
     }
 
     public static String asJsonString(final Object obj) {
+        JavaTimeModule module = new JavaTimeModule();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(module);
         try {
-            return new ObjectMapper().writeValueAsString(obj);
+            return objectMapper.writeValueAsString(obj);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

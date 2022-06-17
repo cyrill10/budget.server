@@ -74,7 +74,7 @@ class VirtualAccountIT extends AbstractIT {
         RealAccountBoundaryDto underlyingAccount = RealAccountBoundaryDto
             .builder()
             //5
-            .id("62a50222ce7b3719fa1aac60")
+            .id("62ace92e84611622284424c8")
             .name("Prebudgeted")
             .accountType(ValueEnumDto.builder()
                                      .value(AccountType.PREBUDGETED.getValue())
@@ -84,7 +84,7 @@ class VirtualAccountIT extends AbstractIT {
         VirtualAccountBoundaryDto input = VirtualAccountBoundaryDto
             .builder()
             //8
-            .id("62a440b0d815222b7f64a76e")
+            .id("62ace92f84611622284424d3")
             .name("TestVirtual")
             .underlyingAccount(underlyingAccount)
             .balance(BigDecimal.ZERO)
@@ -100,28 +100,28 @@ class VirtualAccountIT extends AbstractIT {
                .statusCode(HttpStatus.SC_OK)
                .body("name", equalTo("TestVirtual"))
                //8
-               .body("id", equalTo("62a440b0d815222b7f64a76e"))
+               .body("id", equalTo("62ace92f84611622284424d3"))
                .body("balance", equalTo(0))
                .body("isDeleted", equalTo(false))
                //5
-               .body("underlyingAccount.id", equalTo("62a50222ce7b3719fa1aac60"));
+               .body("underlyingAccount.id", equalTo("62ace92e84611622284424c8"));
 
 
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
                //8
-               .param("id", "62a440b0d815222b7f64a76e")
+               .param("id", "62ace92f84611622284424d3")
                .get("/budget/virtualAccount/")
                .then()
                .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("name", equalTo("TestVirtual"))
                //8
-               .body("id", equalTo("62a440b0d815222b7f64a76e"))
+               .body("id", equalTo("62ace92f84611622284424d3"))
                .body("balance", equalTo(0))
                .body("isDeleted", equalTo(false))
                //5
-               .body("underlyingAccount.id", equalTo("62a50222ce7b3719fa1aac60"));
+               .body("underlyingAccount.id", equalTo("62ace92e84611622284424c8"));
     }
 
 
@@ -133,16 +133,16 @@ class VirtualAccountIT extends AbstractIT {
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
                //6
-               .param("id", "62a50223ce7b3719fa1aac69")
+               .param("id", "62ace92f84611622284424d1")
                .get("/budget/virtualAccount/")
                .then()
                .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("name", equalTo("General Expenses"))
                //6
-               .body("id", equalTo("62a50223ce7b3719fa1aac69"))
+               .body("id", equalTo("62ace92f84611622284424d1"))
                //1
-               .body("underlyingAccount.id", equalTo("62a50222ce7b3719fa1aac5c"));
+               .body("underlyingAccount.id", equalTo("62ace92e84611622284424c4"));
 
     }
 
@@ -159,10 +159,10 @@ class VirtualAccountIT extends AbstractIT {
                .statusCode(HttpStatus.SC_OK)
                .body("$.size()", equalTo(34))
                //3
-               .body("[0].id", equalTo("62a50223ce7b3719fa1aac66"))
+               .body("[0].id", equalTo("62ace92f84611622284424ce"))
                .body("[0].name", equalTo("Bonviva"))
                //4
-               .body("[0].underlyingAccount.id", equalTo("62a50222ce7b3719fa1aac5f"));
+               .body("[0].underlyingAccount.id", equalTo("62ace92e84611622284424c7"));
     }
 
 }

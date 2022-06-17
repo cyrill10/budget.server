@@ -62,4 +62,13 @@ public class RealAccountAdapterImpl implements RealAccountAdapter {
         sqlAccount.reloadEnums();
         return realAccountMapper.mapToDomain(sqlAccount);
     }
+
+    @Override
+    public List<RealAccount> findAll() {
+        return realAccountJpaRepository
+            .findAll()
+            .stream()
+            .map(realAccountMapper::mapToDomain)
+            .collect(Collectors.toList());
+    }
 }

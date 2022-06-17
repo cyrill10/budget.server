@@ -33,6 +33,7 @@ public abstract class AbstractIT {
     private void populateMongoDbs() throws IOException {
         populateMongoDb("virtualAccount");
         populateMongoDb("realAccount");
+        populateMongoDb("transaction");
     }
 
     private void populateMongoDb(String collectionName) throws IOException {
