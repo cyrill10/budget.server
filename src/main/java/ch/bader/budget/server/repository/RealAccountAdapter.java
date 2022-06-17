@@ -14,4 +14,6 @@ public interface RealAccountAdapter {
     Map<RealAccount, List<VirtualAccount>> getAccountMap();
 
     RealAccount updateRealAccount(RealAccount account);
+
+    List<RealAccount> findAll();
 }

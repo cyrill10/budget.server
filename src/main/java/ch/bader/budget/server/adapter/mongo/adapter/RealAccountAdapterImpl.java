@@ -71,4 +71,13 @@ public class RealAccountAdapterImpl implements RealAccountAdapter {
         realAccountDbo = realAccountMongoRepository.save(realAccountDbo);
         return realAccountMapper.mapToDomain(realAccountDbo);
     }
+
+    @Override
+    public List<RealAccount> findAll() {
+        return realAccountMongoRepository
+            .findAll()
+            .stream()
+            .map(realAccountMapper::mapToDomain)
+            .collect(Collectors.toList());
+    }
 }

@@ -1,14 +1,14 @@
 package ch.bader.budget.server.adapter.mongo.adapter;
 
 import ch.bader.budget.server.adapter.mongo.entity.VirtualAccountDbo;
-import ch.bader.budget.server.adapter.mongo.repository.RealAccountMongoRepository;
 import ch.bader.budget.server.adapter.mongo.repository.VirtualAccountMongoRepository;
 import ch.bader.budget.server.domain.RealAccount;
 import ch.bader.budget.server.domain.VirtualAccount;
-import ch.bader.budget.server.mapper.RealAccountMapper;
 import ch.bader.budget.server.mapper.VirtualAccountMapper;
+import ch.bader.budget.server.repository.RealAccountAdapter;
 import ch.bader.budget.server.repository.VirtualAccountAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,26 +24,26 @@ public class VirtualAccountAdapterImpl implements VirtualAccountAdapter {
     private VirtualAccountMongoRepository virtualAccountMongoRepository;
 
     @Autowired
-    private RealAccountMongoRepository realAccountMongoRepository;
-
-    @Autowired
-    private RealAccountMapper realAccountMapper;
+    @Qualifier("realAccountMongo")
+    private RealAccountAdapter realAccountAdapter;
 
 
     @Override
     public VirtualAccount save(VirtualAccount virtualAccount) {
         VirtualAccountDbo accountDbo = virtualAccountMapper.mapToEntity(virtualAccount);
         accountDbo = virtualAccountMongoRepository.save(accountDbo);
-        virtualAccount = virtualAccountMapper.mapToDomain(accountDbo);
-        return addRealAccountToVirtualAccount(virtualAccount, accountDbo.getUnderlyingAccountId());
+        VirtualAccount virtualAccountSaved = virtualAccountMapper.mapToDomain(accountDbo);
+        virtualAccountSaved.setUnderlyingAccount(virtualAccount.getUnderlyingAccount());
+        return virtualAccountSaved;
     }
 
     @Override
     public VirtualAccount updateVirtualAccount(VirtualAccount virtualAccount) {
         VirtualAccountDbo accountDbo = virtualAccountMapper.mapToEntity(virtualAccount);
         accountDbo = virtualAccountMongoRepository.save(accountDbo);
-        virtualAccount = virtualAccountMapper.mapToDomain(accountDbo);
-        return addRealAccountToVirtualAccount(virtualAccount, accountDbo.getUnderlyingAccountId());
+        VirtualAccount virtualAccountSaved = virtualAccountMapper.mapToDomain(accountDbo);
+        virtualAccountSaved.setUnderlyingAccount(virtualAccount.getUnderlyingAccount());
+        return virtualAccountSaved;
     }
 
     @Override
@@ -60,12 +60,8 @@ public class VirtualAccountAdapterImpl implements VirtualAccountAdapter {
     public List<VirtualAccount> getAllVirtualAccountsWithTheirUnderlyingAccount() {
         List<VirtualAccountDbo> virtualAccountDbos = virtualAccountMongoRepository
             .findAll();
-        List<RealAccount> realAccounts = realAccountMongoRepository
-            .findAll()
-            .stream()
-            .map(realAccountMapper::mapToDomain)
-            .collect(
-                Collectors.toList());
+        List<RealAccount> realAccounts = realAccountAdapter.
+            findAll();
 
         return virtualAccountDbos.stream().map(vadbo -> {
             RealAccount ra = realAccounts
@@ -83,17 +79,17 @@ public class VirtualAccountAdapterImpl implements VirtualAccountAdapter {
 
     @Override
     public List<VirtualAccount> getAllVirtualAccountsForRealAccount(String realAccountId) {
-        return null;
-//        List<VirtualAccountDboSql> accounts = virtualAccountJpaRepository.findAllByUnderlyingAccountId(Integer.parseInt(
-//            realAccountId));
-//        return accounts.stream().map(virtualAccountMapper::mapToDomain).sorted().collect(Collectors.toList());
+        List<VirtualAccountDbo> accounts = virtualAccountMongoRepository.findAllByUnderlyingAccountId(realAccountId);
+        RealAccount realAccount = realAccountAdapter.getAccountById(realAccountId);
+        return accounts.stream().map(va -> {
+            VirtualAccount virtualAccount = virtualAccountMapper.mapToDomain(va);
+            virtualAccount.setUnderlyingAccount(realAccount);
+            return virtualAccount;
+        }).sorted().collect(Collectors.toList());
     }
 
     private VirtualAccount addRealAccountToVirtualAccount(VirtualAccount virtualAccount, String realAccountId) {
-        virtualAccount.setUnderlyingAccount(realAccountMongoRepository
-            .findById(realAccountId)
-            .map(realAccountMapper::mapToDomain)
-            .orElseThrow());
+        virtualAccount.setUnderlyingAccount(realAccountAdapter.getAccountById(realAccountId));
         return virtualAccount;
     }
 }
