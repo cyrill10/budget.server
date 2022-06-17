@@ -20,22 +20,22 @@ public class TransactionService {
 
     @Autowired
     @Qualifier("transactionMongo")
-    TransactionAdapter transactionMongoRepository;
+    TransactionAdapter transactionAdapter;
 
     @Autowired
     @Qualifier("virtualAccountMongo")
-    private VirtualAccountAdapter virtualAccountRepository;
+    private VirtualAccountAdapter virtualAccountAdapter;
 
     public Transaction createTransaction(Transaction transaction) {
-        return transactionMongoRepository.createTransaction(transaction);
+        return transactionAdapter.createTransaction(transaction);
     }
 
     public Transaction updateTransaction(Transaction transaction) {
-        return transactionMongoRepository.updateTransaction(transaction);
+        return transactionAdapter.updateTransaction(transaction);
     }
 
     public void deleteTransaction(String transactionId) {
-        transactionMongoRepository.deleteTransaction(transactionId);
+        transactionAdapter.deleteTransaction(transactionId);
     }
 
     public void dublicateTransaction(Transaction transaction) {
@@ -51,21 +51,21 @@ public class TransactionService {
             newTransactions.add(transaction.createDuplicate(startDate));
         }
 
-        transactionMongoRepository.saveTransactions(newTransactions);
+        transactionAdapter.saveTransactions(newTransactions);
     }
 
     public Transaction getTransactionById(String id) {
-        return transactionMongoRepository.getTransactionById(id);
+        return transactionAdapter.getTransactionById(id);
     }
 
     public List<Transaction> getAllTransactions(LocalDate date) {
-        return transactionMongoRepository.getAllTransactions(date);
+        return transactionAdapter.getAllTransactions(date);
     }
 
     public List<TransactionElement> getAllTransactionsForMonthAndVirtualAccount(LocalDate date, String accountId) {
-        VirtualAccount virtualAccount = virtualAccountRepository.getAccountById(accountId);
+        VirtualAccount virtualAccount = virtualAccountAdapter.getAccountById(accountId);
 
-        List<Transaction> allTransactionsForAccount = transactionMongoRepository.getAllTransactionsForVirtualAccountUntilDate(
+        List<Transaction> allTransactionsForAccount = transactionAdapter.getAllTransactionsForVirtualAccountUntilDate(
             accountId,
             date.plusMonths(1));
 
@@ -73,9 +73,9 @@ public class TransactionService {
     }
 
     public List<TransactionElement> getAllTransactionsForMonthAndRealAccount(LocalDate date, String accountId) {
-        List<VirtualAccount> virtualAccounts = virtualAccountRepository.getAllVirtualAccountsForRealAccount(
+        List<VirtualAccount> virtualAccounts = virtualAccountAdapter.getAllVirtualAccountsForRealAccount(
             accountId);
-        List<Transaction> allTransactionsForRealAccount = transactionMongoRepository.getAllTransactionsForVirtualAccountsUntilDate(
+        List<Transaction> allTransactionsForRealAccount = transactionAdapter.getAllTransactionsForVirtualAccountsUntilDate(
             virtualAccounts.stream().map(VirtualAccount::getId).collect(
                 Collectors.toList()),
             date.plusMonths(1));

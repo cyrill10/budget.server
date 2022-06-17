@@ -15,21 +15,21 @@ public class RealAccountService {
 
     @Autowired
     @Qualifier("realAccountMongo")
-    private RealAccountAdapter realAccountMongoAdapter;
+    private RealAccountAdapter realAccountAdapter;
 
     public RealAccount addRealAccount(RealAccount account) {
-        return realAccountMongoAdapter.save(account);
+        return realAccountAdapter.save(account);
     }
 
     public RealAccount getAccountById(String id) {
-        return realAccountMongoAdapter.getAccountById(id);
+        return realAccountAdapter.getAccountById(id);
     }
 
     public Map<RealAccount, List<VirtualAccount>> getAccountMap() {
-        return realAccountMongoAdapter.getAccountMap();
+        return realAccountAdapter.getAccountMap();
     }
 
     public RealAccount updateRealAccount(RealAccount account) {
-        return realAccountMongoAdapter.updateRealAccount(account);
+        return realAccountAdapter.updateRealAccount(account);
     }
 }

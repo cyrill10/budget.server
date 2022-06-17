@@ -1,6 +1,5 @@
 package ch.bader.budget.server.core.closingProcess;
 
-import ch.bader.budget.server.adapter.sql.repository.TransactionAdapterImpl;
 import ch.bader.budget.server.boundary.dto.SaveScannedTransactionBoundaryDto;
 import ch.bader.budget.server.domain.ClosingProcess;
 import ch.bader.budget.server.domain.ScannedTransaction;
@@ -9,6 +8,7 @@ import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.process.closing.ScannedTransactionBean;
 import ch.bader.budget.server.repository.ClosingProcessRepository;
 import ch.bader.budget.server.repository.ScannedTransactionRepository;
+import ch.bader.budget.server.repository.TransactionAdapter;
 import ch.bader.budget.server.repository.VirtualAccountAdapter;
 import ch.bader.budget.server.type.ClosingProcessStatus;
 import ch.bader.budget.server.type.PaymentStatus;
@@ -44,7 +44,8 @@ public class ClosingProcessService {
     private VirtualAccountAdapter virtualAccountRepository;
 
     @Autowired
-    TransactionAdapterImpl transactionRepository;
+    @Qualifier("transactionMySql")
+    TransactionAdapter transactionRepository;
 
     public ClosingProcess getClosingProcess(Integer year, Integer month) {
         return closingProcessRepository.getClosingProcess(year, month);
