@@ -1,10 +1,6 @@
 package ch.bader.budget.server.boundary;
 
 
-import ch.bader.budget.server.adapter.sql.entity.ClosingProcessDboSql;
-import ch.bader.budget.server.adapter.sql.entity.ScannedTransactionDboSql;
-import ch.bader.budget.server.adapter.sql.repository.jpa.ClosingProcessJpaRepository;
-import ch.bader.budget.server.adapter.sql.repository.jpa.ScannedTransactionJpaRepository;
 import ch.bader.budget.server.boundary.dto.ClosingProcessBoundaryDto;
 import ch.bader.budget.server.boundary.dto.SaveScannedTransactionBoundaryDto;
 import ch.bader.budget.server.boundary.dto.ScannedTransactionBoundaryDto;
@@ -13,7 +9,6 @@ import ch.bader.budget.server.domain.ClosingProcess;
 import ch.bader.budget.server.domain.ScannedTransaction;
 import ch.bader.budget.server.mapper.ClosingProcessMapper;
 import ch.bader.budget.server.mapper.ScannedTransactionMapper;
-import ch.bader.budget.server.type.ClosingProcessStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,11 +24,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/budget/closingProcess")
 public class ClosingProcessRestResource {
 
-    @Autowired
-    ClosingProcessJpaRepository closingProcessRepository;
-
-    @Autowired
-    ScannedTransactionJpaRepository scannedTransactionRepository;
 
     @Autowired
     ClosingProcessService closingProcessService;
@@ -45,13 +36,15 @@ public class ClosingProcessRestResource {
 
     @GetMapping
     public ClosingProcessBoundaryDto getClosingProcess(@RequestParam Integer year, @RequestParam Integer month) {
-        ClosingProcess closingProcess = closingProcessService.getClosingProcess(year, month);
+        YearMonth yearMonth = YearMonth.of(year, month + 1);
+        ClosingProcess closingProcess = closingProcessService.getClosingProcess(yearMonth);
         return closingProcessMapper.mapToDto(closingProcess);
     }
 
     @PostMapping("closeFileUpload")
     public ClosingProcessBoundaryDto closeFileUpload(@RequestParam Integer year, @RequestParam Integer month) {
-        ClosingProcess closingProcess = closingProcessService.closeFileUpload(year, month);
+        YearMonth yearMonth = YearMonth.of(year, month + 1);
+        ClosingProcess closingProcess = closingProcessService.closeFileUpload(yearMonth);
         return closingProcessMapper.mapToDto(closingProcess);
     }
 
@@ -60,7 +53,8 @@ public class ClosingProcessRestResource {
         @RequestParam Integer year,
         @RequestParam Integer month,
         @RequestParam MultipartFile file) throws IOException {
-        List<ScannedTransaction> scannedTransactions = closingProcessService.uploadFile(year, month, file);
+        YearMonth yearMonth = YearMonth.of(year, month + 1);
+        List<ScannedTransaction> scannedTransactions = closingProcessService.uploadFile(yearMonth, file);
         if (scannedTransactions != null) {
             return ResponseEntity.ok(scannedTransactions.stream().map(scannedTransactionMapper::mapToDto).collect(
                 Collectors.toList()));
@@ -71,14 +65,15 @@ public class ClosingProcessRestResource {
     }
 
     @GetMapping("/transactions")
-    public List<ScannedTransactionDboSql> getTransactions(
+    public List<ScannedTransactionBoundaryDto> getTransactions(
         @RequestParam Integer year,
         @RequestParam Integer month) {
-        ClosingProcessDboSql closingProcess = closingProcessRepository.findClosingProcessByYearAndMonth(year, month);
-        if (closingProcess.getUploadStatus().equals(ClosingProcessStatus.NEW)) {
-            return List.of();
-        }
-        return scannedTransactionRepository.findAllByClosingProcessOrderByDateAsc(closingProcess);
+        YearMonth yearMonth = YearMonth.of(year, month + 1);
+        return closingProcessService
+            .getTransactions(yearMonth)
+            .stream()
+            .map(scannedTransactionMapper::mapToDto)
+            .collect(Collectors.toList());
     }
 
 

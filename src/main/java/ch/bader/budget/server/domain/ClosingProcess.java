@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.YearMonth;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -13,8 +15,7 @@ import lombok.NoArgsConstructor;
 public class ClosingProcess {
 
     private String id;
-    private Integer year;
-    private Integer month;
+    YearMonth yearMonth;
     private ClosingProcessStatus uploadStatus;
     private ClosingProcessStatus manualEntryStatus;
 }

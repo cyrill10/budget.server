@@ -15,6 +15,8 @@ public class Converters {
         return new MongoCustomConversions(
             Arrays.asList(
                 new LocalDateToStringConverter(),
-                new StringLocalToDateConverter()));
+                new StringToLocalDateConverter(),
+                new YearMonthToStringConverter(),
+                new StringToYearMonthConverter()));
     }
 }

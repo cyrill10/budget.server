@@ -31,9 +31,13 @@ class OverviewIT extends AbstractIT {
 
     @Test
     public void shouldGetOverview() throws IOException {
+        //arrange
+        populateDatabaseFull();
+
         String mills2022May1 = "1651363200000";
         JsonPath expectedJson = JsonPath.from(TestUtils.loadFile("json/overview.json"));
 
+        //act + assert
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
                .param("dateLong", mills2022May1)
