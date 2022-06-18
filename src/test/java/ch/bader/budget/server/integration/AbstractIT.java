@@ -34,6 +34,7 @@ public abstract class AbstractIT {
         populateMongoDb("virtualAccount");
         populateMongoDb("realAccount");
         populateMongoDb("transaction");
+        populateMongoDb("closingProcess");
     }
 
     private void populateMongoDb(String collectionName) throws IOException {

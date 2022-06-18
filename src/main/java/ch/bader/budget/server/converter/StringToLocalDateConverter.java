@@ -7,7 +7,7 @@ import org.springframework.lang.NonNull;
 import java.time.LocalDate;
 
 @ReadingConverter
-public class StringLocalToDateConverter implements Converter<String, LocalDate> {
+public class StringToLocalDateConverter implements Converter<String, LocalDate> {
 
     @Override
     public LocalDate convert(@NonNull String source) {

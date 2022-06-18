@@ -6,7 +6,7 @@ import ch.bader.budget.server.domain.ScannedTransaction;
 import ch.bader.budget.server.domain.Transaction;
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.process.closing.ScannedTransactionBean;
-import ch.bader.budget.server.repository.ClosingProcessRepository;
+import ch.bader.budget.server.repository.ClosingProcessAdapter;
 import ch.bader.budget.server.repository.ScannedTransactionRepository;
 import ch.bader.budget.server.repository.TransactionAdapter;
 import ch.bader.budget.server.repository.VirtualAccountAdapter;
@@ -18,7 +18,6 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -26,6 +25,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +34,12 @@ import java.util.stream.Collectors;
 public class ClosingProcessService {
 
     @Autowired
-    ClosingProcessRepository closingProcessRepository;
+    @Qualifier("closingProcessMySql")
+    ClosingProcessAdapter closingProcessRepository;
+
+    @Autowired
+    @Qualifier("closingProcessMongo")
+    ClosingProcessAdapter closingProcessAdapter;
 
     @Autowired
     ScannedTransactionRepository scannedTransactionRepository;
@@ -47,21 +52,18 @@ public class ClosingProcessService {
     @Qualifier("transactionMySql")
     TransactionAdapter transactionRepository;
 
-    public ClosingProcess getClosingProcess(Integer year, Integer month) {
-        return closingProcessRepository.getClosingProcess(year, month);
+    public ClosingProcess getClosingProcess(YearMonth yearMonth) {
+        return closingProcessAdapter.getClosingProcess(yearMonth);
     }
 
-    public ClosingProcess closeFileUpload(@RequestParam Integer year, @RequestParam Integer month) {
-        ClosingProcess result = closingProcessRepository.getClosingProcess(year, month);
+    public ClosingProcess closeFileUpload(YearMonth yearMonth) {
+        ClosingProcess result = closingProcessAdapter.getClosingProcess(yearMonth);
         result.setUploadStatus(ClosingProcessStatus.DONE);
-        return closingProcessRepository.save(result);
+        return closingProcessAdapter.save(result);
     }
 
-    public List<ScannedTransaction> uploadFile(
-        Integer year,
-        Integer month,
-        MultipartFile file) throws IOException {
-        ClosingProcess closingProcess = closingProcessRepository.getClosingProcess(year, month);
+    public List<ScannedTransaction> uploadFile(YearMonth yearMonth, MultipartFile file) throws IOException {
+        ClosingProcess closingProcess = closingProcessRepository.getClosingProcess(yearMonth);
         if (closingProcess.getUploadStatus().equals(ClosingProcessStatus.NEW)) {
             Reader reader = new InputStreamReader(file.getInputStream());
             List<ScannedTransaction> scannedTransactions = new CsvToBeanBuilder<ScannedTransactionBean>(reader)
@@ -80,11 +82,9 @@ public class ClosingProcessService {
         return null;
     }
 
-    public List<ScannedTransaction> getTransactions(
-        Integer year,
-        Integer month) {
-        return scannedTransactionRepository.getTransactionsForClosingProcess(year,
-            month);
+    public List<ScannedTransaction> getTransactions(YearMonth yearMonth) {
+        return scannedTransactionRepository.getTransactionsForClosingProcess(yearMonth.getYear(),
+            yearMonth.getMonthValue() - 1);
     }
 
 
@@ -94,7 +94,9 @@ public class ClosingProcessService {
                                                            .findFirst()
                                                            .orElseThrow()
                                                            .getClosingProcess();
-        LocalDate transactionDate = LocalDate.of(closingProcess.getYear(), closingProcess.getMonth() + 1, 10);
+        LocalDate transactionDate = LocalDate.of(closingProcess.getYearMonth().getYear(),
+            closingProcess.getYearMonth().getMonthValue(),
+            10);
 
         VirtualAccount creditedAccount = virtualAccountRepository.getAccountById(dto.getCreditedAccountId());
         VirtualAccount debitedAccount = virtualAccountRepository.getAccountById(dto.getDebitedAccountId());
