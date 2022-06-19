@@ -29,29 +29,31 @@ public class ScannedTransactionRepository {
         List<ScannedTransactionDboSql> entities = transactionList.stream()
                                                                  .map(scannedTransactionMapper::mapToOldEntity)
                                                                  .collect(
-                                                                         Collectors.toList());
+                                                                     Collectors.toList());
         entities = scannedTransactionRepository.saveAll(entities);
         return entities.stream().map(scannedTransactionMapper::mapToDomain).collect(Collectors.toList());
     }
 
     public List<ScannedTransaction> getTransactionsForClosingProcess(Integer year, Integer month) {
         ClosingProcessDboSql closingProcessDboSql = closingProcessJpaRepository.findClosingProcessByYearAndMonth(year,
-                month);
+            month);
         if (closingProcessDboSql.getUploadStatus().equals(ClosingProcessStatus.NEW)) {
             return List.of();
         }
         List<ScannedTransactionDboSql> scannedTransactionDboSqls = scannedTransactionRepository.findAllByClosingProcessOrderByDateAsc(
-                closingProcessDboSql);
+            closingProcessDboSql);
         return scannedTransactionDboSqls.stream()
                                         .map(scannedTransactionMapper::mapToDomain)
+                                        .sorted()
                                         .collect(Collectors.toList());
     }
 
     public List<ScannedTransaction> findAllById(List<String> transactionIds) {
-        List<ScannedTransactionDboSql> scannedTransactions = scannedTransactionRepository.findAllById(transactionIds.stream()
-                                                                                                                    .map(Integer::parseInt)
-                                                                                                                    .collect(
-                                                                                                                            Collectors.toList()));
+        List<ScannedTransactionDboSql> scannedTransactions = scannedTransactionRepository.findAllById(transactionIds
+            .stream()
+            .map(Integer::parseInt)
+            .collect(
+                Collectors.toList()));
         return scannedTransactions.stream().map(scannedTransactionMapper::mapToDomain).collect(Collectors.toList());
     }
 }
