@@ -7,6 +7,7 @@ import org.springframework.lang.NonNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.YearMonth;
 
 @Data
 @Builder
@@ -17,7 +18,7 @@ public class ScannedTransaction implements Comparable<ScannedTransaction> {
     private BigDecimal amount;
     private Boolean transactionCreated;
     private CardType cardType;
-    private ClosingProcess closingProcess;
+    private YearMonth yearMonth;
 
     public ScannedTransaction createTransaction() {
         this.setTransactionCreated(true);

@@ -3,18 +3,20 @@ package ch.bader.budget.server;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.http.HttpHeaders;
-import org.testcontainers.shaded.org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 
 public class TestUtils {
 
-    public static String loadFileAsString(String fileName) throws IOException {
-        File file = loadFile(fileName);
-        return FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+    public static String loadFileAsString(String fileName) throws IOException, URISyntaxException {
+        ClassLoader classLoader = TestUtils.class.getClassLoader();
+        Path path = Path.of(Objects.requireNonNull(classLoader.getResource(fileName)).toURI());
+        return Files.readString(path);
     }
 
     public static File loadFile(String fileName) {

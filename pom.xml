@@ -26,10 +26,6 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
         <dependency>
@@ -43,10 +39,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
@@ -87,11 +79,6 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>de.flapdoodle.embed</groupId>
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
             <scope>test</scope>
@@ -100,12 +87,6 @@
             <groupId>slide</groupId>
             <artifactId>slide-webdavlib</artifactId>
             <version>2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
-            <version>${org.testcontainers.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -203,31 +184,6 @@
                     <containerNamePattern>%a</containerNamePattern>
                     <showLogs>true</showLogs>
                     <images>
-                        <image>
-                            <name>mysql:8.0.13</name>
-                            <alias>mysql-db</alias>
-                            <run>
-                                <network>
-                                    <mode>custom</mode>
-                                    <name>custom_network</name>
-                                </network>
-                                <ports>
-                                    <port>3306:3306</port>
-                                </ports>
-                                <env>
-                                    <MYSQL_DATABASE>budget</MYSQL_DATABASE>
-                                    <MYSQL_ROOT_USER>root</MYSQL_ROOT_USER>
-                                    <MYSQL_ROOT_PASSWORD>rootroot</MYSQL_ROOT_PASSWORD>
-                                </env>
-                                <wait>
-                                    <log>mysqld: ready for connections</log>
-                                    <time>20000</time>
-                                    <!-- Kill the container, if it doesn't stop before this given time
-                                        duration since a graceful stop was issued -->
-                                    <kill>100000</kill>
-                                </wait>
-                            </run>
-                        </image>
                         <image>
                             <name>mongo:latest</name>
                             <alias>mongo-db</alias>

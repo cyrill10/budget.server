@@ -4,13 +4,12 @@ import ch.bader.budget.server.TestUtils;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
-import static ch.bader.budget.server.DataUtils.getMySQLDataSource;
 import static ch.bader.budget.server.TestUtils.getAuthHeader;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -18,19 +17,14 @@ import static org.hamcrest.Matchers.equalTo;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OverviewIT extends AbstractIT {
 
-    @BeforeAll
-    void initDatabase() throws IOException {
-        dataSource = getMySQLDataSource();
-    }
-
     @Test
-    public void shouldLoadDb() throws IOException {
+    public void shouldLoadDb() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
     }
 
     @Test
-    public void shouldGetOverview() throws IOException {
+    public void shouldGetOverview() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 

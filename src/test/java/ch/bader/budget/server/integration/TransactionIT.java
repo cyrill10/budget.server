@@ -10,15 +10,14 @@ import ch.bader.budget.server.type.PaymentType;
 import ch.bader.budget.server.type.TransactionIndication;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URISyntaxException;
 import java.time.LocalDate;
 
-import static ch.bader.budget.server.DataUtils.getMySQLDataSource;
 import static ch.bader.budget.server.TestUtils.asJsonString;
 import static ch.bader.budget.server.TestUtils.getAuthHeader;
 import static io.restassured.RestAssured.given;
@@ -28,19 +27,14 @@ import static org.hamcrest.Matchers.isA;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TransactionIT extends AbstractIT {
 
-    @BeforeAll
-    void initDatabase() throws IOException {
-        dataSource = getMySQLDataSource();
-    }
-
     @Test
-    public void shouldLoadDb() throws IOException {
+    public void shouldLoadDb() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
     }
 
     @Test
-    public void shouldAddTransaction() throws IOException {
+    public void shouldAddTransaction() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -100,7 +94,7 @@ class TransactionIT extends AbstractIT {
     }
 
     @Test
-    public void shouldUpdateTransaction() throws IOException {
+    public void shouldUpdateTransaction() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -193,7 +187,7 @@ class TransactionIT extends AbstractIT {
 
 
     @Test
-    public void shouldGetTransaction() throws IOException {
+    public void shouldGetTransaction() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -217,7 +211,7 @@ class TransactionIT extends AbstractIT {
     }
 
     @Test
-    public void shouldDeleteTransaction() throws IOException {
+    public void shouldDeleteTransaction() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -241,7 +235,7 @@ class TransactionIT extends AbstractIT {
     }
 
     @Test
-    public void shouldDuplicateTransaction() throws IOException {
+    public void shouldDuplicateTransaction() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -305,7 +299,7 @@ class TransactionIT extends AbstractIT {
     }
 
     @Test
-    public void shouldGetAllTransactionsForMonth() throws IOException {
+    public void shouldGetAllTransactionsForMonth() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -337,7 +331,7 @@ class TransactionIT extends AbstractIT {
     }
 
     @Test
-    public void shouldGetAllTransactionsForMonthAndVirtualAccount() throws IOException {
+    public void shouldGetAllTransactionsForMonthAndVirtualAccount() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -387,7 +381,7 @@ class TransactionIT extends AbstractIT {
     }
 
     @Test
-    public void shouldGetAllTransactionsForMonthAndRealAccount() throws IOException {
+    public void shouldGetAllTransactionsForMonthAndRealAccount() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
