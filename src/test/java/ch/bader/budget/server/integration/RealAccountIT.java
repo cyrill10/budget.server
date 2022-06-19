@@ -5,13 +5,12 @@ import ch.bader.budget.server.boundary.dto.ValueEnumDto;
 import ch.bader.budget.server.type.AccountType;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
-import static ch.bader.budget.server.DataUtils.getMySQLDataSource;
 import static ch.bader.budget.server.TestUtils.asJsonString;
 import static ch.bader.budget.server.TestUtils.getAuthHeader;
 import static io.restassured.RestAssured.given;
@@ -21,13 +20,8 @@ import static org.hamcrest.Matchers.isA;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RealAccountIT extends AbstractIT {
 
-    @BeforeAll
-    void initDatabase() throws IOException {
-        dataSource = getMySQLDataSource();
-    }
-
     @Test
-    public void shouldLoadDb() throws IOException {
+    public void shouldLoadDb() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
     }
@@ -54,7 +48,7 @@ class RealAccountIT extends AbstractIT {
     }
 
     @Test
-    public void shouldUpdateAccount() throws IOException {
+    public void shouldUpdateAccount() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -91,7 +85,7 @@ class RealAccountIT extends AbstractIT {
 
 
     @Test
-    public void shouldGetAccount() throws IOException {
+    public void shouldGetAccount() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -110,7 +104,7 @@ class RealAccountIT extends AbstractIT {
     }
 
     @Test
-    public void shouldGetAllAccounts() throws IOException {
+    public void shouldGetAllAccounts() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act

@@ -2,7 +2,6 @@ package ch.bader.budget.server.mapper;
 
 import ch.bader.budget.server.adapter.mongo.entity.ClosingProcessDbo;
 import ch.bader.budget.server.adapter.mongo.entity.ValueEnumDbo;
-import ch.bader.budget.server.adapter.sql.entity.ClosingProcessDboSql;
 import ch.bader.budget.server.boundary.dto.ClosingProcessBoundaryDto;
 import ch.bader.budget.server.domain.ClosingProcess;
 import ch.bader.budget.server.type.ClosingProcessStatus;
@@ -40,50 +39,6 @@ class ClosingProcessMapperTest {
         assertThat(dto.getMonth()).isEqualTo(0);
         assertThat(dto.getManualEntryStatus().getValue()).isEqualTo(ClosingProcessStatus.NEW.getValue());
         assertThat(dto.getUploadStatus().getValue()).isEqualTo(ClosingProcessStatus.DONE.getValue());
-    }
-
-    @Test
-    public void shouldMapClosingProcessToOldDbo() {
-        //given
-        ClosingProcess domain = ClosingProcess.builder()
-                                              .id("5")
-                                              .yearMonth(YearMonth.of(2022, 1))
-                                              .manualEntryStatus(ClosingProcessStatus.NEW)
-                                              .uploadStatus(ClosingProcessStatus.DONE)
-                                              .build();
-
-        //when
-        ClosingProcessDboSql dto = sut.mapToOldEntity(domain);
-
-        //then
-        assertThat(dto).isNotNull();
-        assertThat(dto.getId()).isEqualTo(5);
-        assertThat(dto.getYear()).isEqualTo(2022);
-        assertThat(dto.getMonth()).isEqualTo(0);
-        assertThat(dto.getManualEntryStatus().getValue()).isEqualTo(ClosingProcessStatus.NEW.getValue());
-        assertThat(dto.getUploadStatus().getValue()).isEqualTo(ClosingProcessStatus.DONE.getValue());
-    }
-
-    @Test
-    public void shouldMapOldDboToClosingProcess() {
-        //given
-        ClosingProcessDboSql dto = ClosingProcessDboSql.builder()
-                                                       .id(5)
-                                                       .year(2022)
-                                                       .month(0)
-                                                       .manualEntryStatus(ClosingProcessStatus.NEW)
-                                                       .uploadStatus(ClosingProcessStatus.DONE)
-                                                       .build();
-
-        //when
-        ClosingProcess domain = sut.mapToDomain(dto);
-
-        //then
-        assertThat(domain).isNotNull();
-        assertThat(domain.getId()).isEqualTo("5");
-        assertThat(domain.getYearMonth()).isEqualTo(YearMonth.of(2022, 1));
-        assertThat(domain.getManualEntryStatus()).isEqualTo(ClosingProcessStatus.NEW);
-        assertThat(domain.getUploadStatus()).isEqualTo(ClosingProcessStatus.DONE);
     }
 
     @Test

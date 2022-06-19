@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
-public class ScannedTransactionBean {
+public class ScannedTransactionCsvBean {
 
     @CsvBindByName(column = "Transaction date", required = true)
     @CsvDate("dd.MM.yyyy")
@@ -37,8 +37,8 @@ public class ScannedTransactionBean {
                                  .transactionCreated(false)
                                  .amount(amount)
                                  .cardType(getCardType())
-                                 .closingProcess(closingProcess)
                                  .description(description)
+                                 .yearMonth(closingProcess.getYearMonth())
                                  .build();
     }
 

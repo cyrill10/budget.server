@@ -11,9 +11,9 @@ import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
-import static ch.bader.budget.server.DataUtils.getMySQLDataSource;
 import static ch.bader.budget.server.TestUtils.asJsonString;
 import static ch.bader.budget.server.TestUtils.getAuthHeader;
 import static io.restassured.RestAssured.given;
@@ -22,19 +22,14 @@ import static org.hamcrest.Matchers.equalTo;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ClosingProcessIT extends AbstractIT {
 
-    @BeforeAll
-    void initDatabase() throws IOException {
-        dataSource = getMySQLDataSource();
-    }
-
     @Test
-    public void shouldLoadDb() throws IOException {
+    public void shouldLoadDb() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
     }
 
     @Test
-    public void whenProcessExists_shouldGetClosingProcess() throws IOException {
+    public void whenProcessExists_shouldGetClosingProcess() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -54,7 +49,7 @@ class ClosingProcessIT extends AbstractIT {
     }
 
     @Test
-    public void whenProcessDoesNotExists_shouldCreateAndGetClosingProcess() throws IOException {
+    public void whenProcessDoesNotExists_shouldCreateAndGetClosingProcess() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -74,7 +69,7 @@ class ClosingProcessIT extends AbstractIT {
     }
 
     @Test
-    public void whenCloseFileUpload_shouldCloseUploadStatus() throws IOException {
+    public void whenCloseFileUpload_shouldCloseUploadStatus() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -126,7 +121,7 @@ class ClosingProcessIT extends AbstractIT {
 
         @Test
         @Order(1)
-        void uploadFile() throws IOException {
+        void uploadFile() throws IOException, URISyntaxException {
             //arrange
             populateDatabaseFull();
 
@@ -215,10 +210,8 @@ class ClosingProcessIT extends AbstractIT {
             SaveScannedTransactionBoundaryDto body = SaveScannedTransactionBoundaryDto
                 .builder()
                 .transactionIds(transactionIds)
-                .creditedAccountId("2")
-                .debitedAccountId("10")
-//                .creditedAccountId("62ace92f84611622284424cd")
-//                .debitedAccountId("62ace92f84611622284424d5")
+                .creditedAccountId("62ace92f84611622284424cd")
+                .debitedAccountId("62ace92f84611622284424d5")
                 .build();
 
             // create transactions from scannedtransactions
@@ -269,7 +262,7 @@ class ClosingProcessIT extends AbstractIT {
                    .statusCode(HttpStatus.SC_OK)
                    .body("$.size()", equalTo(16))
                    .body("[10].description", equalTo("DO IT + GARDEN MIGROS BER, BERN"))
-                   .body("[10].budgetedAmount", equalTo(0F))
+                   .body("[10].budgetedAmount", equalTo(0))
                    .body("[10].effectiveAmount", equalTo(28.5F))
                    .body("[10].date", equalTo("2021-12-10"))
                    .body("[10].debitedAccount.name", equalTo("Lunch Cyrill"))
@@ -278,7 +271,7 @@ class ClosingProcessIT extends AbstractIT {
                    .body("[10].debitedAccount.underlyingAccount.accountType.value",
                        equalTo(AccountType.PREBUDGETED.getValue()))
                    .body("[15].description", equalTo("REINHARD AG, BERN"))
-                   .body("[15].budgetedAmount", equalTo(0F))
+                   .body("[15].budgetedAmount", equalTo(0))
                    .body("[15].effectiveAmount", equalTo(10.8F))
                    .body("[15].date", equalTo("2021-12-10"))
                    .body("[15].debitedAccount.name", equalTo("Lunch Cyrill"))
@@ -334,12 +327,9 @@ class ClosingProcessIT extends AbstractIT {
             SaveScannedTransactionBoundaryDto body = SaveScannedTransactionBoundaryDto
                 .builder()
                 .transactionIds(transactionIds)
-                .creditedAccountId("6")
-                .debitedAccountId("25")
-                .throughAccountId("2")
-//                .creditedAccountId("62ace92f84611622284424d1")
-//                .debitedAccountId("62ace92f84611622284424e4")
-//                .throughAccountId("62ace92f84611622284424cd")
+                .creditedAccountId("62ace92f84611622284424d1")
+                .debitedAccountId("62ace92f84611622284424e4")
+                .throughAccountId("62ace92f84611622284424cd")
                 .build();
 
             // create transactions from scannedtransactions
@@ -386,7 +376,7 @@ class ClosingProcessIT extends AbstractIT {
                    .statusCode(HttpStatus.SC_OK)
                    .body("$.size()", equalTo(22))
                    .body("[16].description", equalTo("H & M, BERN"))
-                   .body("[16].budgetedAmount", equalTo(0F))
+                   .body("[16].budgetedAmount", equalTo(0))
                    .body("[16].effectiveAmount", equalTo(30.90F))
                    .body("[16].date", equalTo("2021-12-10"))
                    .body("[16].debitedAccount.name", equalTo("Miles & More"))
@@ -395,7 +385,7 @@ class ClosingProcessIT extends AbstractIT {
                    .body("[16].debitedAccount.underlyingAccount.accountType.value",
                        equalTo(AccountType.CREDIT.getValue()))
                    .body("[17].description", equalTo("H & M, BERN"))
-                   .body("[17].budgetedAmount", equalTo(0F))
+                   .body("[17].budgetedAmount", equalTo(0))
                    .body("[17].effectiveAmount", equalTo(30.90F))
                    .body("[17].date", equalTo("2021-12-10"))
                    .body("[17].debitedAccount.name", equalTo("Furniture"))
@@ -404,7 +394,7 @@ class ClosingProcessIT extends AbstractIT {
                    .body("[17].debitedAccount.underlyingAccount.accountType.value",
                        equalTo(AccountType.ALIEN.getValue()))
                    .body("[21].description", equalTo("WWW.ZALANDO.CH, BERLIN"))
-                   .body("[21].budgetedAmount", equalTo(0F))
+                   .body("[21].budgetedAmount", equalTo(0))
                    .body("[21].effectiveAmount", equalTo(-34.95F))
                    .body("[21].date", equalTo("2021-12-10"))
                    .body("[21].debitedAccount.name", equalTo("Furniture"))

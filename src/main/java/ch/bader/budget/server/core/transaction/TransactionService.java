@@ -19,8 +19,7 @@ import java.util.stream.Collectors;
 public class TransactionService {
 
     @Autowired
-//    @Qualifier("transactionMongo")
-    @Qualifier("transactionMySql")
+    @Qualifier("transactionMongo")
     TransactionAdapter transactionAdapter;
 
     @Autowired

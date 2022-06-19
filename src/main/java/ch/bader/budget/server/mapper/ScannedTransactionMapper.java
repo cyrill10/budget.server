@@ -1,18 +1,18 @@
 package ch.bader.budget.server.mapper;
 
-import ch.bader.budget.server.adapter.sql.entity.ScannedTransactionDboSql;
+import ch.bader.budget.server.adapter.mongo.entity.ScannedTransactionDbo;
 import ch.bader.budget.server.boundary.dto.ScannedTransactionBoundaryDto;
 import ch.bader.budget.server.domain.ScannedTransaction;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {CardTypeMapper.class, ClosingProcessMapper.class})
-public interface ScannedTransactionMapper {
+import java.time.YearMonth;
 
-    ScannedTransaction mapToDomain(ScannedTransactionBoundaryDto dto);
+@Mapper(componentModel = "spring", uses = {CardTypeMapper.class, ClosingProcessMapper.class}, imports = YearMonth.class)
+public interface ScannedTransactionMapper {
 
     ScannedTransactionBoundaryDto mapToDto(ScannedTransaction domain);
 
-    ScannedTransactionDboSql mapToOldEntity(ScannedTransaction domain);
+    ScannedTransaction mapToDomain(ScannedTransactionDbo entity);
 
-    ScannedTransaction mapToDomain(ScannedTransactionDboSql entity);
+    ScannedTransactionDbo mapToEntity(ScannedTransaction domain);
 }
