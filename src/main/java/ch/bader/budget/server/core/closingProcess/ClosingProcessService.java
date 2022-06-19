@@ -26,7 +26,6 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,7 +71,7 @@ public class ClosingProcessService {
                 .stream()
                 .filter(stb -> !stb.getDescription().contains("IHRE ZAHLUNG – BESTEN DANK"))
                 .map(stb -> stb.mapTopScannedTransaction(closingProcess))
-                .sorted(Comparator.comparing(ScannedTransaction::getDate))
+                .sorted()
                 .collect(Collectors.toList());
 
             closingProcess.setUploadStatus(ClosingProcessStatus.STARTED);
@@ -128,6 +127,7 @@ public class ClosingProcessService {
                                                  VirtualAccount creditedAccount,
                                                  VirtualAccount debitedAccount, LocalDate date) {
         return scannedTransactions.stream()
+                                  .sorted()
                                   .map(ScannedTransaction::createTransaction)
                                   .map(sc -> createTransaction(sc,
                                       creditedAccount,
@@ -143,6 +143,7 @@ public class ClosingProcessService {
                                                  LocalDate date) {
 
         return scannedTransactions.stream()
+                                  .sorted()
                                   .map(ScannedTransaction::createTransaction)
                                   .map(sc -> createThroughTransactions(sc,
                                       creditedAccount,

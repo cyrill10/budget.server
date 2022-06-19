@@ -144,8 +144,8 @@ class ClosingProcessIT extends AbstractIT {
                    .statusCode(HttpStatus.SC_OK)
                    .body("$.size()", equalTo(127))
                    .body("[0].date", equalTo("2022-04-20"))
-                   .body("[0].description", equalTo("LAEDERACH CHOCOLAT. AG, BERN"))
-                   .body("[0].amount", equalTo(9.9F))
+                   .body("[0].description", equalTo("COOP-1990 BE C.RYFFLIH, BERN"))
+                   .body("[0].amount", equalTo(27.9F))
                    .body("[0].cardType", equalTo("MasterCard"))
                    .body("[0].transactionCreated", equalTo(false))
                    .body("[126].date", equalTo("2022-05-20"))
@@ -160,6 +160,8 @@ class ClosingProcessIT extends AbstractIT {
         void saveScannedTransactions_withoutThroughAccount() {
 
             //act + assert
+
+            // read all scanned Transactions
             JsonPath jsonPath = given().headers(getAuthHeader()).contentType(ContentType.JSON)
                                        .when()
                                        .queryParam("year", 2021)
@@ -170,8 +172,8 @@ class ClosingProcessIT extends AbstractIT {
                                        .statusCode(HttpStatus.SC_OK)
                                        .body("$.size()", equalTo(127))
                                        .body("[0].date", equalTo("2022-04-20"))
-                                       .body("[0].description", equalTo("LAEDERACH CHOCOLAT. AG, BERN"))
-                                       .body("[0].amount", equalTo(9.9F))
+                                       .body("[0].description", equalTo("COOP-1990 BE C.RYFFLIH, BERN"))
+                                       .body("[0].amount", equalTo(27.9F))
                                        .body("[0].cardType", equalTo("MasterCard"))
                                        .body("[0].transactionCreated", equalTo(false))
                                        .body("[126].date", equalTo("2022-05-20"))
@@ -179,12 +181,19 @@ class ClosingProcessIT extends AbstractIT {
                                        .body("[126].amount", equalTo(13.5F))
                                        .body("[126].cardType", equalTo("AMEX"))
                                        .body("[126].transactionCreated", equalTo(false))
+                                       .body("[15].description", equalTo("COOP-5734 BE SPITALGAS, BERN"))
                                        .body("[15].transactionCreated", equalTo(false))
+                                       .body("[22].description", equalTo("DO IT + GARDEN MIGROS BER, BERN"))
                                        .body("[22].transactionCreated", equalTo(false))
+                                       .body("[43].description", equalTo("COOP-5450 WORBLAUFEN A, WORBLAUFEN"))
                                        .body("[43].transactionCreated", equalTo(false))
+                                       .body("[67].description", equalTo("NIESENBAHN AG, MÜLENEN"))
                                        .body("[67].transactionCreated", equalTo(false))
+                                       .body("[81].description", equalTo("AMAVITA BAHNHOF BERN 1, BERN"))
                                        .body("[81].transactionCreated", equalTo(false))
+                                       .body("[91].description", equalTo("ASIAN FOOD IMPORT GMBH, BERN"))
                                        .body("[91].transactionCreated", equalTo(false))
+                                       .body("[115].description", equalTo("REINHARD AG, BERN"))
                                        .body("[115].transactionCreated", equalTo(false))
                                        .extract().jsonPath();
 
@@ -212,7 +221,7 @@ class ClosingProcessIT extends AbstractIT {
 //                .debitedAccountId("62ace92f84611622284424d5")
                 .build();
 
-
+            // create transactions from scannedtransactions
             given().headers(getAuthHeader()).contentType(ContentType.JSON)
                    .body(asJsonString(body))
                    .when()
@@ -222,6 +231,7 @@ class ClosingProcessIT extends AbstractIT {
                    .statusCode(HttpStatus.SC_OK);
 
 
+            // read scanned transactions again
             given().headers(getAuthHeader()).contentType(ContentType.JSON)
                    .when()
                    .queryParam("year", 2021)
@@ -232,15 +242,15 @@ class ClosingProcessIT extends AbstractIT {
                    .statusCode(HttpStatus.SC_OK)
                    .body("$.size()", equalTo(127))
                    .body("[0].date", equalTo("2022-04-20"))
-                   .body("[0].description", equalTo("LAEDERACH CHOCOLAT. AG, BERN"))
-                   .body("[0].amount", equalTo(9.9F))
+                   .body("[0].description", equalTo("COOP-1990 BE C.RYFFLIH, BERN"))
+                   .body("[0].amount", equalTo(27.9F))
                    .body("[0].cardType", equalTo("MasterCard"))
                    .body("[0].transactionCreated", equalTo(false))
                    .body("[126].date", equalTo("2022-05-20"))
                    .body("[126].description", equalTo("TRAVEL COMFORT PLUS"))
                    .body("[126].amount", equalTo(13.5F))
                    .body("[126].cardType", equalTo("AMEX"))
-                   .body("[126].transactionCreated", equalTo(true))
+                   .body("[126].transactionCreated", equalTo(false))
                    .body("[15].transactionCreated", equalTo(true))
                    .body("[22].transactionCreated", equalTo(true))
                    .body("[43].transactionCreated", equalTo(true))
@@ -249,6 +259,7 @@ class ClosingProcessIT extends AbstractIT {
                    .body("[91].transactionCreated", equalTo(true))
                    .body("[115].transactionCreated", equalTo(true));
 
+            // read transactions
             given().headers(getAuthHeader()).contentType(ContentType.JSON)
                    .when()
                    .param("date", "1638316800000")
@@ -256,23 +267,151 @@ class ClosingProcessIT extends AbstractIT {
                    .then()
                    .log().all()
                    .statusCode(HttpStatus.SC_OK)
-                   .body("$.size()", equalTo(7))
-                   .body("[0].description", equalTo("Internet"))
-                   .body("[0].budgetedAmount", equalTo(45F))
-                   .body("[0].effectiveAmount", equalTo(0F))
-                   .body("[0].debitedAccount.name", equalTo("Internet & Phone"))
-                   .body("[0].creditedAccount.name", equalTo("Checking"))
-                   .body("[0].debitedAccount.underlyingAccount.accountType.value",
-                       equalTo(AccountType.ALIEN.getValue()))
-                   .body("[10].description", equalTo("Salary"))
-                   .body("[10].budgetedAmount", equalTo(7363.6F))
-                   .body("[10].effectiveAmount", equalTo(0F))
-                   .body("[10].date", equalTo("2022-06-25"))
-                   .body("[10].debitedAccount.name", equalTo("Checking"))
-                   .body("[10].creditedAccount.name", equalTo("Salary Cyrill"))
-                   .body("[10].debitedAccount.underlyingAccount.name", equalTo("Checking"))
+                   .body("$.size()", equalTo(16))
+                   .body("[10].description", equalTo("DO IT + GARDEN MIGROS BER, BERN"))
+                   .body("[10].budgetedAmount", equalTo(0F))
+                   .body("[10].effectiveAmount", equalTo(28.5F))
+                   .body("[10].date", equalTo("2021-12-10"))
+                   .body("[10].debitedAccount.name", equalTo("Lunch Cyrill"))
+                   .body("[10].creditedAccount.name", equalTo("Miles & More"))
+                   .body("[10].debitedAccount.underlyingAccount.name", equalTo("Prebudget"))
                    .body("[10].debitedAccount.underlyingAccount.accountType.value",
-                       equalTo(AccountType.CHECKING.getValue()));
+                       equalTo(AccountType.PREBUDGETED.getValue()))
+                   .body("[15].description", equalTo("REINHARD AG, BERN"))
+                   .body("[15].budgetedAmount", equalTo(0F))
+                   .body("[15].effectiveAmount", equalTo(10.8F))
+                   .body("[15].date", equalTo("2021-12-10"))
+                   .body("[15].debitedAccount.name", equalTo("Lunch Cyrill"))
+                   .body("[15].creditedAccount.name", equalTo("Miles & More"))
+                   .body("[15].debitedAccount.underlyingAccount.name", equalTo("Prebudget"))
+                   .body("[15].debitedAccount.underlyingAccount.accountType.value",
+                       equalTo(AccountType.PREBUDGETED.getValue()));
+
+        }
+
+
+        @Test
+        @Order(3)
+        void saveScannedTransactions_withThroughAccount() {
+
+            //act + assert
+
+            // read all scanned Transactions
+            JsonPath jsonPath = given().headers(getAuthHeader()).contentType(ContentType.JSON)
+                                       .when()
+                                       .queryParam("year", 2021)
+                                       .queryParam("month", 11)
+                                       .get("/budget/closingProcess/transactions")
+                                       .then()
+                                       .log().all()
+                                       .statusCode(HttpStatus.SC_OK)
+                                       .body("$.size()", equalTo(127))
+                                       .body("[0].date", equalTo("2022-04-20"))
+                                       .body("[0].description", equalTo("COOP-1990 BE C.RYFFLIH, BERN"))
+                                       .body("[0].amount", equalTo(27.9F))
+                                       .body("[0].cardType", equalTo("MasterCard"))
+                                       .body("[0].transactionCreated", equalTo(false))
+                                       .body("[126].date", equalTo("2022-05-20"))
+                                       .body("[126].description", equalTo("TRAVEL COMFORT PLUS"))
+                                       .body("[126].amount", equalTo(13.5F))
+                                       .body("[126].cardType", equalTo("AMEX"))
+                                       .body("[126].transactionCreated", equalTo(false))
+                                       .body("[16].description", equalTo("H & M, BERN"))
+                                       .body("[16].transactionCreated", equalTo(false))
+                                       .body("[77].description", equalTo("MOBILITY CAR SHARING, LUZERN"))
+                                       .body("[77].transactionCreated", equalTo(false))
+                                       .body("[105].description", equalTo("WWW.ZALANDO.CH, BERLIN"))
+                                       .body("[105].transactionCreated", equalTo(false))
+                                       .extract().jsonPath();
+
+            String transactionId1 = jsonPath.getString("[16].id");
+            String transactionId2 = jsonPath.getString("[77].id");
+            String transactionId3 = jsonPath.getString("[105].id");
+            List<String> transactionIds = List.of(transactionId1,
+                transactionId2,
+                transactionId3);
+
+            SaveScannedTransactionBoundaryDto body = SaveScannedTransactionBoundaryDto
+                .builder()
+                .transactionIds(transactionIds)
+                .creditedAccountId("6")
+                .debitedAccountId("25")
+                .throughAccountId("2")
+//                .creditedAccountId("62ace92f84611622284424d1")
+//                .debitedAccountId("62ace92f84611622284424e4")
+//                .throughAccountId("62ace92f84611622284424cd")
+                .build();
+
+            // create transactions from scannedtransactions
+            given().headers(getAuthHeader()).contentType(ContentType.JSON)
+                   .body(asJsonString(body))
+                   .when()
+                   .post("/budget/closingProcess/transactions")
+                   .then()
+                   .log().all()
+                   .statusCode(HttpStatus.SC_OK);
+
+
+            // read scanned transactions again
+            given().headers(getAuthHeader()).contentType(ContentType.JSON)
+                   .when()
+                   .queryParam("year", 2021)
+                   .queryParam("month", 11)
+                   .get("/budget/closingProcess/transactions")
+                   .then()
+                   .log().all()
+                   .statusCode(HttpStatus.SC_OK)
+                   .body("$.size()", equalTo(127))
+                   .body("[0].date", equalTo("2022-04-20"))
+                   .body("[0].description", equalTo("COOP-1990 BE C.RYFFLIH, BERN"))
+                   .body("[0].amount", equalTo(27.9F))
+                   .body("[0].cardType", equalTo("MasterCard"))
+                   .body("[0].transactionCreated", equalTo(false))
+                   .body("[126].date", equalTo("2022-05-20"))
+                   .body("[126].description", equalTo("TRAVEL COMFORT PLUS"))
+                   .body("[126].amount", equalTo(13.5F))
+                   .body("[126].cardType", equalTo("AMEX"))
+                   .body("[126].transactionCreated", equalTo(false))
+                   .body("[16].transactionCreated", equalTo(true))
+                   .body("[77].transactionCreated", equalTo(true))
+                   .body("[105].transactionCreated", equalTo(true));
+
+            // read transactions
+            given().headers(getAuthHeader()).contentType(ContentType.JSON)
+                   .when()
+                   .param("date", "1638316800000")
+                   .get("/budget/transaction/list")
+                   .then()
+                   .log().all()
+                   .statusCode(HttpStatus.SC_OK)
+                   .body("$.size()", equalTo(22))
+                   .body("[16].description", equalTo("H & M, BERN"))
+                   .body("[16].budgetedAmount", equalTo(0F))
+                   .body("[16].effectiveAmount", equalTo(30.90F))
+                   .body("[16].date", equalTo("2021-12-10"))
+                   .body("[16].debitedAccount.name", equalTo("Miles & More"))
+                   .body("[16].creditedAccount.name", equalTo("General Expenses"))
+                   .body("[16].debitedAccount.underlyingAccount.name", equalTo("Credit Cards"))
+                   .body("[16].debitedAccount.underlyingAccount.accountType.value",
+                       equalTo(AccountType.CREDIT.getValue()))
+                   .body("[17].description", equalTo("H & M, BERN"))
+                   .body("[17].budgetedAmount", equalTo(0F))
+                   .body("[17].effectiveAmount", equalTo(30.90F))
+                   .body("[17].date", equalTo("2021-12-10"))
+                   .body("[17].debitedAccount.name", equalTo("Furniture"))
+                   .body("[17].creditedAccount.name", equalTo("Miles & More"))
+                   .body("[17].debitedAccount.underlyingAccount.name", equalTo("Variable Costs"))
+                   .body("[17].debitedAccount.underlyingAccount.accountType.value",
+                       equalTo(AccountType.ALIEN.getValue()))
+                   .body("[21].description", equalTo("WWW.ZALANDO.CH, BERLIN"))
+                   .body("[21].budgetedAmount", equalTo(0F))
+                   .body("[21].effectiveAmount", equalTo(-34.95F))
+                   .body("[21].date", equalTo("2021-12-10"))
+                   .body("[21].debitedAccount.name", equalTo("Furniture"))
+                   .body("[21].creditedAccount.name", equalTo("Miles & More"))
+                   .body("[21].debitedAccount.underlyingAccount.name", equalTo("Variable Costs"))
+                   .body("[21].debitedAccount.underlyingAccount.accountType.value",
+                       equalTo(AccountType.ALIEN.getValue()));
 
         }
     }
