@@ -5,7 +5,7 @@ import ch.bader.budget.server.boundary.dto.ScannedTransactionBoundaryDto;
 import ch.bader.budget.server.domain.ScannedTransaction;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = CardTypeMapper.class)
+@Mapper(componentModel = "spring", uses = {CardTypeMapper.class, ClosingProcessMapper.class})
 public interface ScannedTransactionMapper {
 
     ScannedTransaction mapToDomain(ScannedTransactionBoundaryDto dto);

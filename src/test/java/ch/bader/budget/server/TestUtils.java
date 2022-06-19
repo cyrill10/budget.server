@@ -12,10 +12,14 @@ import java.util.Objects;
 
 public class TestUtils {
 
-    public static String loadFile(String fileName) throws IOException {
-        ClassLoader classLoader = TestUtils.class.getClassLoader();
-        File file = new File(Objects.requireNonNull(classLoader.getResource(fileName)).getFile());
+    public static String loadFileAsString(String fileName) throws IOException {
+        File file = loadFile(fileName);
         return FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+    }
+
+    public static File loadFile(String fileName) {
+        ClassLoader classLoader = TestUtils.class.getClassLoader();
+        return new File(Objects.requireNonNull(classLoader.getResource(fileName)).getFile());
     }
 
     public static String asJsonString(final Object obj) {
