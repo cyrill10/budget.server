@@ -38,7 +38,7 @@ public abstract class AbstractIT {
     }
 
     private void populateMongoDb(String collectionName) throws IOException {
-        String virtualAccountsString = TestUtils.loadFile("dump/budget/" + collectionName + ".txt");
+        String virtualAccountsString = TestUtils.loadFileAsString("dump/budget/" + collectionName + ".txt");
 
         try (MongoClient mongoClient = MongoClients.create(DataUtils.getMogoDataSourceString())) {
             MongoDatabase db = mongoClient.getDatabase("budget");

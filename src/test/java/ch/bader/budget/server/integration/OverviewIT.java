@@ -35,7 +35,7 @@ class OverviewIT extends AbstractIT {
         populateDatabaseFull();
 
         String mills2022May1 = "1651363200000";
-        JsonPath expectedJson = JsonPath.from(TestUtils.loadFile("json/overview.json"));
+        JsonPath expectedJson = JsonPath.from(TestUtils.loadFileAsString("json/overview.json"));
 
         //act + assert
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
