@@ -11,7 +11,7 @@ public class BudgetedAmountFunction implements BiFunction<Transaction, Boolean, 
     @Override
     public BigDecimal apply(Transaction t, Boolean isPreBudgetedAccount) {
         LocalDate firstDayOfThisMonth = LocalDate.now().withDayOfMonth(1);
-        if (firstDayOfThisMonth.isAfter(t.getDate())) {
+        if (!isPreBudgetedAccount && firstDayOfThisMonth.isAfter(t.getDate())) {
             return t.getEffectiveAmount();
         }
         return t.getBudgetedAmount();
