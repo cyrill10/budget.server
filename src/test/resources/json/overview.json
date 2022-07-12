@@ -4,7 +4,6 @@
     "balanceAfter": 2337.54,
     "budgetedBalanceAfter": 2337.54,
     "projection": 1987.54,
-    "budgetedProjection": 9350.69,
     "id": "62ace92e84611622284424c4",
     "realAccount": true
   },
@@ -13,7 +12,6 @@
     "balanceAfter": 121.82,
     "budgetedBalanceAfter": 121.82,
     "projection": -228.18,
-    "budgetedProjection": -355.03,
     "id": "62ace92f84611622284424cf",
     "realAccount": false
   },
@@ -22,7 +20,6 @@
     "balanceAfter": 503.05,
     "budgetedBalanceAfter": 503.05,
     "projection": 503.05,
-    "budgetedProjection": 1343.05,
     "id": "62ace92f84611622284424d0",
     "realAccount": false
   },
@@ -31,7 +28,6 @@
     "balanceAfter": 219.87,
     "budgetedBalanceAfter": 219.87,
     "projection": 219.87,
-    "budgetedProjection": 3719.87,
     "id": "62ace92f84611622284424d1",
     "realAccount": false
   },
@@ -40,7 +36,6 @@
     "balanceAfter": -468.35,
     "budgetedBalanceAfter": -468.35,
     "projection": -468.35,
-    "budgetedProjection": 2681.65,
     "id": "62ace92f84611622284424d2",
     "realAccount": false
   },
@@ -49,7 +44,6 @@
     "balanceAfter": 1961.15,
     "budgetedBalanceAfter": 1961.15,
     "projection": 1961.15,
-    "budgetedProjection": 1961.15,
     "id": "62ace92f84611622284424ed",
     "realAccount": false
   },
@@ -58,7 +52,6 @@
     "balanceAfter": 1398.22,
     "budgetedBalanceAfter": 1398.22,
     "projection": 1398.22,
-    "budgetedProjection": 2833.22,
     "id": "62ace92e84611622284424c5",
     "realAccount": true
   },
@@ -67,7 +60,6 @@
     "balanceAfter": 640.22,
     "budgetedBalanceAfter": 640.22,
     "projection": 640.22,
-    "budgetedProjection": 1060.22,
     "id": "62ace92f84611622284424ea",
     "realAccount": false
   },
@@ -76,7 +68,6 @@
     "balanceAfter": 3.0,
     "budgetedBalanceAfter": 3.0,
     "projection": 3.0,
-    "budgetedProjection": 563.0,
     "id": "62ace92f84611622284424ec",
     "realAccount": false
   },
@@ -85,7 +76,6 @@
     "balanceAfter": 755.0,
     "budgetedBalanceAfter": 755.0,
     "projection": 755.0,
-    "budgetedProjection": 1210.0,
     "id": "62ace92f84611622284424eb",
     "realAccount": false
   },
@@ -94,7 +84,6 @@
     "balanceAfter": 1791.1,
     "budgetedBalanceAfter": 1791.1,
     "projection": 1791.1,
-    "budgetedProjection": 14001.9,
     "id": "62ace92e84611622284424c6",
     "realAccount": true
   },
@@ -103,7 +92,6 @@
     "balanceAfter": 2888.8,
     "budgetedBalanceAfter": 2888.8,
     "projection": 2888.8,
-    "budgetedProjection": 12999.6,
     "id": "62ace92f84611622284424cc",
     "realAccount": false
   },
@@ -112,7 +100,6 @@
     "balanceAfter": 100.0,
     "budgetedBalanceAfter": 100.0,
     "projection": 100.0,
-    "budgetedProjection": 100.0,
     "id": "62ace92f84611622284424d9",
     "realAccount": false
   },
@@ -121,7 +108,6 @@
     "balanceAfter": -1197.7,
     "budgetedBalanceAfter": -1197.7,
     "projection": -1197.7,
-    "budgetedProjection": 902.3,
     "id": "62ace92f84611622284424d8",
     "realAccount": false
   },
@@ -130,7 +116,6 @@
     "balanceAfter": 0.00,
     "budgetedBalanceAfter": 0.00,
     "projection": 0.00,
-    "budgetedProjection": 0.00,
     "id": "62ace92e84611622284424c7",
     "realAccount": true
   },
@@ -139,7 +124,6 @@
     "balanceAfter": 0.0,
     "budgetedBalanceAfter": 0.0,
     "projection": 0.0,
-    "budgetedProjection": 0.0,
     "id": "62ace92f84611622284424ce",
     "realAccount": false
   },
@@ -148,15 +132,14 @@
     "balanceAfter": 0.00,
     "budgetedBalanceAfter": 0.00,
     "projection": 0.00,
-    "budgetedProjection": 0.00,
     "id": "62ace92f84611622284424cd",
     "realAccount": false
   },
   {
     "name": "Prebudget",
     "balanceAfter": 2218.20,
-    "budgetedBalanceAfter": 2218.20,
-    "projection": 0.00,
+    "budgetedBalanceAfter": 1900.0,
+    "projection": -318.20,
     "budgetedProjection": null,
     "id": "62ace92e84611622284424c8",
     "realAccount": true
@@ -164,8 +147,8 @@
   {
     "name": "Going Out",
     "balanceAfter": 718.9,
-    "budgetedBalanceAfter": 718.9,
-    "projection": 0.0,
+    "budgetedBalanceAfter": 300.0,
+    "projection": -418.9,
     "budgetedProjection": null,
     "id": "62ace92f84611622284424d3",
     "realAccount": false
@@ -173,8 +156,8 @@
   {
     "name": "Groceries",
     "balanceAfter": 626.30,
-    "budgetedBalanceAfter": 626.30,
-    "projection": 0.00,
+    "budgetedBalanceAfter": 800.00,
+    "projection": 173.70,
     "budgetedProjection": null,
     "id": "62ace92f84611622284424d4",
     "realAccount": false
@@ -200,8 +183,8 @@
   {
     "name": "Transportation",
     "balanceAfter": 273.0,
-    "budgetedBalanceAfter": 273.0,
-    "projection": 0.0,
+    "budgetedBalanceAfter": 200.0,
+    "projection": -73.0,
     "budgetedProjection": null,
     "id": "62ace92f84611622284424d7",
     "realAccount": false
