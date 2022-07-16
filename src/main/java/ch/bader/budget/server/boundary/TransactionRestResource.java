@@ -12,6 +12,7 @@ import ch.bader.budget.server.type.PaymentType;
 import ch.bader.budget.server.type.TransactionIndication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RestController
@@ -50,7 +52,7 @@ public class TransactionRestResource {
     }
 
     @DeleteMapping(path = "/delete")
-    public void deleteTransaction(@RequestParam Integer transactionId) {
+    public void deleteTransaction(@RequestParam String transactionId) {
         transactionService.deleteTransaction(transactionId);
     }
 
@@ -62,9 +64,14 @@ public class TransactionRestResource {
     }
 
     @GetMapping(path = "/")
-    public TransactionBoundaryDto getTransactionById(@RequestParam int id) {
-        Transaction transaction = transactionService.getTransactionById(id);
-        return transactionMapper.mapToDto(transaction);
+    public ResponseEntity<TransactionBoundaryDto> getTransactionById(@RequestParam String id) {
+        try {
+            Transaction transaction = transactionService.getTransactionById(id);
+            return ResponseEntity.ok(transactionMapper.mapToDto(transaction));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
     }
 
     @GetMapping(path = "/list")
@@ -76,12 +83,12 @@ public class TransactionRestResource {
 
     @GetMapping(path = "/listByMonthAndVirtualAccount")
     public List<TransactionElementBoundaryDto> getAllTransactionsForMonthAndVirtualAccount(
-            @RequestParam(name = "date") long dateLong,
-            @RequestParam int accountId) {
+        @RequestParam(name = "date") long dateLong,
+        @RequestParam String accountId) {
         LocalDate date = Instant.ofEpochMilli(dateLong).atZone(ZoneId.systemDefault()).toLocalDate().withDayOfMonth(1);
         List<TransactionElement> transactionElements = transactionService.getAllTransactionsForMonthAndVirtualAccount(
-                date,
-                accountId);
+            date,
+            accountId);
 
         return transactionElements.stream()
                                   .map(transactionElementMapper::mapToDto)
@@ -90,14 +97,14 @@ public class TransactionRestResource {
 
     @GetMapping(path = "/listByMonthAndRealAccount")
     public List<TransactionElementBoundaryDto> getAllTransactionsForMonthAndRealAccount(
-            @RequestParam(name = "date") long dateLong,
-            @RequestParam int accountId) {
+        @RequestParam(name = "date") long dateLong,
+        @RequestParam String accountId) {
         LocalDate date = Instant.ofEpochMilli(dateLong).atZone(ZoneId.systemDefault()).toLocalDate().withDayOfMonth(1);
         return transactionService.getAllTransactionsForMonthAndRealAccount(date, accountId)
                                  .stream()
                                  .map(transactionElementMapper::mapToDto)
                                  .collect(
-                                         Collectors.toList());
+                                     Collectors.toList());
     }
 
     @GetMapping(path = "/type/list")

@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -19,5 +20,6 @@ public class TransactionBoundaryDto {
     private ValueEnumDto paymentType;
     private BigDecimal budgetedAmount;
     private BigDecimal effectiveAmount;
-    
+    private LocalDateTime creationDate;
+
 }

@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -22,6 +23,7 @@ public class Transaction implements Comparable<Transaction> {
     private PaymentType paymentType;
     private BigDecimal budgetedAmount;
     private BigDecimal effectiveAmount;
+    private LocalDateTime creationDate;
 
     public Transaction createDuplicate(LocalDate newDate) {
         return Transaction.builder()
@@ -34,12 +36,12 @@ public class Transaction implements Comparable<Transaction> {
                           .indication(this.indication)
                           .paymentType(this.paymentType)
                           .date(newDate)
+                          .creationDate(LocalDateTime.now())
                           .build();
     }
 
     @Override
     public int compareTo(Transaction o) {
-        return this.id.compareTo(o.id);
-
+        return this.creationDate.compareTo(o.creationDate);
     }
 }

@@ -25,29 +25,32 @@ public class OverviewCalculator {
                          .distinct()
                          .filter(entry -> new OverviewRealAccountPredicate().test(entry.getKey()))
                          .map(account -> getOverviewElementListFromRealAccount(account,
-                                 allTransactions, allTransactionsTillEndOfYear, utilDate))
+                             allTransactions, allTransactionsTillEndOfYear, utilDate))
                          .flatMap(Collection::stream)
                          .collect(Collectors.toList());
     }
 
     public static List<OverviewElement> getOverviewElementListFromRealAccount(
-            Map.Entry<RealAccount, List<VirtualAccount>> accountEntry, List<Transaction> allTransactions,
-            List<Transaction> allTransactionsTillEndOfYear, LocalDate untilDate) {
+        Map.Entry<RealAccount, List<VirtualAccount>> accountEntry, List<Transaction> allTransactions,
+        List<Transaction> allTransactionsTillEndOfYear, LocalDate untilDate) {
         LinkedList<OverviewElement> elements = accountEntry.getValue().stream().distinct()
                                                            .filter(va -> !va.isDeleted())
                                                            .map(virtualAccount -> getOverviewElementFromVirtualAccount(
-                                                                   virtualAccount,
-                                                                   allTransactions.stream()
-                                                                                  .filter(t -> t.getCreditedAccount()
-                                                                                                .equals(virtualAccount) || t.getDebitedAccount()
-                                                                                                                            .equals(virtualAccount))
-                                                                                  .collect(Collectors.toList()),
-                                                                   allTransactionsTillEndOfYear.stream()
-                                                                                               .filter(t -> t.getCreditedAccount()
-                                                                                                             .equals(virtualAccount) || t.getDebitedAccount()
-                                                                                                                                         .equals(virtualAccount))
-                                                                                               .collect(Collectors.toList()),
-                                                                   untilDate))
+                                                               virtualAccount,
+                                                               allTransactions.stream()
+                                                                              .filter(t -> t.getCreditedAccount()
+                                                                                            .equals(virtualAccount) || t
+                                                                                  .getDebitedAccount()
+                                                                                  .equals(virtualAccount))
+                                                                              .collect(Collectors.toList()),
+                                                               allTransactionsTillEndOfYear.stream()
+                                                                                           .filter(t -> t
+                                                                                               .getCreditedAccount()
+                                                                                               .equals(virtualAccount) || t
+                                                                                               .getDebitedAccount()
+                                                                                               .equals(virtualAccount))
+                                                                                           .collect(Collectors.toList()),
+                                                               untilDate))
                                                            .collect(Collectors.toCollection(LinkedList::new));
         elements.push(createOverviewElement(accountEntry.getKey(), elements));
         return elements;
@@ -69,9 +72,9 @@ public class OverviewCalculator {
                 .distinct()
                 .forEach(element -> {
                     realAccountBalance.add(element.getBalanceAfter(),
-                            element.getBudgetedBalanceAfter());
+                        element.getBudgetedBalanceAfter());
                     projectionBalance.add(element.getProjection(),
-                            element.getBudgetedProjection() != null ? element.getBudgetedProjection() : BigDecimal.ZERO);
+                        element.getBudgetedProjection() != null ? element.getBudgetedProjection() : BigDecimal.ZERO);
                 });
 
 
@@ -79,7 +82,7 @@ public class OverviewCalculator {
         BigDecimal budgetedProjection;
 
         if (account.isPrebudgetedAccount()) {
-            projection = realAccountBalance.getBudgeted().subtract(realAccountBalance.getBudgeted());
+            projection = realAccountBalance.getBudgeted().subtract(realAccountBalance.getEffective());
             budgetedProjection = null;
 
         } else {
@@ -88,12 +91,12 @@ public class OverviewCalculator {
         }
 
         return new OverviewElement(account.getName(),
-                realAccountBalance.getEffective(),
-                realAccountBalance.getBudgeted(),
-                projection,
-                budgetedProjection,
-                true,
-                account.getId());
+            realAccountBalance.getEffective(),
+            realAccountBalance.getBudgeted(),
+            projection,
+            budgetedProjection,
+            true,
+            account.getId());
     }
 
 }

@@ -1,36 +1,34 @@
 package ch.bader.budget.server.core.virtualAccount;
 
 import ch.bader.budget.server.domain.VirtualAccount;
-import ch.bader.budget.server.repository.VirtualAccountRepository;
+import ch.bader.budget.server.repository.VirtualAccountAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class VirtualAccountService {
-
+    
     @Autowired
-    private VirtualAccountRepository virtualAccountRepository;
+    @Qualifier("virtualAccountMongo")
+    private VirtualAccountAdapter virtualAccountAdapter;
 
 
     public VirtualAccount addVirtualAccount(VirtualAccount account) {
-        return virtualAccountRepository.save(account);
+        return virtualAccountAdapter.save(account);
     }
 
     public VirtualAccount updateVirtualAccount(VirtualAccount account) {
-        return virtualAccountRepository.updateVirtualAccount(account);
+        return virtualAccountAdapter.updateVirtualAccount(account);
     }
 
-    public VirtualAccount getAccountById(Integer id) {
-        return virtualAccountRepository.getAccountById(id);
+    public VirtualAccount getAccountById(String id) {
+        return virtualAccountAdapter.getAccountById(id);
     }
 
     public List<VirtualAccount> getAllVirtualAccounts() {
-        return virtualAccountRepository.getAllVirtualAccountsWithTheirUnderlyingAccount();
-    }
-
-    public List<VirtualAccount> getAllVirtualAccountsForRealAccount(Integer realAccountId) {
-        return virtualAccountRepository.getAllVirtualAccountsForRealAccount(realAccountId);
+        return virtualAccountAdapter.getAllVirtualAccountsWithTheirUnderlyingAccount();
     }
 }
