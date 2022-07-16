@@ -41,7 +41,7 @@ public class RealAccountRestResource {
     }
 
     @GetMapping(path = "/")
-    public RealAccountBoundaryDto getAccount(@RequestParam Integer id) {
+    public RealAccountBoundaryDto getAccount(@RequestParam String id) {
         RealAccount result = realAccountService.getAccountById(id);
         return realAccountMapper.mapToDto(result);
     }
@@ -52,8 +52,8 @@ public class RealAccountRestResource {
         return realAccounts.entrySet()
                            .stream()
                            .map(entry -> new AccountElementBoundaryDto(realAccountMapper.mapToDto(entry.getKey()),
-                                   entry.getValue().stream().map(virtualAccountMapper::mapToDto)
-                                        .collect(Collectors.toList())))
+                               entry.getValue().stream().map(virtualAccountMapper::mapToDto)
+                                    .collect(Collectors.toList())))
                            .collect(Collectors.toList());
     }
 

@@ -5,19 +5,19 @@ import ch.bader.budget.server.domain.ClosingProcess;
 import ch.bader.budget.server.domain.ScannedTransaction;
 import ch.bader.budget.server.domain.Transaction;
 import ch.bader.budget.server.domain.VirtualAccount;
-import ch.bader.budget.server.process.closing.ScannedTransactionBean;
-import ch.bader.budget.server.repository.ClosingProcessRepository;
-import ch.bader.budget.server.repository.ScannedTransactionRepository;
-import ch.bader.budget.server.repository.TransactionRepository;
-import ch.bader.budget.server.repository.VirtualAccountRepository;
+import ch.bader.budget.server.process.closing.ScannedTransactionCsvBean;
+import ch.bader.budget.server.repository.ClosingProcessAdapter;
+import ch.bader.budget.server.repository.ScannedTransactionAdapter;
+import ch.bader.budget.server.repository.TransactionAdapter;
+import ch.bader.budget.server.repository.VirtualAccountAdapter;
 import ch.bader.budget.server.type.ClosingProcessStatus;
 import ch.bader.budget.server.type.PaymentStatus;
 import ch.bader.budget.server.type.PaymentType;
 import ch.bader.budget.server.type.TransactionIndication;
 import com.opencsv.bean.CsvToBeanBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -25,106 +25,110 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Comparator;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class ClosingProcessService {
 
     @Autowired
-    ClosingProcessRepository closingProcessRepository;
+    @Qualifier("closingProcessMongo")
+    ClosingProcessAdapter closingProcessAdapter;
 
     @Autowired
-    ScannedTransactionRepository scannedTransactionRepository;
+    @Qualifier("scannedTransactionMongo")
+    ScannedTransactionAdapter scannedTransactionAdapter;
 
     @Autowired
-    VirtualAccountRepository virtualAccountRepository;
+    @Qualifier("virtualAccountMongo")
+    private VirtualAccountAdapter virtualAccountAdapter;
 
     @Autowired
-    TransactionRepository transactionRepository;
+    @Qualifier("transactionMongo")
+    TransactionAdapter transactionAdapter;
 
-    public ClosingProcess getClosingProcess(Integer year, Integer month) {
-        return closingProcessRepository.getClosingProcess(year, month);
+    public ClosingProcess getClosingProcess(YearMonth yearMonth) {
+        return closingProcessAdapter.getClosingProcess(yearMonth);
     }
 
-    public ClosingProcess closeFileUpload(@RequestParam Integer year, @RequestParam Integer month) {
-        ClosingProcess result = closingProcessRepository.getClosingProcess(year, month);
+    public ClosingProcess closeFileUpload(YearMonth yearMonth) {
+        ClosingProcess result = closingProcessAdapter.getClosingProcess(yearMonth);
         result.setUploadStatus(ClosingProcessStatus.DONE);
-        return closingProcessRepository.save(result);
+        return closingProcessAdapter.save(result);
     }
 
-    public List<ScannedTransaction> uploadFile(
-            Integer year,
-            Integer month,
-            MultipartFile file) throws IOException {
-        ClosingProcess closingProcess = closingProcessRepository.getClosingProcess(year, month);
+    public List<ScannedTransaction> uploadFile(YearMonth yearMonth, MultipartFile file) throws IOException {
+        ClosingProcess closingProcess = closingProcessAdapter.getClosingProcess(yearMonth);
         if (closingProcess.getUploadStatus().equals(ClosingProcessStatus.NEW)) {
             Reader reader = new InputStreamReader(file.getInputStream());
-            List<ScannedTransaction> scannedTransactions = new CsvToBeanBuilder<ScannedTransactionBean>(reader)
-                    .withType(ScannedTransactionBean.class)
-                    .build()
-                    .stream()
-                    .filter(stb -> !stb.getDescription().contains("IHRE ZAHLUNG – BESTEN DANK"))
-                    .map(stb -> stb.mapTopScannedTransaction(closingProcess))
-                    .sorted(Comparator.comparing(ScannedTransaction::getDate))
-                    .collect(Collectors.toList());
+            List<ScannedTransaction> scannedTransactions = new CsvToBeanBuilder<ScannedTransactionCsvBean>(reader)
+                .withType(ScannedTransactionCsvBean.class)
+                .build()
+                .stream()
+                .filter(stb -> !stb.getDescription().contains("IHRE ZAHLUNG – BESTEN DANK"))
+                .map(stb -> stb.mapTopScannedTransaction(closingProcess))
+                .sorted()
+                .collect(Collectors.toList());
 
             closingProcess.setUploadStatus(ClosingProcessStatus.STARTED);
-            closingProcessRepository.save(closingProcess);
-            return scannedTransactionRepository.saveAll(scannedTransactions);
+            closingProcessAdapter.save(closingProcess);
+            return scannedTransactionAdapter.saveAll(scannedTransactions);
         }
         return null;
     }
 
-    public List<ScannedTransaction> getTransactions(
-            Integer year,
-            Integer month) {
-        return scannedTransactionRepository.getTransactionsForClosingProcess(year,
-                month);
+    public List<ScannedTransaction> getTransactions(YearMonth yearMonth) {
+        return scannedTransactionAdapter.getTransactionsForYearMonth(yearMonth);
     }
 
 
     public void saveScannedTransactions(SaveScannedTransactionBoundaryDto dto) {
-        List<ScannedTransaction> scannedTransactions = scannedTransactionRepository.findAllById(dto.getTransactionIds());
-        ClosingProcess closingProcess = scannedTransactions.stream()
-                                                           .findFirst()
-                                                           .orElseThrow()
-                                                           .getClosingProcess();
-        LocalDate transactionDate = LocalDate.of(closingProcess.getYear(), closingProcess.getMonth() + 1, 1);
+        List<ScannedTransaction> scannedTransactions = scannedTransactionAdapter.findAllById(dto.getTransactionIds());
+        YearMonth yearMonth = scannedTransactions.stream()
+                                                 .findFirst()
+                                                 .orElseThrow()
+                                                 .getYearMonth();
 
-        Optional<VirtualAccount> creditedAccount = virtualAccountRepository.findByAccountId(dto.getCreditedAccountId());
-        Optional<VirtualAccount> debitedAccount = virtualAccountRepository.findByAccountId(dto.getDebitedAccountId());
-        Optional<VirtualAccount> throughAccount = dto.getThroughAccountId() != null ? virtualAccountRepository.findByAccountId(
-                dto.getThroughAccountId()) : Optional.empty();
+        LocalDate transactionDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonthValue(), 10);
+
+        VirtualAccount creditedAccount = virtualAccountAdapter.getAccountById(dto.getCreditedAccountId());
+        VirtualAccount debitedAccount = virtualAccountAdapter.getAccountById(dto.getDebitedAccountId());
+        VirtualAccount throughAccount = null;
+
+        if (dto.getThroughAccountId() != null) {
+            throughAccount = virtualAccountAdapter.getAccountById(
+                dto.getThroughAccountId());
+        }
 
         List<Transaction> transactions;
-        if (throughAccount.isPresent()) {
+        if (throughAccount != null) {
             transactions = createTransactions(scannedTransactions,
-                    creditedAccount.orElseThrow(),
-                    debitedAccount.orElseThrow(),
-                    throughAccount.get(),
-                    transactionDate);
+                creditedAccount,
+                debitedAccount,
+                throughAccount,
+                transactionDate);
         } else {
             transactions = createTransactions(scannedTransactions,
-                    creditedAccount.orElseThrow(),
-                    debitedAccount.orElseThrow(),
-                    transactionDate);
+                creditedAccount,
+                debitedAccount,
+                transactionDate);
         }
-        scannedTransactionRepository.saveAll(scannedTransactions);
-        transactionRepository.saveTransactions(transactions);
+        scannedTransactionAdapter.saveAll(scannedTransactions);
+        transactionAdapter.saveTransactions(transactions);
     }
 
     private List<Transaction> createTransactions(List<ScannedTransaction> scannedTransactions,
                                                  VirtualAccount creditedAccount,
                                                  VirtualAccount debitedAccount, LocalDate date) {
         return scannedTransactions.stream()
+                                  .sorted()
                                   .map(ScannedTransaction::createTransaction)
                                   .map(sc -> createTransaction(sc,
-                                          creditedAccount,
-                                          debitedAccount,
-                                          date)).collect(Collectors.toList());
+                                      creditedAccount,
+                                      debitedAccount,
+                                      date)).collect(Collectors.toList());
 
 
     }
@@ -135,12 +139,13 @@ public class ClosingProcessService {
                                                  LocalDate date) {
 
         return scannedTransactions.stream()
+                                  .sorted()
                                   .map(ScannedTransaction::createTransaction)
                                   .map(sc -> createThroughTransactions(sc,
-                                          creditedAccount,
-                                          debitedAccount,
-                                          throughtAccount,
-                                          date))
+                                      creditedAccount,
+                                      debitedAccount,
+                                      throughtAccount,
+                                      date))
                                   .flatMap(List::stream)
                                   .collect(Collectors.toList());
     }
@@ -158,6 +163,7 @@ public class ClosingProcessService {
                           .creditedAccount(creditedAccount)
                           .debitedAccount(debitedAccout)
                           .budgetedAmount(BigDecimal.ZERO)
+                          .creationDate(LocalDateTime.now())
                           .build();
     }
 

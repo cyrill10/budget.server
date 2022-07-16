@@ -20,15 +20,4 @@ public class MonthGenerator {
         }
         return allMonths;
     }
-
-    public static int getCurrentMonthInt() {
-        LocalDate today = LocalDate.now();
-
-        LocalDate startDate = LocalDate.from(STARTDATE).plusMonths(1);
-        int i = 0;
-        while (startDate.plusMonths(i).isBefore(today)) {
-            i++;
-        }
-        return i;
-    }
 }

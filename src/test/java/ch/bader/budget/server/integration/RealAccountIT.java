@@ -3,38 +3,28 @@ package ch.bader.budget.server.integration;
 import ch.bader.budget.server.boundary.dto.RealAccountBoundaryDto;
 import ch.bader.budget.server.boundary.dto.ValueEnumDto;
 import ch.bader.budget.server.type.AccountType;
-import com.mysql.cj.jdbc.MysqlDataSource;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
-import static ch.bader.budget.server.DataUtils.getMySQLDataSource;
 import static ch.bader.budget.server.TestUtils.asJsonString;
 import static ch.bader.budget.server.TestUtils.getAuthHeader;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.matchesRegex;
+import static org.hamcrest.Matchers.isA;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class RealAccountIT {
+class RealAccountIT extends AbstractIT {
 
-    MysqlDataSource dataSource;
-
-    @BeforeAll
-    void initDatabase() throws IOException {
-        dataSource = getMySQLDataSource();
-
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-        populator.addScript(new ClassPathResource("/sql/fullDatabase.sql"));
-        populator.execute(dataSource);
+    @Test
+    public void shouldLoadDb() throws IOException, URISyntaxException {
+        //arrange
+        populateDatabaseFull();
     }
-
 
     @Test
     public void shouldAddAccount() {
@@ -53,14 +43,17 @@ class RealAccountIT {
                .log().all()
                .statusCode(HttpStatus.SC_CREATED)
                .body("name", equalTo("TestAccount"))
-               .body("id", matchesRegex("\\d+"))
+               .body("id", isA(String.class))
                .body("accountType.value", equalTo(AccountType.CHECKING.getValue()));
     }
 
     @Test
-    public void shouldUpdateAccount() {
+    public void shouldUpdateAccount() throws IOException, URISyntaxException {
+        //arrange
+        populateDatabaseFull();
+        //act
         RealAccountBoundaryDto input = RealAccountBoundaryDto.builder()
-                                                             .id("5")
+                                                             .id("62a2560999508e3db411c854")
                                                              .name("TestAccount2")
                                                              .accountType(ValueEnumDto.builder()
                                                                                       .value(AccountType.CREDIT.getValue())
@@ -75,52 +68,65 @@ class RealAccountIT {
                .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("name", equalTo("TestAccount2"))
-               .body("id", equalTo("5"))
+               .body("id", equalTo("62a2560999508e3db411c854"))
                .body("accountType.value", equalTo(AccountType.CREDIT.getValue()));
 
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
-               .param("id", 5)
+               .param("id", "62a2560999508e3db411c854")
                .get("/budget/realAccount/")
                .then()
                .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("name", equalTo("TestAccount2"))
-               .body("id", matchesRegex("\\d+"))
+               .body("id", equalTo("62a2560999508e3db411c854"))
                .body("accountType.value", equalTo(AccountType.CREDIT.getValue()));
     }
 
 
     @Test
-    public void shouldGetAccount() {
-
+    public void shouldGetAccount() throws IOException, URISyntaxException {
+        //arrange
+        populateDatabaseFull();
+        //act
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
-               .param("id", 1)
+               //1
+               .param("id", "62d172d23b2f355e5ceafb5a")
                .get("/budget/realAccount/")
                .then()
                .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("name", equalTo("Checking"))
-               .body("id", matchesRegex("\\d+"))
+               //1
+               .body("id", equalTo("62d172d23b2f355e5ceafb5a"))
                .body("accountType.value", equalTo(AccountType.CHECKING.getValue()));
     }
 
     @Test
-    public void shouldGetAllAccounts() {
-
+    public void shouldGetAllAccounts() throws IOException, URISyntaxException {
+        //arrange
+        populateDatabaseFull();
+        //act
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
                .get("/budget/realAccount/list")
                .then()
                .log().all()
                .statusCode(HttpStatus.SC_OK)
-               .body("$.size()", equalTo(9));
+               .body("$.size()", equalTo(8))
+               .body("[0].realAccount.name", equalTo("Checking"))
+               .body("[0].virtualAccounts.size()", equalTo(5))
+               .body("[1].virtualAccounts[1].name", equalTo("Libera Lyka"))
+               .body("[7].realAccount.name", equalTo("Prebudget"))
+               .body("[7].virtualAccounts.size()", equalTo(5))
+               .body("[7].virtualAccounts[0].name", equalTo("Going Out"))
+               .body("[7].virtualAccounts[0].underlyingAccount.accountType.value", equalTo(5));
     }
 
     @Test
     public void shouldGetAllAccountTyps() {
-
+        //act
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
                .get("/budget/realAccount/type/list")
