@@ -92,14 +92,14 @@ class RealAccountIT extends AbstractIT {
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
                //1
-               .param("id", "62ace92e84611622284424c4")
+               .param("id", "62d172d23b2f355e5ceafb5a")
                .get("/budget/realAccount/")
                .then()
                .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("name", equalTo("Checking"))
                //1
-               .body("id", equalTo("62ace92e84611622284424c4"))
+               .body("id", equalTo("62d172d23b2f355e5ceafb5a"))
                .body("accountType.value", equalTo(AccountType.CHECKING.getValue()));
     }
 

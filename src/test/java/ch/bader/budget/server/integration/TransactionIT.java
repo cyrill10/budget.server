@@ -51,7 +51,7 @@ class TransactionIT extends AbstractIT {
         VirtualAccountBoundaryDto virtualAccount = VirtualAccountBoundaryDto
             .builder()
             //2
-            .id("62ace92f84611622284424cd")
+            .id("62d172d93b2f355e5ceafb63")
             .name("Bonviva")
             .isDeleted(false).balance(BigDecimal.ZERO)
             .underlyingAccount(underlyingAccount)
@@ -101,7 +101,7 @@ class TransactionIT extends AbstractIT {
         RealAccountBoundaryDto underlyingAccount = RealAccountBoundaryDto
             .builder()
             //1
-            .id("62ace92e84611622284424c4")
+            .id("62d172d23b2f355e5ceafb5a")
             .name("Checking")
             .accountType(ValueEnumDto.builder()
                                      .value(AccountType.CHECKING.getValue())
@@ -111,7 +111,7 @@ class TransactionIT extends AbstractIT {
         VirtualAccountBoundaryDto virtualAccountChecking = VirtualAccountBoundaryDto
             .builder()
             //4
-            .id("62ace92f84611622284424cf")
+            .id("62d172d93b2f355e5ceafb65")
             .name("Checking")
             .isDeleted(false).balance(BigDecimal.ZERO)
             .underlyingAccount(underlyingAccount)
@@ -120,7 +120,7 @@ class TransactionIT extends AbstractIT {
         VirtualAccountBoundaryDto virtualAccountHealth = VirtualAccountBoundaryDto
             .builder()
             //7
-            .id("62ace92f84611622284424d2")
+            .id("62d172d93b2f355e5ceafb68")
             .name("Health Savings")
             .isDeleted(false).balance(BigDecimal.ZERO)
             .underlyingAccount(underlyingAccount)
@@ -130,7 +130,7 @@ class TransactionIT extends AbstractIT {
         TransactionBoundaryDto input = TransactionBoundaryDto
             .builder()
             //294
-            .id("62ace92f8461162228442607")
+            .id("62d172e63b2f355e5ceafc9b")
             .creditedAccount(virtualAccountChecking)
             .debitedAccount(virtualAccountHealth)
             .description("Health Saving")
@@ -158,7 +158,7 @@ class TransactionIT extends AbstractIT {
                .statusCode(HttpStatus.SC_OK)
                .body("description", equalTo("Health Saving"))
                //294
-               .body("id", equalTo("62ace92f8461162228442607"))
+               .body("id", equalTo("62d172e63b2f355e5ceafc9b"))
                .body("budgetedAmount", equalTo(400))
                .body("effectiveAmount", equalTo(500))
                .body("debitedAccount.name", equalTo("Health Savings"))
@@ -169,14 +169,14 @@ class TransactionIT extends AbstractIT {
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
                //294
-               .param("id", "62ace92f8461162228442607")
+               .param("id", "62d172e63b2f355e5ceafc9b")
                .get("/budget/transaction/")
                .then()
                .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("description", equalTo("Health Saving"))
                //294
-               .body("id", equalTo("62ace92f8461162228442607"))
+               .body("id", equalTo("62d172e63b2f355e5ceafc9b"))
                .body("budgetedAmount", equalTo(400))
                .body("effectiveAmount", equalTo(500))
                .body("debitedAccount.name", equalTo("Health Savings"))
@@ -194,14 +194,14 @@ class TransactionIT extends AbstractIT {
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
                //294
-               .param("id", "62ace92f8461162228442607")
+               .param("id", "62d172e63b2f355e5ceafc9b")
                .get("/budget/transaction/")
                .then()
                .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("description", equalTo("Health Saving"))
                //294
-               .body("id", equalTo("62ace92f8461162228442607"))
+               .body("id", equalTo("62d172e63b2f355e5ceafc9b"))
                .body("budgetedAmount", equalTo(400F))
                .body("effectiveAmount", equalTo(400F))
                .body("debitedAccount.name", equalTo("Health Savings"))
@@ -218,7 +218,7 @@ class TransactionIT extends AbstractIT {
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
                //294
-               .param("transactionId", "62ace92f8461162228442607")
+               .param("transactionId", "62d172e63b2f355e5ceafc9b")
                .delete("/budget/transaction/delete")
                .then()
                .log().all()
@@ -227,7 +227,7 @@ class TransactionIT extends AbstractIT {
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
                //294
-               .param("id", "62ace92f8461162228442607")
+               .param("id", "62d172e63b2f355e5ceafc9b")
                .get("/budget/transaction/")
                .then()
                .log().all()
@@ -242,7 +242,7 @@ class TransactionIT extends AbstractIT {
         RealAccountBoundaryDto underlyingAccount = RealAccountBoundaryDto
             .builder()
             //1
-            .id("62ace92e84611622284424c4")
+            .id("62d172d23b2f355e5ceafb5a")
             .name("Checking")
             .accountType(ValueEnumDto.builder()
                                      .value(AccountType.CHECKING.getValue())
@@ -252,7 +252,7 @@ class TransactionIT extends AbstractIT {
         VirtualAccountBoundaryDto virtualAccountChecking = VirtualAccountBoundaryDto
             .builder()
             //4
-            .id("62ace92f84611622284424cf")
+            .id("62d172d93b2f355e5ceafb65")
             .name("Checking")
             .isDeleted(false).balance(BigDecimal.ZERO)
             .underlyingAccount(underlyingAccount)
@@ -261,7 +261,7 @@ class TransactionIT extends AbstractIT {
         VirtualAccountBoundaryDto virtualAccountHealth = VirtualAccountBoundaryDto
             .builder()
             //7
-            .id("62ace92f84611622284424d2")
+            .id("62d172d93b2f355e5ceafb68")
             .name("Health Savings")
             .isDeleted(false).balance(BigDecimal.ZERO)
             .underlyingAccount(underlyingAccount)
@@ -271,7 +271,7 @@ class TransactionIT extends AbstractIT {
         TransactionBoundaryDto input = TransactionBoundaryDto
             .builder()
             //294
-            .id("62ace92f8461162228442607")
+            .id("62d172e63b2f355e5ceafc9b")
             .creditedAccount(virtualAccountChecking)
             .debitedAccount(virtualAccountHealth)
             .description("Health Saving")
@@ -310,23 +310,23 @@ class TransactionIT extends AbstractIT {
                .then()
                .log().all()
                .statusCode(HttpStatus.SC_OK)
-               .body("$.size()", equalTo(24))
-               .body("[0].description", equalTo("Internet"))
-               .body("[0].budgetedAmount", equalTo(45F))
+               .body("$.size()", equalTo(168))
+               .body("[0].description", equalTo("Going out"))
+               .body("[0].budgetedAmount", equalTo(300F))
                .body("[0].effectiveAmount", equalTo(0F))
-               .body("[0].debitedAccount.name", equalTo("Internet & Phone"))
-               .body("[0].creditedAccount.name", equalTo("Checking"))
+               .body("[0].debitedAccount.name", equalTo("Going Out"))
+               .body("[0].creditedAccount.name", equalTo("Miles & More"))
                .body("[0].debitedAccount.underlyingAccount.accountType.value",
-                   equalTo(AccountType.ALIEN.getValue()))
-               .body("[10].description", equalTo("Salary"))
-               .body("[10].budgetedAmount", equalTo(7363.6F))
-               .body("[10].effectiveAmount", equalTo(0F))
-               .body("[10].date", equalTo("2022-06-25"))
-               .body("[10].debitedAccount.name", equalTo("Checking"))
-               .body("[10].creditedAccount.name", equalTo("Salary Cyrill"))
-               .body("[10].debitedAccount.underlyingAccount.name", equalTo("Checking"))
+                   equalTo(AccountType.PREBUDGETED.getValue()))
+               .body("[10].description", equalTo("RACE INN, ROGGWIL BE"))
+               .body("[10].budgetedAmount", equalTo(0F))
+               .body("[10].effectiveAmount", equalTo(5F))
+               .body("[10].date", equalTo("2022-06-01"))
+               .body("[10].debitedAccount.name", equalTo("Lunch Cyrill"))
+               .body("[10].creditedAccount.name", equalTo("Miles & More"))
+               .body("[10].debitedAccount.underlyingAccount.name", equalTo("Prebudget"))
                .body("[10].debitedAccount.underlyingAccount.accountType.value",
-                   equalTo(AccountType.CHECKING.getValue()));
+                   equalTo(AccountType.PREBUDGETED.getValue()));
 
     }
 
@@ -339,7 +339,7 @@ class TransactionIT extends AbstractIT {
                .when()
                .param("date", "1651363200000")
                //2
-               .param("accountId", "62ace92f84611622284424cd")
+               .param("accountId", "62d172d93b2f355e5ceafb63")
                .get("/budget/transaction/listByMonthAndVirtualAccount")
                .then()
                .log().all()
@@ -389,12 +389,12 @@ class TransactionIT extends AbstractIT {
                .when()
                .param("date", "1654041600000")
                //1
-               .param("accountId", "62ace92e84611622284424c4")
+               .param("accountId", "62d172d23b2f355e5ceafb5a")
                .get("/budget/transaction/listByMonthAndRealAccount")
                .then()
                .log().all()
                .statusCode(HttpStatus.SC_OK)
-               .body("$.size()", equalTo(19))
+               .body("$.size()", equalTo(32))
                .body("[0].name", equalTo("Before"))
                .body("[0].balance", equalTo(2337.54F))
                .body("[0].amount", equalTo(0))
@@ -402,24 +402,24 @@ class TransactionIT extends AbstractIT {
                .body("[0].budgetedAmount", equalTo(0))
                .body("[0].id", equalTo("0"))
 
-               .body("[12].name", equalTo("Hairdresser "))
-               .body("[12].balance", equalTo(2287.54F))
-               .body("[12].amount", equalTo(-50F))
-               .body("[12].budgetedBalance", equalTo(5177.39F))
-               .body("[12].budgetedAmount", equalTo(0F))
+               .body("[12].name", equalTo("Health insurance"))
+               .body("[12].balance", equalTo(-2513.31F))
+               .body("[12].amount", equalTo(-794.15F))
+               .body("[12].budgetedBalance", equalTo(-1951.21F))
+               .body("[12].budgetedAmount", equalTo(-794.15F))
 
-               .body("[10].name", equalTo("Phone"))
-               .body("[10].balance", equalTo(2337.54F))
-               .body("[10].amount", equalTo(0F))
-               .body("[10].budgetedBalance", equalTo(5377.49F))
-               .body("[10].budgetedAmount", equalTo(-50F))
+               .body("[10].name", equalTo("Rent"))
+               .body("[10].balance", equalTo(-1519.06F))
+               .body("[10].amount", equalTo(-1356.0F))
+               .body("[10].budgetedBalance", equalTo(-956.96F))
+               .body("[10].budgetedAmount", equalTo(-1356.0F))
 
-               .body("[18].name", equalTo("After"))
-               .body("[18].balance", equalTo(2287.54F))
-               .body("[18].amount", equalTo(0))
-               .body("[18].budgetedBalance", equalTo(3367.99F))
-               .body("[18].budgetedAmount", equalTo(0))
-               .body("[18].id", equalTo("2147483646"));
+               .body("[31].name", equalTo("After"))
+               .body("[31].balance", equalTo(2361.84F))
+               .body("[31].amount", equalTo(0))
+               .body("[31].budgetedBalance", equalTo(3387.99F))
+               .body("[31].budgetedAmount", equalTo(0))
+               .body("[31].id", equalTo("2147483646"));
     }
 
     @Test
