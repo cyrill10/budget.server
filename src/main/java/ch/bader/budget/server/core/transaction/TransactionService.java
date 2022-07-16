@@ -59,7 +59,7 @@ public class TransactionService {
     }
 
     public List<Transaction> getAllTransactions(LocalDate date) {
-        return transactionAdapter.getAllTransactions(date);
+        return transactionAdapter.getAllTransactions(date).stream().sorted().collect(Collectors.toList());
     }
 
     public List<TransactionElement> getAllTransactionsForMonthAndVirtualAccount(LocalDate date, String accountId) {

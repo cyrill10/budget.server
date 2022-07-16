@@ -210,8 +210,8 @@ class ClosingProcessIT extends AbstractIT {
             SaveScannedTransactionBoundaryDto body = SaveScannedTransactionBoundaryDto
                 .builder()
                 .transactionIds(transactionIds)
-                .creditedAccountId("62ace92f84611622284424cd")
-                .debitedAccountId("62ace92f84611622284424d5")
+                .creditedAccountId("62d172d93b2f355e5ceafb63")
+                .debitedAccountId("62d172da3b2f355e5ceafb6b")
                 .build();
 
             // create transactions from scannedtransactions
@@ -327,9 +327,9 @@ class ClosingProcessIT extends AbstractIT {
             SaveScannedTransactionBoundaryDto body = SaveScannedTransactionBoundaryDto
                 .builder()
                 .transactionIds(transactionIds)
-                .creditedAccountId("62ace92f84611622284424d1")
-                .debitedAccountId("62ace92f84611622284424e4")
-                .throughAccountId("62ace92f84611622284424cd")
+                .creditedAccountId("62d172d93b2f355e5ceafb67")
+                .debitedAccountId("62d172da3b2f355e5ceafb7a")
+                .throughAccountId("62d172d93b2f355e5ceafb63")
                 .build();
 
             // create transactions from scannedtransactions

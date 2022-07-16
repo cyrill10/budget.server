@@ -30,13 +30,13 @@ public class TransactionCalculator {
         Predicate<Transaction> beforePredicate = new TransactionBeforePredicate(from);
 
         Balance accountBalance =
-                VirtualAccountCalculator.getBalanceAt(virtualAccount,
-                        transactions.stream().filter(beforePredicate).collect(Collectors.toList()),
-                        effectiveAmountFunction,
-                        budgetedAmountFunction, from);
+            VirtualAccountCalculator.getBalanceAt(virtualAccount,
+                transactions.stream().filter(beforePredicate).collect(Collectors.toList()),
+                effectiveAmountFunction,
+                budgetedAmountFunction, from);
 
         TransactionElement before = new TransactionElement("Before", accountBalance.getEffective(),
-                accountBalance.getBudgeted(), "0");
+            accountBalance.getBudgeted(), "0");
 
         Predicate<Transaction> duringPredicate = new TransactionInMonthPredicate(from);
 
@@ -44,8 +44,8 @@ public class TransactionCalculator {
                                                                          .distinct()
                                                                          .filter(duringPredicate)
                                                                          .map(t -> createTransactionElement(t,
-                                                                                 virtualAccount,
-                                                                                 accountBalance))
+                                                                             virtualAccount,
+                                                                             accountBalance))
                                                                          // This peek is ugly and keeps track of how much money went in and out in total
                                                                          .peek(t -> {
                                                                              if (t.getAmount()
@@ -53,23 +53,23 @@ public class TransactionCalculator {
                                                                                  in.add(t.getAmount(), BigDecimal.ZERO);
                                                                              } else {
                                                                                  out.subtract(t.getAmount(),
-                                                                                         BigDecimal.ZERO);
+                                                                                     BigDecimal.ZERO);
                                                                              }
                                                                              if (t.getBudgetedAmount()
                                                                                   .compareTo(BigDecimal.ZERO) >= 0) {
                                                                                  in.add(BigDecimal.ZERO,
-                                                                                         t.getBudgetedAmount());
+                                                                                     t.getBudgetedAmount());
                                                                              } else {
                                                                                  out.subtract(BigDecimal.ZERO,
-                                                                                         t.getBudgetedAmount());
+                                                                                     t.getBudgetedAmount());
                                                                              }
                                                                          })
                                                                          .collect(Collectors.toCollection(LinkedList::new));
         TransactionElement after = new TransactionElement("After",
-                accountBalance.getEffective(),
-                accountBalance.getBudgeted(), String.valueOf(Integer.MAX_VALUE - 1));
+            accountBalance.getEffective(),
+            accountBalance.getBudgeted(), String.valueOf(Integer.MAX_VALUE - 1));
         TransactionElement in_out = new TransactionElement(in.getEffective(), out.getEffective(), in.getBudgeted(),
-                out.getBudgeted());
+            out.getBudgeted());
         transactionElements.push(before);
         transactionElements.add(after);
         transactionElements.add(in_out);
@@ -85,19 +85,19 @@ public class TransactionCalculator {
             amount = transaction.getEffectiveAmount();
             budgetedAmount = transaction.getBudgetedAmount();
             accountBalance.add(effectiveAmountFunction.apply(transaction, virtualAccount.isPrebudgetedAccount()),
-                    budgetedAmountFunction.apply(transaction, virtualAccount.isPrebudgetedAccount()));
+                budgetedAmountFunction.apply(transaction, virtualAccount.isPrebudgetedAccount()));
         }
         if (transaction.getCreditedAccount().equals(virtualAccount)) {
             amount = BigDecimal.ZERO.subtract(transaction.getEffectiveAmount());
             budgetedAmount = BigDecimal.ZERO.subtract(transaction.getBudgetedAmount());
 
             accountBalance.subtract(effectiveAmountFunction.apply(transaction,
-                    virtualAccount.isPrebudgetedAccount()), budgetedAmountFunction.apply(transaction,
-                    virtualAccount.isPrebudgetedAccount()));
+                virtualAccount.isPrebudgetedAccount()), budgetedAmountFunction.apply(transaction,
+                virtualAccount.isPrebudgetedAccount()));
         }
 
         return new TransactionElement(transaction, amount, budgetedAmount, accountBalance.getEffective(),
-                accountBalance.getBudgeted());
+            accountBalance.getBudgeted());
     }
 
     public static List<TransactionElement> getTransactionsForMonth(List<Transaction> transactions,
@@ -107,13 +107,13 @@ public class TransactionCalculator {
         Predicate<Transaction> beforePredicate = new TransactionBeforePredicate(from);
 
         Balance accountBalance =
-                VirtualAccountCalculator.getBalanceAt(virtualAccounts,
-                        transactions.stream().filter(beforePredicate).collect(Collectors.toList()),
-                        effectiveAmountFunction,
-                        budgetedAmountFunction, from);
+            VirtualAccountCalculator.getBalanceAt(virtualAccounts,
+                transactions.stream().filter(beforePredicate).collect(Collectors.toList()),
+                effectiveAmountFunction,
+                budgetedAmountFunction, from);
 
         TransactionElement before = new TransactionElement("Before", accountBalance.getEffective(),
-                accountBalance.getBudgeted(), "0");
+            accountBalance.getBudgeted(), "0");
 
         Predicate<Transaction> duringPredicate = new TransactionInMonthPredicate(from);
 
@@ -121,12 +121,12 @@ public class TransactionCalculator {
                                                                          .distinct()
                                                                          .filter(duringPredicate)
                                                                          .map(t -> createTransactionElement(t,
-                                                                                 virtualAccounts,
-                                                                                 accountBalance))
+                                                                             virtualAccounts,
+                                                                             accountBalance))
                                                                          .collect(Collectors.toCollection(LinkedList::new));
         TransactionElement after = new TransactionElement("After",
-                accountBalance.getEffective(),
-                accountBalance.getBudgeted(), String.valueOf(Integer.MAX_VALUE - 1));
+            accountBalance.getEffective(),
+            accountBalance.getBudgeted(), String.valueOf(Integer.MAX_VALUE - 1));
         transactionElements.push(before);
         transactionElements.add(after);
         return transactionElements;
@@ -149,7 +149,7 @@ public class TransactionCalculator {
         }
 
         return new TransactionElement(transaction, amount, budgetedAmount, accountBalance.getEffective(),
-                accountBalance.getBudgeted());
+            accountBalance.getBudgeted());
     }
 
 
