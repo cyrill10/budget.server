@@ -40,7 +40,7 @@ public class TransactionRestResource {
     @PostMapping(path = "/add")
     @ResponseStatus(HttpStatus.CREATED)
     public TransactionBoundaryDto createTransaction(@RequestBody TransactionBoundaryDto dto) {
-        if (dto.creationDate == null) {
+        if (dto.getCreationDate() == null) {
             dto.setCreationDate(LocalDateTime.now());
         }
         Transaction transaction = transactionMapper.mapToDomain(dto);
