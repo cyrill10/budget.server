@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +40,9 @@ public class TransactionRestResource {
     @PostMapping(path = "/add")
     @ResponseStatus(HttpStatus.CREATED)
     public TransactionBoundaryDto createTransaction(@RequestBody TransactionBoundaryDto dto) {
+        if (dto.getCreationDate() == null) {
+            dto.setCreationDate(LocalDateTime.now());
+        }
         Transaction transaction = transactionMapper.mapToDomain(dto);
         transaction = transactionService.createTransaction(transaction);
         return transactionMapper.mapToDto(transaction);
