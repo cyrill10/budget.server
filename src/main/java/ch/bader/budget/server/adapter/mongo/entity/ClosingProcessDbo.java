@@ -21,5 +21,6 @@ public class ClosingProcessDbo {
     private YearMonth yearMonth;
     private ValueEnumDbo uploadStatus;
     private ValueEnumDbo manualEntryStatus;
+    private ValueEnumDbo transferStatus;
 
 }

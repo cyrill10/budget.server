@@ -1,15 +1,21 @@
 package ch.bader.budget.server.core.closingProcess;
 
 import ch.bader.budget.server.boundary.dto.SaveScannedTransactionBoundaryDto;
+import ch.bader.budget.server.core.transaction.TransactionService;
 import ch.bader.budget.server.domain.ClosingProcess;
+import ch.bader.budget.server.domain.RealAccount;
 import ch.bader.budget.server.domain.ScannedTransaction;
 import ch.bader.budget.server.domain.Transaction;
+import ch.bader.budget.server.domain.TransactionElement;
+import ch.bader.budget.server.domain.TransferDetails;
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.process.closing.ScannedTransactionCsvBean;
 import ch.bader.budget.server.repository.ClosingProcessAdapter;
+import ch.bader.budget.server.repository.RealAccountAdapter;
 import ch.bader.budget.server.repository.ScannedTransactionAdapter;
 import ch.bader.budget.server.repository.TransactionAdapter;
 import ch.bader.budget.server.repository.VirtualAccountAdapter;
+import ch.bader.budget.server.type.AccountType;
 import ch.bader.budget.server.type.ClosingProcessStatus;
 import ch.bader.budget.server.type.PaymentStatus;
 import ch.bader.budget.server.type.PaymentType;
@@ -49,6 +55,14 @@ public class ClosingProcessService {
     @Qualifier("transactionMongo")
     TransactionAdapter transactionAdapter;
 
+    @Autowired
+    @Qualifier("realAccountMongo")
+    private RealAccountAdapter realAccountAdapter;
+
+
+    @Autowired
+    private TransactionService transactionService;
+
     public ClosingProcess getClosingProcess(YearMonth yearMonth) {
         return closingProcessAdapter.getClosingProcess(yearMonth);
     }
@@ -57,6 +71,33 @@ public class ClosingProcessService {
         ClosingProcess result = closingProcessAdapter.getClosingProcess(yearMonth);
         result.setUploadStatus(ClosingProcessStatus.DONE);
         return closingProcessAdapter.save(result);
+    }
+
+    public ClosingProcess closeTransfer(YearMonth yearMonth) {
+        ClosingProcess result = closingProcessAdapter.getClosingProcess(yearMonth);
+        result.setTransferStatus(ClosingProcessStatus.DONE);
+        return closingProcessAdapter.save(result);
+    }
+
+    public List<TransferDetails> getTransferDetails(YearMonth yearMonth) {
+        List<RealAccount> realAccounts = realAccountAdapter.getAccountsByTyp(AccountType.SAVING);
+        return realAccounts.stream().map(r -> {
+                List<TransactionElement> transactionElements = transactionService.getAllTransactionsForMonthAndRealAccount(
+                    yearMonth.atDay(1), r.getId());
+                return extractTransferDetails(r.getName(), transactionElements);
+            }
+        ).sorted().collect(Collectors.toList());
+    }
+
+    private TransferDetails extractTransferDetails(String accountName, List<TransactionElement> transactionElements) {
+        TransactionElement balanceBefore = transactionElements.get(0);
+        TransactionElement balanceAfter = transactionElements.get(transactionElements.size() - 1);
+
+        return TransferDetails
+            .builder()
+            .transferAmount(balanceAfter.getBalance().subtract(balanceBefore.getBalance()))
+            .accountName(accountName)
+            .build();
     }
 
     public List<ScannedTransaction> uploadFile(YearMonth yearMonth, MultipartFile file) throws IOException {

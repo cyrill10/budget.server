@@ -6,9 +6,11 @@ import ch.bader.budget.server.adapter.mongo.repository.RealAccountMongoRepositor
 import ch.bader.budget.server.adapter.mongo.repository.VirtualAccountMongoRepository;
 import ch.bader.budget.server.domain.RealAccount;
 import ch.bader.budget.server.domain.VirtualAccount;
+import ch.bader.budget.server.mapper.AccountTypeMapper;
 import ch.bader.budget.server.mapper.RealAccountMapper;
 import ch.bader.budget.server.mapper.VirtualAccountMapper;
 import ch.bader.budget.server.repository.RealAccountAdapter;
+import ch.bader.budget.server.type.AccountType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +33,10 @@ public class RealAccountAdapterImpl implements RealAccountAdapter {
     private RealAccountMongoRepository realAccountMongoRepository;
 
     @Autowired
-    VirtualAccountMongoRepository virtualAccountMongoRepository;
+    private VirtualAccountMongoRepository virtualAccountMongoRepository;
+
+    @Autowired
+    private AccountTypeMapper accountTypeMapper;
 
     @Override
     public RealAccount save(RealAccount realAccount) {
@@ -79,5 +84,13 @@ public class RealAccountAdapterImpl implements RealAccountAdapter {
             .stream()
             .map(realAccountMapper::mapToDomain)
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<RealAccount> getAccountsByTyp(AccountType accountType) {
+        return realAccountMongoRepository
+            .findAllByAccountType(accountTypeMapper.mapToDbo(accountType))
+            .stream()
+            .map(realAccountMapper::mapToDomain).collect(Collectors.toList());
     }
 }

@@ -28,6 +28,7 @@ public class ClosingProcessAdapterImpl implements ClosingProcessAdapter {
                                                              .yearMonth(yearMonth)
                                                              .manualEntryStatus(ClosingProcessStatus.NEW)
                                                              .uploadStatus(ClosingProcessStatus.NEW)
+                                                             .transferStatus(ClosingProcessStatus.NEW)
                                                              .build();
             dbo = closingProcessMongoRepository.save(closingProcessMapper.mapToEntity(newClosingProcess));
         }

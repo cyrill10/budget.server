@@ -4,11 +4,13 @@ package ch.bader.budget.server.boundary;
 import ch.bader.budget.server.boundary.dto.ClosingProcessBoundaryDto;
 import ch.bader.budget.server.boundary.dto.SaveScannedTransactionBoundaryDto;
 import ch.bader.budget.server.boundary.dto.ScannedTransactionBoundaryDto;
+import ch.bader.budget.server.boundary.dto.TransferDetailDto;
 import ch.bader.budget.server.core.closingProcess.ClosingProcessService;
 import ch.bader.budget.server.domain.ClosingProcess;
 import ch.bader.budget.server.domain.ScannedTransaction;
 import ch.bader.budget.server.mapper.ClosingProcessMapper;
 import ch.bader.budget.server.mapper.ScannedTransactionMapper;
+import ch.bader.budget.server.mapper.TransferDetailMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,9 @@ public class ClosingProcessRestResource {
 
     @Autowired
     ScannedTransactionMapper scannedTransactionMapper;
+
+    @Autowired
+    TransferDetailMapper transferDetailsMapper;
 
     @GetMapping
     public ClosingProcessBoundaryDto getClosingProcess(@RequestParam Integer year, @RequestParam Integer month) {
@@ -84,4 +89,20 @@ public class ClosingProcessRestResource {
     }
 
 
+    @GetMapping("/transfer/details")
+    public List<TransferDetailDto> getTransferDetails(@RequestParam Integer year,
+                                                      @RequestParam Integer month) {
+        YearMonth yearMonth = YearMonth.of(year, month + 1);
+        return closingProcessService
+            .getTransferDetails(yearMonth)
+            .stream()
+            .map(transferDetailsMapper::mapToDto).collect(Collectors.toList());
+    }
+
+    @PostMapping("/transfer/close")
+    public ClosingProcessBoundaryDto closeTransfer(@RequestParam Integer year, @RequestParam Integer month) {
+        YearMonth yearMonth = YearMonth.of(year, month + 1);
+        ClosingProcess closingProcess = closingProcessService.closeTransfer(yearMonth);
+        return closingProcessMapper.mapToDto(closingProcess);
+    }
 }

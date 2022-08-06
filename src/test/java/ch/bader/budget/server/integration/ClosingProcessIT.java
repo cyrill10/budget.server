@@ -115,6 +115,56 @@ class ClosingProcessIT extends AbstractIT {
                .body("manualEntryStatus.value", equalTo(ClosingProcessStatus.NEW.getValue()));
     }
 
+    @Test
+    public void whenCloseTransferDetail_shouldCloseTransferDetailStatus() throws IOException, URISyntaxException {
+        //arrange
+        populateDatabaseFull();
+
+        given().headers(getAuthHeader()).contentType(ContentType.JSON)
+               .when()
+               .param("year", 2022)
+               .param("month", 1)
+               .get("/budget/closingProcess")
+               .then()
+               .log().all()
+               .statusCode(HttpStatus.SC_OK)
+               .body("year", equalTo(2022))
+               .body("month", equalTo(1))
+               .body("uploadStatus.value", equalTo(ClosingProcessStatus.NEW.getValue()))
+               .body("manualEntryStatus.value", equalTo(ClosingProcessStatus.NEW.getValue()))
+               .body("transferStatus.value", equalTo(ClosingProcessStatus.NEW.getValue()));
+
+        //act + assert
+        given().headers(getAuthHeader()).contentType(ContentType.JSON)
+               .when()
+               .queryParam("year", 2022)
+               .queryParam("month", 1)
+               .post("/budget/closingProcess/transfer/close")
+               .then()
+               .log().all()
+               .statusCode(HttpStatus.SC_OK)
+               .body("year", equalTo(2022))
+               .body("month", equalTo(1))
+               .body("uploadStatus.value", equalTo(ClosingProcessStatus.NEW.getValue()))
+               .body("manualEntryStatus.value", equalTo(ClosingProcessStatus.NEW.getValue()))
+               .body("transferStatus.value", equalTo(ClosingProcessStatus.DONE.getValue()));
+
+
+        given().headers(getAuthHeader()).contentType(ContentType.JSON)
+               .when()
+               .param("year", 2022)
+               .param("month", 1)
+               .get("/budget/closingProcess")
+               .then()
+               .log().all()
+               .statusCode(HttpStatus.SC_OK)
+               .body("year", equalTo(2022))
+               .body("month", equalTo(1))
+               .body("uploadStatus.value", equalTo(ClosingProcessStatus.NEW.getValue()))
+               .body("manualEntryStatus.value", equalTo(ClosingProcessStatus.NEW.getValue()))
+               .body("transferStatus.value", equalTo(ClosingProcessStatus.DONE.getValue()));
+    }
+
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class ScannendTransaction {
@@ -404,5 +454,44 @@ class ClosingProcessIT extends AbstractIT {
                        equalTo(AccountType.ALIEN.getValue()));
 
         }
+    }
+
+
+    @Test
+    public void shouldGetTransferDetail() throws IOException, URISyntaxException {
+        //arrange
+        populateDatabaseFull();
+
+        //act + assert
+        given().headers(getAuthHeader()).contentType(ContentType.JSON)
+               .when()
+               .param("year", 2022)
+               .param("month", 1)
+               .get("/budget/closingProcess")
+               .then()
+               .log().all()
+               .statusCode(HttpStatus.SC_OK)
+               .body("year", equalTo(2022))
+               .body("month", equalTo(1))
+               .body("uploadStatus.value", equalTo(ClosingProcessStatus.NEW.getValue()))
+               .body("manualEntryStatus.value", equalTo(ClosingProcessStatus.NEW.getValue()))
+               .body("transferStatus.value", equalTo(ClosingProcessStatus.NEW.getValue()));
+
+
+        given()
+            .headers(getAuthHeader())
+            .contentType(ContentType.JSON)
+            .when()
+            .param("year", 2022)
+            .param("month", 1)
+            .get("/budget/closingProcess/transfer/details")
+            .then()
+            .log()
+            .all()
+            .statusCode(HttpStatus.SC_OK)
+            .body("[0].accountName", equalTo("Cyrill Saving"))
+            .body("[0].transferAmount", equalTo(220.0F))
+            .body("[1].accountName", equalTo("Lyka Saving"))
+            .body("[1].transferAmount", equalTo(-3171.7F));
     }
 }

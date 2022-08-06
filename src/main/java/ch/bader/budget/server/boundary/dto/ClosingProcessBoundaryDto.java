@@ -16,4 +16,5 @@ public class ClosingProcessBoundaryDto {
     private Integer month;
     private ValueEnumDto uploadStatus;
     private ValueEnumDto manualEntryStatus;
+    private ValueEnumDto transferStatus;
 }
