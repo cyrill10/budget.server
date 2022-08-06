@@ -19,6 +19,7 @@ public class ClosingProcess implements Comparable<ClosingProcess> {
     YearMonth yearMonth;
     private ClosingProcessStatus uploadStatus;
     private ClosingProcessStatus manualEntryStatus;
+    private ClosingProcessStatus transferStatus;
 
     @Override
     public int compareTo(@NonNull ClosingProcess o) {

@@ -13,7 +13,10 @@ public interface ClosingProcessStatusMapper {
     ValueEnumDto mapToDto(ClosingProcessStatus domain);
 
     default ClosingProcessStatus mapToDomain(ValueEnumDbo entity) {
-        return ClosingProcessStatus.forValue(entity.getValue());
+        if (entity != null) {
+            return ClosingProcessStatus.forValue(entity.getValue());
+        }
+        return ClosingProcessStatus.NEW;
     }
 
     default ClosingProcessStatus mapToDomain(ValueEnumDto dto) {
