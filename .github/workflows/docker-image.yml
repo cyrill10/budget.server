@@ -8,12 +8,11 @@ name: Create and publish a Docker image
 on:
   push:
     tags:
-      - 'old_v*.*.*'
+      - 'v*.*.*'
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  AZURE_WEBAPP_NAME: budget-server
 
 jobs:
   build-and-push-image:
