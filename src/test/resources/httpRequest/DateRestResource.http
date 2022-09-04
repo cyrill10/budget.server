@@ -69,8 +69,3 @@ Accept: application/json
 ###
 GET https://budget-server-prod-budget-server-z9ef36.mo2.mogenius.io/actuator/info
 Accept: application/json
-
-###
-GET https://budget-server-prod-budget-server-z9ef36.mo2.mogenius.io/budget/date/month/list
-Authorization: Basic budget-user 83WoogdTloBM
-Accept: application/json

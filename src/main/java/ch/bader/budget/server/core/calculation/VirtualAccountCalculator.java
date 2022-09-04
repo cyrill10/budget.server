@@ -6,14 +6,14 @@ import ch.bader.budget.server.domain.VirtualAccount;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 
 public class VirtualAccountCalculator {
 
     public static Balance getBalanceAt(VirtualAccount account, List<Transaction> allTransactions,
-                                       BiFunction<Transaction, Boolean, BigDecimal> effectiveBalanceTypeFunction,
-                                       BiFunction<Transaction, Boolean, BigDecimal> budgetedBalanceTypeFunction,
+                                       Function<Transaction, BigDecimal> effectiveBalanceTypeFunction,
+                                       Function<Transaction, BigDecimal> budgetedBalanceTypeFunction,
                                        LocalDate untilDate) {
 
         if (account.getUnderlyingAccount().getAccountType().isAlienAccount()) {
@@ -25,8 +25,8 @@ public class VirtualAccountCalculator {
         Balance balance = new Balance(account.getBalance(), account.getBalance());
 
         allTransactions.stream().distinct().filter(t -> transactionPredicate.test(t, untilDate)).forEach(t -> {
-            BigDecimal effectiveBalanceChange = effectiveBalanceTypeFunction.apply(t, account.isPrebudgetedAccount());
-            BigDecimal budgetedBalanceChange = budgetedBalanceTypeFunction.apply(t, account.isPrebudgetedAccount());
+            BigDecimal effectiveBalanceChange = effectiveBalanceTypeFunction.apply(t);
+            BigDecimal budgetedBalanceChange = budgetedBalanceTypeFunction.apply(t);
             if (t.getCreditedAccount().equals(account)) {
                 balance.subtract(effectiveBalanceChange, budgetedBalanceChange);
             }
@@ -39,16 +39,16 @@ public class VirtualAccountCalculator {
     }
 
     public static Balance getBalanceAt(List<VirtualAccount> accounts, List<Transaction> allTransactions,
-                                       BiFunction<Transaction, Boolean, BigDecimal> effectiveBalanceTypeFunction,
-                                       BiFunction<Transaction, Boolean, BigDecimal> budgetedBalanceTypeFunction,
+                                       Function<Transaction, BigDecimal> effectiveBalanceTypeFunction,
+                                       Function<Transaction, BigDecimal> budgetedBalanceTypeFunction,
                                        LocalDate untilDate) {
         Balance balance = new Balance(BigDecimal.ZERO, BigDecimal.ZERO);
         accounts.stream()
                 .distinct()
                 .forEach(account -> balance.add(getBalanceAt(account,
-                        allTransactions,
-                        effectiveBalanceTypeFunction,
-                        budgetedBalanceTypeFunction, untilDate)));
+                    allTransactions,
+                    effectiveBalanceTypeFunction,
+                    budgetedBalanceTypeFunction, untilDate)));
         return balance;
 
     }
