@@ -84,16 +84,15 @@ public class TransactionCalculator {
         if (transaction.getDebitedAccount().equals(virtualAccount)) {
             amount = transaction.getEffectiveAmount();
             budgetedAmount = transaction.getBudgetedAmount();
-            accountBalance.add(effectiveAmountFunction.apply(transaction, virtualAccount.isPrebudgetedAccount()),
-                budgetedAmountFunction.apply(transaction, virtualAccount.isPrebudgetedAccount()));
+            accountBalance.add(effectiveAmountFunction.apply(transaction),
+                budgetedAmountFunction.apply(transaction));
         }
         if (transaction.getCreditedAccount().equals(virtualAccount)) {
             amount = BigDecimal.ZERO.subtract(transaction.getEffectiveAmount());
             budgetedAmount = BigDecimal.ZERO.subtract(transaction.getBudgetedAmount());
 
-            accountBalance.subtract(effectiveAmountFunction.apply(transaction,
-                virtualAccount.isPrebudgetedAccount()), budgetedAmountFunction.apply(transaction,
-                virtualAccount.isPrebudgetedAccount()));
+            accountBalance.subtract(effectiveAmountFunction.apply(transaction),
+                budgetedAmountFunction.apply(transaction));
         }
 
         return new TransactionElement(transaction, amount, budgetedAmount, accountBalance.getEffective(),
