@@ -29,11 +29,10 @@ public class TransactionCalculator {
 
         Predicate<Transaction> beforePredicate = new TransactionBeforePredicate(from);
 
-        Balance accountBalance =
-            VirtualAccountCalculator.getBalanceAt(virtualAccount,
-                transactions.stream().filter(beforePredicate).collect(Collectors.toList()),
-                effectiveAmountFunction,
-                budgetedAmountFunction, from);
+        Balance accountBalance = getInitialAccountBalance(transactions,
+            virtualAccount,
+            from,
+            beforePredicate);
 
         TransactionElement before = new TransactionElement("Before", accountBalance.getEffective(),
             accountBalance.getBudgeted(), "0");
@@ -76,6 +75,18 @@ public class TransactionCalculator {
         return transactionElements;
     }
 
+    private static Balance getInitialAccountBalance(List<Transaction> transactions, VirtualAccount virtualAccount,
+                                                    LocalDate from,
+                                                    Predicate<Transaction> beforePredicate) {
+        if (virtualAccount.isPrebudgetedAccount()) {
+            return new Balance(BigDecimal.ZERO, BigDecimal.ZERO);
+        }
+        return VirtualAccountCalculator.getBalanceAt(virtualAccount,
+            transactions.stream().filter(beforePredicate).collect(Collectors.toList()),
+            effectiveAmountFunction,
+            budgetedAmountFunction, from);
+    }
+
     public static TransactionElement createTransactionElement(Transaction transaction,
                                                               VirtualAccount virtualAccount,
                                                               Balance accountBalance) {
@@ -84,16 +95,15 @@ public class TransactionCalculator {
         if (transaction.getDebitedAccount().equals(virtualAccount)) {
             amount = transaction.getEffectiveAmount();
             budgetedAmount = transaction.getBudgetedAmount();
-            accountBalance.add(effectiveAmountFunction.apply(transaction, virtualAccount.isPrebudgetedAccount()),
-                budgetedAmountFunction.apply(transaction, virtualAccount.isPrebudgetedAccount()));
+            accountBalance.add(effectiveAmountFunction.apply(transaction),
+                budgetedAmountFunction.apply(transaction));
         }
         if (transaction.getCreditedAccount().equals(virtualAccount)) {
             amount = BigDecimal.ZERO.subtract(transaction.getEffectiveAmount());
             budgetedAmount = BigDecimal.ZERO.subtract(transaction.getBudgetedAmount());
 
-            accountBalance.subtract(effectiveAmountFunction.apply(transaction,
-                virtualAccount.isPrebudgetedAccount()), budgetedAmountFunction.apply(transaction,
-                virtualAccount.isPrebudgetedAccount()));
+            accountBalance.subtract(effectiveAmountFunction.apply(transaction),
+                budgetedAmountFunction.apply(transaction));
         }
 
         return new TransactionElement(transaction, amount, budgetedAmount, accountBalance.getEffective(),

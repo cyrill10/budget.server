@@ -50,7 +50,6 @@ class VirtualAccountIT extends AbstractIT {
                .when()
                .post("/budget/virtualAccount/add/")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_CREATED)
                .body("name", equalTo("TestVirtual"))
                .body("id", isA(String.class))
@@ -90,7 +89,6 @@ class VirtualAccountIT extends AbstractIT {
                .when()
                .put("/budget/virtualAccount/update")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("name", equalTo("TestVirtual"))
                //8
@@ -107,7 +105,6 @@ class VirtualAccountIT extends AbstractIT {
                .param("id", "62d172da3b2f355e5ceafb69")
                .get("/budget/virtualAccount/")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("name", equalTo("TestVirtual"))
                //8
@@ -130,7 +127,6 @@ class VirtualAccountIT extends AbstractIT {
                .param("id", "62d172d93b2f355e5ceafb67")
                .get("/budget/virtualAccount/")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("name", equalTo("General Expenses"))
                //6
@@ -149,7 +145,6 @@ class VirtualAccountIT extends AbstractIT {
                .when()
                .get("/budget/virtualAccount/list")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("$.size()", equalTo(34))
                //3

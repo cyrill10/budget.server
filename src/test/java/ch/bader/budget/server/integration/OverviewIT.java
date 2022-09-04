@@ -44,7 +44,6 @@ class OverviewIT extends AbstractIT {
                                                   .param("dateLong", mills2022May1)
                                                   .get("/budget/overview/list/")
                                                   .then()
-                                                  .log().all()
                                                   .statusCode(HttpStatus.SC_OK)
                                                   .extract().jsonPath().getList(""));
 
