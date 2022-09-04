@@ -82,7 +82,6 @@ class TransactionIT extends AbstractIT {
                .when()
                .post("/budget/transaction/add/")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_CREATED)
                .body("description", equalTo("Test Transaction"))
                .body("id", isA(String.class))
@@ -154,7 +153,6 @@ class TransactionIT extends AbstractIT {
                .when()
                .put("/budget/transaction/update")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("description", equalTo("Health Saving"))
                //294
@@ -172,7 +170,6 @@ class TransactionIT extends AbstractIT {
                .param("id", "62d172e63b2f355e5ceafc9b")
                .get("/budget/transaction/")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("description", equalTo("Health Saving"))
                //294
@@ -197,7 +194,6 @@ class TransactionIT extends AbstractIT {
                .param("id", "62d172e63b2f355e5ceafc9b")
                .get("/budget/transaction/")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("description", equalTo("Health Saving"))
                //294
@@ -221,7 +217,6 @@ class TransactionIT extends AbstractIT {
                .param("transactionId", "62d172e63b2f355e5ceafc9b")
                .delete("/budget/transaction/delete")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK);
 
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
@@ -230,7 +225,6 @@ class TransactionIT extends AbstractIT {
                .param("id", "62d172e63b2f355e5ceafc9b")
                .get("/budget/transaction/")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
@@ -294,7 +288,6 @@ class TransactionIT extends AbstractIT {
                .when()
                .post("/budget/transaction/dublicate")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_CREATED);
     }
 
@@ -308,7 +301,6 @@ class TransactionIT extends AbstractIT {
                .param("date", "1654041600000")
                .get("/budget/transaction/list")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("$.size()", equalTo(168))
                .body("[0].description", equalTo("Going out"))
@@ -342,7 +334,6 @@ class TransactionIT extends AbstractIT {
                .param("accountId", "62d172d93b2f355e5ceafb63")
                .get("/budget/transaction/listByMonthAndVirtualAccount")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("$.size()", equalTo(141))
                .body("[0].name", equalTo("Before"))
@@ -392,7 +383,6 @@ class TransactionIT extends AbstractIT {
                .param("accountId", "62d172d23b2f355e5ceafb5a")
                .get("/budget/transaction/listByMonthAndRealAccount")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("$.size()", equalTo(32))
                .body("[0].name", equalTo("Before"))
@@ -429,7 +419,6 @@ class TransactionIT extends AbstractIT {
                .when()
                .get("/budget/transaction/type/list")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("$.size()", equalTo(3))
                .body("[0].name", equalTo("Deposit"))
@@ -447,7 +436,6 @@ class TransactionIT extends AbstractIT {
                .when()
                .get("/budget/transaction/indication/list")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("$.size()", equalTo(2))
                .body("[0].name", equalTo("E"))
@@ -463,7 +451,6 @@ class TransactionIT extends AbstractIT {
                .when()
                .get("/budget/transaction/status/list")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("$.size()", equalTo(3))
                .body("[0].name", equalTo("open"))

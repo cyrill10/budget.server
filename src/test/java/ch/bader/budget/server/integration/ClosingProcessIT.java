@@ -7,7 +7,12 @@ import ch.bader.budget.server.type.ClosingProcessStatus;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +45,6 @@ class ClosingProcessIT extends AbstractIT {
                .param("month", 4)
                .get("/budget/closingProcess")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("year", equalTo(2022))
                .body("month", equalTo(4))
@@ -60,7 +64,6 @@ class ClosingProcessIT extends AbstractIT {
                .param("month", 1)
                .get("/budget/closingProcess")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("year", equalTo(2022))
                .body("month", equalTo(1))
@@ -79,7 +82,6 @@ class ClosingProcessIT extends AbstractIT {
                .param("month", 1)
                .get("/budget/closingProcess")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("year", equalTo(2022))
                .body("month", equalTo(1))
@@ -93,7 +95,6 @@ class ClosingProcessIT extends AbstractIT {
                .queryParam("month", 1)
                .post("/budget/closingProcess/closeFileUpload")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("year", equalTo(2022))
                .body("month", equalTo(1))
@@ -107,7 +108,6 @@ class ClosingProcessIT extends AbstractIT {
                .param("month", 1)
                .get("/budget/closingProcess")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("year", equalTo(2022))
                .body("month", equalTo(1))
@@ -126,7 +126,6 @@ class ClosingProcessIT extends AbstractIT {
                .param("month", 1)
                .get("/budget/closingProcess")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("year", equalTo(2022))
                .body("month", equalTo(1))
@@ -141,7 +140,6 @@ class ClosingProcessIT extends AbstractIT {
                .queryParam("month", 1)
                .post("/budget/closingProcess/transfer/close")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("year", equalTo(2022))
                .body("month", equalTo(1))
@@ -156,7 +154,6 @@ class ClosingProcessIT extends AbstractIT {
                .param("month", 1)
                .get("/budget/closingProcess")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("year", equalTo(2022))
                .body("month", equalTo(1))
@@ -185,7 +182,6 @@ class ClosingProcessIT extends AbstractIT {
                    .multiPart(file)
                    .post("/budget/closingProcess")
                    .then()
-                   .log().all()
                    .statusCode(HttpStatus.SC_OK)
                    .body("$.size()", equalTo(127))
                    .body("[0].date", equalTo("2022-04-20"))
@@ -213,7 +209,6 @@ class ClosingProcessIT extends AbstractIT {
                                        .queryParam("month", 11)
                                        .get("/budget/closingProcess/transactions")
                                        .then()
-                                       .log().all()
                                        .statusCode(HttpStatus.SC_OK)
                                        .body("$.size()", equalTo(127))
                                        .body("[0].date", equalTo("2022-04-20"))
@@ -270,7 +265,6 @@ class ClosingProcessIT extends AbstractIT {
                    .when()
                    .post("/budget/closingProcess/transactions")
                    .then()
-                   .log().all()
                    .statusCode(HttpStatus.SC_OK);
 
 
@@ -281,7 +275,6 @@ class ClosingProcessIT extends AbstractIT {
                    .queryParam("month", 11)
                    .get("/budget/closingProcess/transactions")
                    .then()
-                   .log().all()
                    .statusCode(HttpStatus.SC_OK)
                    .body("$.size()", equalTo(127))
                    .body("[0].date", equalTo("2022-04-20"))
@@ -308,7 +301,6 @@ class ClosingProcessIT extends AbstractIT {
                    .param("date", "1638316800000")
                    .get("/budget/transaction/list")
                    .then()
-                   .log().all()
                    .statusCode(HttpStatus.SC_OK)
                    .body("$.size()", equalTo(16))
                    .body("[10].description", equalTo("DO IT + GARDEN MIGROS BER, BERN"))
@@ -346,7 +338,6 @@ class ClosingProcessIT extends AbstractIT {
                                        .queryParam("month", 11)
                                        .get("/budget/closingProcess/transactions")
                                        .then()
-                                       .log().all()
                                        .statusCode(HttpStatus.SC_OK)
                                        .body("$.size()", equalTo(127))
                                        .body("[0].date", equalTo("2022-04-20"))
@@ -388,7 +379,6 @@ class ClosingProcessIT extends AbstractIT {
                    .when()
                    .post("/budget/closingProcess/transactions")
                    .then()
-                   .log().all()
                    .statusCode(HttpStatus.SC_OK);
 
 
@@ -399,7 +389,6 @@ class ClosingProcessIT extends AbstractIT {
                    .queryParam("month", 11)
                    .get("/budget/closingProcess/transactions")
                    .then()
-                   .log().all()
                    .statusCode(HttpStatus.SC_OK)
                    .body("$.size()", equalTo(127))
                    .body("[0].date", equalTo("2022-04-20"))
@@ -422,7 +411,6 @@ class ClosingProcessIT extends AbstractIT {
                    .param("date", "1638316800000")
                    .get("/budget/transaction/list")
                    .then()
-                   .log().all()
                    .statusCode(HttpStatus.SC_OK)
                    .body("$.size()", equalTo(22))
                    .body("[16].description", equalTo("H & M, BERN"))
@@ -469,7 +457,6 @@ class ClosingProcessIT extends AbstractIT {
                .param("month", 1)
                .get("/budget/closingProcess")
                .then()
-               .log().all()
                .statusCode(HttpStatus.SC_OK)
                .body("year", equalTo(2022))
                .body("month", equalTo(1))
