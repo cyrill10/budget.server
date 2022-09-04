@@ -36,7 +36,6 @@ public class DateIT {
                                    .when()
                                    .get("/budget/date/month/list")
                                    .then()
-                                   .log().all()
                                    .statusCode(HttpStatus.SC_OK)
                                    .body("[0]", equalTo(firstDay.toString()))
                                    .extract().jsonPath();
