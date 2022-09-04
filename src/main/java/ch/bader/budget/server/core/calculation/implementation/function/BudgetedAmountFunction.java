@@ -4,17 +4,16 @@ import ch.bader.budget.server.domain.Transaction;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
-public class BudgetedAmountFunction implements BiFunction<Transaction, Boolean, BigDecimal> {
+public class BudgetedAmountFunction implements Function<Transaction, BigDecimal> {
 
     @Override
-    public BigDecimal apply(Transaction t, Boolean isPreBudgetedAccount) {
+    public BigDecimal apply(Transaction t) {
         LocalDate firstDayOfThisMonth = LocalDate.now().withDayOfMonth(1);
-        if (!isPreBudgetedAccount && firstDayOfThisMonth.isAfter(t.getDate())) {
+        if (firstDayOfThisMonth.isAfter(t.getDate())) {
             return t.getEffectiveAmount();
         }
         return t.getBudgetedAmount();
     }
-
 }

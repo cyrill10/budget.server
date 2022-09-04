@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,10 +28,13 @@ public class OverviewData {
     protected OverviewData(VirtualAccount virtualAccount, List<Transaction> transactions,
                            List<Transaction> transactionsTillEndOfYear, LocalDate untilDate) {
 
+        Function<Transaction, BigDecimal> budgetedFunction = getBudgetedFunction(virtualAccount);
+
+
         Balance balance = VirtualAccountCalculator.getBalanceAt(virtualAccount,
-                transactions,
-                new EffectiveAmountFunction(),
-                new BudgetedAmountFunction(), untilDate);
+            transactions,
+            new EffectiveAmountFunction(),
+            budgetedFunction, untilDate);
 
         balanceAfter = balance.getEffective();
         budgetedBalanceAfter = balance.getBudgeted();
@@ -40,14 +44,21 @@ public class OverviewData {
             this.budgetedProjection = null;
         } else {
             Balance projectedBalance = VirtualAccountCalculator.getBalanceAt(virtualAccount,
-                    Stream.of(transactions, transactionsTillEndOfYear)
-                          .flatMap(Collection::stream)
-                          .collect(Collectors.toList()),
-                    new EffectiveAmountFunction(),
-                    new BudgetedAmountFunction(), untilDate);
+                Stream.of(transactions, transactionsTillEndOfYear)
+                      .flatMap(Collection::stream)
+                      .collect(Collectors.toList()),
+                new EffectiveAmountFunction(),
+                new BudgetedAmountFunction(), untilDate);
             this.projection = projectedBalance.getEffective();
 
             this.budgetedProjection = projectedBalance.getBudgeted();
         }
+    }
+
+    private Function<Transaction, BigDecimal> getBudgetedFunction(VirtualAccount virtualAccount) {
+        if (virtualAccount.isPrebudgetedAccount()) {
+            return (Transaction::getBudgetedAmount);
+        }
+        return new BudgetedAmountFunction();
     }
 }
