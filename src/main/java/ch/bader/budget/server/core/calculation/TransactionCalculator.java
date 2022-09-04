@@ -29,11 +29,10 @@ public class TransactionCalculator {
 
         Predicate<Transaction> beforePredicate = new TransactionBeforePredicate(from);
 
-        Balance accountBalance =
-            VirtualAccountCalculator.getBalanceAt(virtualAccount,
-                transactions.stream().filter(beforePredicate).collect(Collectors.toList()),
-                effectiveAmountFunction,
-                budgetedAmountFunction, from);
+        Balance accountBalance = getInitialAccountBalance(transactions,
+            virtualAccount,
+            from,
+            beforePredicate);
 
         TransactionElement before = new TransactionElement("Before", accountBalance.getEffective(),
             accountBalance.getBudgeted(), "0");
@@ -74,6 +73,18 @@ public class TransactionCalculator {
         transactionElements.add(after);
         transactionElements.add(in_out);
         return transactionElements;
+    }
+
+    private static Balance getInitialAccountBalance(List<Transaction> transactions, VirtualAccount virtualAccount,
+                                                    LocalDate from,
+                                                    Predicate<Transaction> beforePredicate) {
+        if (virtualAccount.isPrebudgetedAccount()) {
+            return new Balance(BigDecimal.ZERO, BigDecimal.ZERO);
+        }
+        return VirtualAccountCalculator.getBalanceAt(virtualAccount,
+            transactions.stream().filter(beforePredicate).collect(Collectors.toList()),
+            effectiveAmountFunction,
+            budgetedAmountFunction, from);
     }
 
     public static TransactionElement createTransactionElement(Transaction transaction,
