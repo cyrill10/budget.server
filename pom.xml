@@ -17,7 +17,7 @@
 
     <properties>
         <java.version>11</java.version>
-        <org.mapstruct.version>1.5.1.Final</org.mapstruct.version>
+        <org.mapstruct.version>1.5.2.Final</org.mapstruct.version>
         <lombok.version>1.18.24</lombok.version>
         <org.testcontainers.version>1.17.2</org.testcontainers.version>
         <docker.autoCreateCustomNetworks>true</docker.autoCreateCustomNetworks>
@@ -99,12 +99,12 @@
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
-            <version>5.6</version>
+            <version>5.7.0</version>
         </dependency>
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>5.1.0</version>
+            <version>5.1.1</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -120,7 +120,7 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured-all</artifactId>
-            <version>5.1.0</version>
+            <version>5.1.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
