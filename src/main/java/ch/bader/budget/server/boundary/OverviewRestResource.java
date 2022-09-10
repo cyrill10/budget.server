@@ -3,7 +3,6 @@ package ch.bader.budget.server.boundary;
 import ch.bader.budget.server.boundary.dto.OverviewElementBoundaryDto;
 import ch.bader.budget.server.core.overview.OverviewService;
 import ch.bader.budget.server.mapper.OverviewElementMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,11 +18,14 @@ import java.util.stream.Collectors;
 @RequestMapping("/budget/overview/")
 public class OverviewRestResource {
 
-    @Autowired
-    private OverviewElementMapper overviewElementMapper;
+    private final OverviewElementMapper overviewElementMapper;
 
-    @Autowired
-    private OverviewService overviewService;
+    private final OverviewService overviewService;
+
+    public OverviewRestResource(OverviewElementMapper overviewElementMapper, OverviewService overviewService) {
+        this.overviewElementMapper = overviewElementMapper;
+        this.overviewService = overviewService;
+    }
 
     @GetMapping(path = "/list")
     public List<OverviewElementBoundaryDto> getAllTransactions(@RequestParam long dateLong) {

@@ -11,7 +11,6 @@ import ch.bader.budget.server.mapper.RealAccountMapper;
 import ch.bader.budget.server.mapper.VirtualAccountMapper;
 import ch.bader.budget.server.repository.RealAccountAdapter;
 import ch.bader.budget.server.type.AccountType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,20 +22,26 @@ import java.util.stream.Collectors;
 @Service("realAccountMongo")
 public class RealAccountAdapterImpl implements RealAccountAdapter {
 
-    @Autowired
-    private RealAccountMapper realAccountMapper;
+    private final RealAccountMapper realAccountMapper;
 
-    @Autowired
-    private VirtualAccountMapper virtualAccountMapper;
+    private final VirtualAccountMapper virtualAccountMapper;
 
-    @Autowired
-    private RealAccountMongoRepository realAccountMongoRepository;
+    private final RealAccountMongoRepository realAccountMongoRepository;
 
-    @Autowired
-    private VirtualAccountMongoRepository virtualAccountMongoRepository;
+    private final VirtualAccountMongoRepository virtualAccountMongoRepository;
 
-    @Autowired
-    private AccountTypeMapper accountTypeMapper;
+    private final AccountTypeMapper accountTypeMapper;
+
+    public RealAccountAdapterImpl(RealAccountMapper realAccountMapper, VirtualAccountMapper virtualAccountMapper,
+                                  RealAccountMongoRepository realAccountMongoRepository,
+                                  VirtualAccountMongoRepository virtualAccountMongoRepository,
+                                  AccountTypeMapper accountTypeMapper) {
+        this.realAccountMapper = realAccountMapper;
+        this.virtualAccountMapper = virtualAccountMapper;
+        this.realAccountMongoRepository = realAccountMongoRepository;
+        this.virtualAccountMongoRepository = virtualAccountMongoRepository;
+        this.accountTypeMapper = accountTypeMapper;
+    }
 
     @Override
     public RealAccount save(RealAccount realAccount) {

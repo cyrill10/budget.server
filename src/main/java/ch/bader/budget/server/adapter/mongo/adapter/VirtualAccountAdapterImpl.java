@@ -7,7 +7,6 @@ import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.mapper.VirtualAccountMapper;
 import ch.bader.budget.server.repository.RealAccountAdapter;
 import ch.bader.budget.server.repository.VirtualAccountAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +16,19 @@ import java.util.stream.Collectors;
 @Service("virtualAccountMongo")
 public class VirtualAccountAdapterImpl implements VirtualAccountAdapter {
 
-    @Autowired
-    private VirtualAccountMapper virtualAccountMapper;
+    private final VirtualAccountMapper virtualAccountMapper;
 
-    @Autowired
-    private VirtualAccountMongoRepository virtualAccountMongoRepository;
+    private final VirtualAccountMongoRepository virtualAccountMongoRepository;
 
-    @Autowired
-    @Qualifier("realAccountMongo")
-    private RealAccountAdapter realAccountAdapter;
+    private final RealAccountAdapter realAccountAdapter;
+
+    public VirtualAccountAdapterImpl(VirtualAccountMapper virtualAccountMapper,
+                                     VirtualAccountMongoRepository virtualAccountMongoRepository,
+                                     @Qualifier("realAccountMongo") RealAccountAdapter realAccountAdapter) {
+        this.virtualAccountMapper = virtualAccountMapper;
+        this.virtualAccountMongoRepository = virtualAccountMongoRepository;
+        this.realAccountAdapter = realAccountAdapter;
+    }
 
 
     @Override
