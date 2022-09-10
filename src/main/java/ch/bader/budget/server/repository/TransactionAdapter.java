@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface TransactionAdapter {
-    Transaction createTransaction(Transaction transaction);
 
     Transaction updateTransaction(Transaction transaction);
 

@@ -29,15 +29,6 @@ public class TransactionAdapterImpl implements TransactionAdapter {
     @Qualifier("virtualAccountMongo")
     private VirtualAccountAdapter virtualAccountAdapter;
 
-    @Override
-    public Transaction createTransaction(Transaction transaction) {
-        TransactionDbo transactionDbo = transactionMapper.mapToEntity(transaction);
-        transactionDbo = transactionMongoRepository.save(transactionDbo);
-        Transaction transactionSaved = transactionMapper.mapToDomain(transactionDbo);
-        transactionSaved.setCreditedAccount(transaction.getCreditedAccount());
-        transactionSaved.setDebitedAccount(transaction.getDebitedAccount());
-        return transactionSaved;
-    }
 
     @Override
     public Transaction updateTransaction(Transaction transaction) {
