@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.time.YearMonth;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public interface ScannedTransactionMongoRepository extends MongoRepository<ScannedTransactionDbo, String> {
 
     List<ScannedTransactionDbo> findAllByYearMonth(YearMonth yearMonth);

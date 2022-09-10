@@ -6,7 +6,6 @@ import ch.bader.budget.server.domain.TransactionElement;
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.repository.TransactionAdapter;
 import ch.bader.budget.server.repository.VirtualAccountAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +17,17 @@ import java.util.stream.Collectors;
 @Service
 public class TransactionService {
 
-    @Autowired
-    @Qualifier("transactionMongo")
+    final
     TransactionAdapter transactionAdapter;
 
-    @Autowired
-    @Qualifier("virtualAccountMongo")
-    private VirtualAccountAdapter virtualAccountAdapter;
-    
+    private final VirtualAccountAdapter virtualAccountAdapter;
+
+    public TransactionService(@Qualifier("transactionMongo") TransactionAdapter transactionAdapter,
+                              @Qualifier("virtualAccountMongo") VirtualAccountAdapter virtualAccountAdapter) {
+        this.transactionAdapter = transactionAdapter;
+        this.virtualAccountAdapter = virtualAccountAdapter;
+    }
+
 
     public Transaction updateTransaction(Transaction transaction) {
         return transactionAdapter.updateTransaction(transaction);
@@ -35,7 +37,7 @@ public class TransactionService {
         transactionAdapter.deleteTransaction(transactionId);
     }
 
-    public void dublicateTransaction(Transaction transaction) {
+    public void duplicateTransaction(Transaction transaction) {
         LocalDate startDate = transaction.getDate();
         LocalDate endDate = transaction.getDate()
                                        .plusYears(1)

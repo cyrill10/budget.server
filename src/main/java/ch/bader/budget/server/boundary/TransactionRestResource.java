@@ -10,7 +10,6 @@ import ch.bader.budget.server.mapper.TransactionMapper;
 import ch.bader.budget.server.type.PaymentStatus;
 import ch.bader.budget.server.type.PaymentType;
 import ch.bader.budget.server.type.TransactionIndication;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,14 +35,21 @@ import java.util.stream.Collectors;
 @RequestMapping("/budget/transaction/")
 public class TransactionRestResource {
 
-    @Autowired
+    final
     TransactionService transactionService;
 
-    @Autowired
+    final
     TransactionMapper transactionMapper;
 
-    @Autowired
+    final
     TransactionElementMapper transactionElementMapper;
+
+    public TransactionRestResource(TransactionService transactionService, TransactionMapper transactionMapper,
+                                   TransactionElementMapper transactionElementMapper) {
+        this.transactionService = transactionService;
+        this.transactionMapper = transactionMapper;
+        this.transactionElementMapper = transactionElementMapper;
+    }
 
     @PostMapping(path = "/add")
     @ResponseStatus(HttpStatus.CREATED)
@@ -72,7 +78,7 @@ public class TransactionRestResource {
     @ResponseStatus(HttpStatus.CREATED)
     public void dublicateTransaction(@RequestBody TransactionBoundaryDto dto) {
         Transaction transaction = transactionMapper.mapToDomain(dto);
-        transactionService.dublicateTransaction(transaction);
+        transactionService.duplicateTransaction(transaction);
     }
 
     @GetMapping(path = "/")

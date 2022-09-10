@@ -1,16 +1,11 @@
 package ch.bader.budget.server.type;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Arrays;
 
 public enum AccountType implements ValueEnum<Integer> {
 
     CHECKING(1, "Checking"), SAVING(2, "Saving"), CREDIT(3, "Credit"), ALIEN(4, "Alien"),
     PREBUDGETED(5, "Prebudgeted");
-
-    private static final AccountType[] internalTypes = {CHECKING, SAVING, CREDIT};
 
     private static final AccountType[] overviewTypes = {CHECKING, SAVING, CREDIT, PREBUDGETED};
 
@@ -39,21 +34,6 @@ public enum AccountType implements ValueEnum<Integer> {
 
     public static AccountType forValue(Integer value) {
         return Arrays.stream(AccountType.values()).filter(p -> p.getValue().equals(value)).findFirst().orElseThrow();
-    }
-
-    @JsonCreator
-    public static AccountType forValues(@JsonProperty("name") String name, @JsonProperty("value") double value) {
-        for (AccountType accountType : AccountType.values()) {
-            if (accountType.name.equals(name) && Double.compare(accountType.value, value) == 0) {
-                return accountType;
-            }
-        }
-
-        return null;
-    }
-
-    public boolean isInternalAccount() {
-        return Arrays.asList(internalTypes).contains(this);
     }
 
     public boolean isPrebudgetedAccount() {

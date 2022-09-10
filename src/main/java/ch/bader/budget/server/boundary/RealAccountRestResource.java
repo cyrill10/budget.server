@@ -8,7 +8,6 @@ import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.mapper.RealAccountMapper;
 import ch.bader.budget.server.mapper.VirtualAccountMapper;
 import ch.bader.budget.server.type.AccountType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,14 +27,18 @@ import java.util.stream.Collectors;
 @RequestMapping("/budget/realAccount/")
 public class RealAccountRestResource {
 
-    @Autowired
-    private RealAccountService realAccountService;
+    private final RealAccountService realAccountService;
 
-    @Autowired
-    private RealAccountMapper realAccountMapper;
+    private final RealAccountMapper realAccountMapper;
 
-    @Autowired
-    private VirtualAccountMapper virtualAccountMapper;
+    private final VirtualAccountMapper virtualAccountMapper;
+
+    public RealAccountRestResource(RealAccountService realAccountService, RealAccountMapper realAccountMapper,
+                                   VirtualAccountMapper virtualAccountMapper) {
+        this.realAccountService = realAccountService;
+        this.realAccountMapper = realAccountMapper;
+        this.virtualAccountMapper = virtualAccountMapper;
+    }
 
 
     @PostMapping(path = "/add")

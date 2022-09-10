@@ -36,9 +36,10 @@ class TransactionMongoRepositoryTest {
         sut.saveAll(List.of(lastDayOfMonthBefore, firstDayOfMonth, lastDayOfMonth, firstDayOfMonthAfter));
 
         List<TransactionDbo> transations = sut.findAllByDateBetween(july31st, sep1st);
-        assertThat(transations.size()).isEqualTo(2);
-        assertThat(transations).contains(firstDayOfMonth);
-        assertThat(transations).contains(lastDayOfMonth);
+        assertThat(transations)
+            .hasSize(2)
+            .contains(firstDayOfMonth)
+            .contains(lastDayOfMonth);
     }
 
 
@@ -133,11 +134,12 @@ class TransactionMongoRepositoryTest {
         List<TransactionDbo> transactions = sut.findAllByDateBetweenAndVirtualAccountId(july31st,
             sep1st,
             List.of(accountIncluded, accountAlsoIncluded));
-        assertThat(transactions.size()).isEqualTo(5);
-        assertThat(transactions).contains(firstDayOfMonthIncl);
-        assertThat(transactions).contains(firstDayOfMonthDoubleIncl);
-        assertThat(transactions).contains(lastDayOfMonthIncl);
-        assertThat(transactions).contains(lastDayOfMonthAlsoIncl);
-        assertThat(transactions).contains(lastDayOfMonthDoubleIncl);
+        assertThat(transactions)
+            .hasSize(5)
+            .contains(firstDayOfMonthIncl)
+            .contains(firstDayOfMonthDoubleIncl)
+            .contains(lastDayOfMonthIncl)
+            .contains(lastDayOfMonthAlsoIncl)
+            .contains(lastDayOfMonthDoubleIncl);
     }
 }

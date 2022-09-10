@@ -8,7 +8,6 @@ import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.mapper.TransactionMapper;
 import ch.bader.budget.server.repository.TransactionAdapter;
 import ch.bader.budget.server.repository.VirtualAccountAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -19,15 +18,19 @@ import java.util.stream.Collectors;
 @Service("transactionMongo")
 public class TransactionAdapterImpl implements TransactionAdapter {
 
-    @Autowired
-    private TransactionMapper transactionMapper;
+    private final TransactionMapper transactionMapper;
 
-    @Autowired
-    private TransactionMongoRepository transactionMongoRepository;
+    private final TransactionMongoRepository transactionMongoRepository;
 
-    @Autowired
-    @Qualifier("virtualAccountMongo")
-    private VirtualAccountAdapter virtualAccountAdapter;
+    private final VirtualAccountAdapter virtualAccountAdapter;
+
+    public TransactionAdapterImpl(TransactionMapper transactionMapper,
+                                  TransactionMongoRepository transactionMongoRepository,
+                                  @Qualifier("virtualAccountMongo") VirtualAccountAdapter virtualAccountAdapter) {
+        this.transactionMapper = transactionMapper;
+        this.transactionMongoRepository = transactionMongoRepository;
+        this.virtualAccountAdapter = virtualAccountAdapter;
+    }
 
 
     @Override

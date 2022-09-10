@@ -4,7 +4,6 @@ import ch.bader.budget.server.boundary.dto.VirtualAccountBoundaryDto;
 import ch.bader.budget.server.core.account.virtual.VirtualAccountService;
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.mapper.VirtualAccountMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,11 +22,15 @@ import java.util.stream.Collectors;
 @RequestMapping("/budget/virtualAccount/")
 public class VirtualAccountRestResource {
 
-    @Autowired
-    private VirtualAccountService virtualAccountService;
+    private final VirtualAccountService virtualAccountService;
 
-    @Autowired
-    private VirtualAccountMapper virtualAccountMapper;
+    private final VirtualAccountMapper virtualAccountMapper;
+
+    public VirtualAccountRestResource(VirtualAccountService virtualAccountService,
+                                      VirtualAccountMapper virtualAccountMapper) {
+        this.virtualAccountService = virtualAccountService;
+        this.virtualAccountMapper = virtualAccountMapper;
+    }
 
 
     @PostMapping(path = "/add")

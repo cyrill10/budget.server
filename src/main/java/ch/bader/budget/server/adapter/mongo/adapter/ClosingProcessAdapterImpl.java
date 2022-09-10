@@ -6,7 +6,6 @@ import ch.bader.budget.server.domain.ClosingProcess;
 import ch.bader.budget.server.mapper.ClosingProcessMapper;
 import ch.bader.budget.server.repository.ClosingProcessAdapter;
 import ch.bader.budget.server.type.ClosingProcessStatus;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.YearMonth;
@@ -14,11 +13,16 @@ import java.time.YearMonth;
 @Service("closingProcessMongo")
 public class ClosingProcessAdapterImpl implements ClosingProcessAdapter {
 
-    @Autowired
-    private ClosingProcessMongoRepository closingProcessMongoRepository;
+    private final ClosingProcessMongoRepository closingProcessMongoRepository;
 
-    @Autowired
+    final
     ClosingProcessMapper closingProcessMapper;
+
+    public ClosingProcessAdapterImpl(ClosingProcessMongoRepository closingProcessMongoRepository,
+                                     ClosingProcessMapper closingProcessMapper) {
+        this.closingProcessMongoRepository = closingProcessMongoRepository;
+        this.closingProcessMapper = closingProcessMapper;
+    }
 
     @Override
     public ClosingProcess getClosingProcess(YearMonth yearMonth) {

@@ -48,7 +48,7 @@ class VirtualAccountMapperTest {
         assertThat(account.getName()).isEqualTo("virtualAccountName");
         assertThat(account.getId()).isEqualTo("idVirtual");
         assertThat(account.getBalance()).isEqualTo(BigDecimal.ZERO);
-        assertThat(account.getIsDeleted()).isEqualTo(false);
+        assertThat(account.getIsDeleted()).isFalse();
         assertThat(account.getUnderlyingAccount().getId()).isEqualTo("id");
         assertThat(account.getUnderlyingAccount()
                           .getAccountType()
@@ -87,7 +87,7 @@ class VirtualAccountMapperTest {
         assertThat(account.getName()).isEqualTo("virtualAccountName");
         assertThat(account.getId()).isEqualTo("idVirtual");
         assertThat(account.getBalance()).isEqualTo(BigDecimal.ZERO);
-        assertThat(account.getIsDeleted()).isEqualTo(false);
+        assertThat(account.getIsDeleted()).isFalse();
         assertThat(account.getUnderlyingAccount().getId()).isEqualTo("id");
         assertThat(account.getUnderlyingAccount()
                           .getAccountType()).isEqualTo(AccountType.CHECKING);
@@ -120,7 +120,7 @@ class VirtualAccountMapperTest {
         assertThat(account.getName()).isEqualTo("virtualAccountName");
         assertThat(account.getId()).isEqualTo("idVirtual");
         assertThat(account.getBalance()).isEqualTo(BigDecimal.ZERO);
-        assertThat(account.getIsDeleted()).isEqualTo(false);
+        assertThat(account.getIsDeleted()).isFalse();
         assertThat(account.getUnderlyingAccountId()).isEqualTo("id");
     }
 
@@ -144,7 +144,7 @@ class VirtualAccountMapperTest {
         assertThat(account.getName()).isEqualTo("virtualAccountName");
         assertThat(account.getId()).isEqualTo("idVirtual");
         assertThat(account.getBalance()).isEqualTo(BigDecimal.ZERO);
-        assertThat(account.getIsDeleted()).isEqualTo(false);
+        assertThat(account.getIsDeleted()).isFalse();
         assertThat(account.getUnderlyingAccount()).isNull();
     }
 }

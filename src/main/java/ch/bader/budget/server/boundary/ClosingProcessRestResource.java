@@ -11,7 +11,6 @@ import ch.bader.budget.server.domain.ScannedTransaction;
 import ch.bader.budget.server.mapper.ClosingProcessMapper;
 import ch.bader.budget.server.mapper.ScannedTransactionMapper;
 import ch.bader.budget.server.mapper.TransferDetailMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,17 +31,27 @@ import java.util.stream.Collectors;
 public class ClosingProcessRestResource {
 
 
-    @Autowired
+    final
     ClosingProcessService closingProcessService;
 
-    @Autowired
+    final
     ClosingProcessMapper closingProcessMapper;
 
-    @Autowired
+    final
     ScannedTransactionMapper scannedTransactionMapper;
 
-    @Autowired
+    final
     TransferDetailMapper transferDetailsMapper;
+
+    public ClosingProcessRestResource(ClosingProcessService closingProcessService,
+                                      ClosingProcessMapper closingProcessMapper,
+                                      ScannedTransactionMapper scannedTransactionMapper,
+                                      TransferDetailMapper transferDetailsMapper) {
+        this.closingProcessService = closingProcessService;
+        this.closingProcessMapper = closingProcessMapper;
+        this.scannedTransactionMapper = scannedTransactionMapper;
+        this.transferDetailsMapper = transferDetailsMapper;
+    }
 
     @GetMapping
     public ClosingProcessBoundaryDto getClosingProcess(@RequestParam Integer year, @RequestParam Integer month) {

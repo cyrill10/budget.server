@@ -19,7 +19,4 @@ public interface ClosingProcessStatusMapper {
         return ClosingProcessStatus.NEW;
     }
 
-    default ClosingProcessStatus mapToDomain(ValueEnumDto dto) {
-        return ClosingProcessStatus.forValue(dto.getValue());
-    }
 }

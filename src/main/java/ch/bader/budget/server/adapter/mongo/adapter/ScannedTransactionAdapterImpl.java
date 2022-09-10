@@ -5,7 +5,6 @@ import ch.bader.budget.server.adapter.mongo.repository.ScannedTransactionMongoRe
 import ch.bader.budget.server.domain.ScannedTransaction;
 import ch.bader.budget.server.mapper.ScannedTransactionMapper;
 import ch.bader.budget.server.repository.ScannedTransactionAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.YearMonth;
@@ -16,11 +15,17 @@ import java.util.stream.StreamSupport;
 @Component("scannedTransactionMongo")
 public class ScannedTransactionAdapterImpl implements ScannedTransactionAdapter {
 
-    @Autowired
+    final
     ScannedTransactionMapper scannedTransactionMapper;
 
-    @Autowired
+    final
     ScannedTransactionMongoRepository scannedTransactionMongoRepository;
+
+    public ScannedTransactionAdapterImpl(ScannedTransactionMapper scannedTransactionMapper,
+                                         ScannedTransactionMongoRepository scannedTransactionMongoRepository) {
+        this.scannedTransactionMapper = scannedTransactionMapper;
+        this.scannedTransactionMongoRepository = scannedTransactionMongoRepository;
+    }
 
     @Override
     public List<ScannedTransaction> saveAll(List<ScannedTransaction> transactionList) {

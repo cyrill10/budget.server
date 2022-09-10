@@ -27,9 +27,4 @@ public class Balance {
         this.effective = this.effective.add(balance.effective);
         this.budgeted = this.budgeted.add(balance.budgeted);
     }
-
-    public void subtract(Balance balance) {
-        this.effective = this.effective.subtract(balance.effective);
-        this.budgeted = this.budgeted.subtract(balance.budgeted);
-    }
 }

@@ -59,8 +59,10 @@ class ScannedTransactionMongoRepositoryTest {
         //act
         List<ScannedTransactionDbo> results = sut.findAllByYearMonth(YearMonth.of(2021, 1));
 
-        assertThat(results).hasSize(2);
-        assertThat(results).containsAll(List.of(findableDbo, alsoFindableDbo));
+        assertThat(results)
+            .hasSize(2)
+            .contains(findableDbo)
+            .contains(alsoFindableDbo);
 
     }
 }
