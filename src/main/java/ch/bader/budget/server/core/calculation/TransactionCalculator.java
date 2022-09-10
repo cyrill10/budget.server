@@ -71,11 +71,11 @@ public class TransactionCalculator {
         TransactionElement after = new TransactionElement("After",
             accountBalance.getEffective(),
             accountBalance.getBudgeted(), String.valueOf(Integer.MAX_VALUE - 1));
-        TransactionElement in_out = new TransactionElement(in.getEffective(), out.getEffective(), in.getBudgeted(),
+        TransactionElement inOut = new TransactionElement(in.getEffective(), out.getEffective(), in.getBudgeted(),
             out.getBudgeted());
         transactionElements.push(before);
         transactionElements.add(after);
-        transactionElements.add(in_out);
+        transactionElements.add(inOut);
         return transactionElements;
     }
 

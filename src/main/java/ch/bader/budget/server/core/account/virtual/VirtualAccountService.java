@@ -1,4 +1,4 @@
-package ch.bader.budget.server.core.virtualAccount;
+package ch.bader.budget.server.core.account.virtual;
 
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.repository.VirtualAccountAdapter;

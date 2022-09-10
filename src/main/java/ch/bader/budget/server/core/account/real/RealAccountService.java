@@ -1,4 +1,4 @@
-package ch.bader.budget.server.core.realAccount;
+package ch.bader.budget.server.core.account.real;
 
 import ch.bader.budget.server.domain.RealAccount;
 import ch.bader.budget.server.domain.VirtualAccount;

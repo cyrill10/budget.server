@@ -1,7 +1,7 @@
 package ch.bader.budget.server.boundary;
 
 import ch.bader.budget.server.boundary.dto.VirtualAccountBoundaryDto;
-import ch.bader.budget.server.core.virtualAccount.VirtualAccountService;
+import ch.bader.budget.server.core.account.virtual.VirtualAccountService;
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.mapper.VirtualAccountMapper;
 import org.springframework.beans.factory.annotation.Autowired;
