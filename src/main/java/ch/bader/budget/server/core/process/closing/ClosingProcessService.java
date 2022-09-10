@@ -1,4 +1,4 @@
-package ch.bader.budget.server.core.closingProcess;
+package ch.bader.budget.server.core.process.closing;
 
 import ch.bader.budget.server.boundary.dto.SaveScannedTransactionBoundaryDto;
 import ch.bader.budget.server.core.transaction.TransactionService;
@@ -117,7 +117,7 @@ public class ClosingProcessService {
             closingProcessAdapter.save(closingProcess);
             return scannedTransactionAdapter.saveAll(scannedTransactions);
         }
-        return null;
+        return List.of();
     }
 
     public List<ScannedTransaction> getTransactions(YearMonth yearMonth) {

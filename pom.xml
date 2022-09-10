@@ -21,6 +21,8 @@
         <lombok.version>1.18.24</lombok.version>
         <org.testcontainers.version>1.17.2</org.testcontainers.version>
         <docker.autoCreateCustomNetworks>true</docker.autoCreateCustomNetworks>
+        <sonar.organization>cyrill10</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencies>

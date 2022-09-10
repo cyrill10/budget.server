@@ -23,7 +23,7 @@ class ScannedTransactionMapperTest {
     private ScannedTransactionMapperImpl sut;
 
     @Test
-    public void shouldMapScannedTransactionToDto() {
+    void shouldMapScannedTransactionToDto() {
         //given
 
         ClosingProcess closingProcess = ClosingProcess.builder()
@@ -50,14 +50,14 @@ class ScannedTransactionMapperTest {
         assertThat(dto).isNotNull();
         assertThat(dto.getId()).isEqualTo("id");
         assertThat(dto.getAmount()).isEqualTo(BigDecimal.TEN);
-        assertThat(dto.getTransactionCreated()).isEqualTo(true);
+        assertThat(dto.getTransactionCreated()).isTrue();
         assertThat(dto.getCardType()).isEqualTo(CardType.MASTER_CARD.name());
         assertThat(dto.getDate()).isEqualTo(LocalDate.now());
         assertThat(dto.getDescription()).isEqualTo("scannedTransactionDesc");
     }
 
     @Test
-    public void shouldMapScannedTransactionToDbo() {
+    void shouldMapScannedTransactionToDbo() {
         //given
         ScannedTransaction domain = ScannedTransaction.builder()
                                                       .id("6")
@@ -76,7 +76,7 @@ class ScannedTransactionMapperTest {
         assertThat(dbo).isNotNull();
         assertThat(dbo.getId()).isEqualTo("6");
         assertThat(dbo.getAmount()).isEqualTo(BigDecimal.TEN);
-        assertThat(dbo.getTransactionCreated()).isEqualTo(true);
+        assertThat(dbo.getTransactionCreated()).isTrue();
         assertThat(dbo.getCardType()).isEqualTo(CardType.MASTER_CARD.name());
         assertThat(dbo.getDate()).isEqualTo(LocalDate.now());
         assertThat(dbo.getDescription()).isEqualTo("scannedTransactionDesc");
@@ -84,7 +84,7 @@ class ScannedTransactionMapperTest {
     }
 
     @Test
-    public void shouldMapDboToRealAccount() {
+    void shouldMapDboToRealAccount() {
         //given
         ScannedTransactionDbo dbo = ScannedTransactionDbo.builder()
                                                          .id("6")
@@ -103,7 +103,7 @@ class ScannedTransactionMapperTest {
         assertThat(domain).isNotNull();
         assertThat(domain.getId()).isEqualTo("6");
         assertThat(domain.getAmount()).isEqualTo(BigDecimal.TEN);
-        assertThat(domain.getTransactionCreated()).isEqualTo(true);
+        assertThat(domain.getTransactionCreated()).isTrue();
         assertThat(domain.getCardType()).isEqualTo(CardType.MASTER_CARD);
         assertThat(domain.getDate()).isEqualTo(LocalDate.now());
         assertThat(domain.getDescription()).isEqualTo("scannedTransactionDesc");

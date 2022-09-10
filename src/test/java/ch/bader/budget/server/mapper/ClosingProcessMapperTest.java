@@ -20,7 +20,7 @@ class ClosingProcessMapperTest {
     private ClosingProcessMapperImpl sut;
 
     @Test
-    public void shouldMapClosingProcessToDto() {
+    void shouldMapClosingProcessToDto() {
         //given
         ClosingProcess domain = ClosingProcess.builder()
                                               .id("id")
@@ -36,13 +36,13 @@ class ClosingProcessMapperTest {
         assertThat(dto).isNotNull();
         assertThat(dto.getId()).isEqualTo("id");
         assertThat(dto.getYear()).isEqualTo(2022);
-        assertThat(dto.getMonth()).isEqualTo(0);
+        assertThat(dto.getMonth()).isZero();
         assertThat(dto.getManualEntryStatus().getValue()).isEqualTo(ClosingProcessStatus.NEW.getValue());
         assertThat(dto.getUploadStatus().getValue()).isEqualTo(ClosingProcessStatus.DONE.getValue());
     }
 
     @Test
-    public void shouldMapClosingProcessToDbo() {
+    void shouldMapClosingProcessToDbo() {
         //given
         ClosingProcess domain = ClosingProcess.builder()
                                               .id("5")
@@ -63,7 +63,7 @@ class ClosingProcessMapperTest {
     }
 
     @Test
-    public void shouldMapDboToClosingProcess() {
+    void shouldMapDboToClosingProcess() {
         //given
         ClosingProcessDbo dbo = ClosingProcessDbo.builder()
                                                  .id("5")

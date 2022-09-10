@@ -6,7 +6,7 @@ import java.util.List;
 
 public class MonthGenerator {
 
-    public final static LocalDate STARTDATE = LocalDate.of(2021, 12, 1);
+    public static final LocalDate STARTDATE = LocalDate.of(2021, 12, 1);
 
     private MonthGenerator() {
         throw new IllegalStateException("Utility class");

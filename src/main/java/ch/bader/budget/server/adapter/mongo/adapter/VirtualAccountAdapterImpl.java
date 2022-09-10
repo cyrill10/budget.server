@@ -29,15 +29,6 @@ public class VirtualAccountAdapterImpl implements VirtualAccountAdapter {
 
 
     @Override
-    public VirtualAccount save(VirtualAccount virtualAccount) {
-        VirtualAccountDbo accountDbo = virtualAccountMapper.mapToEntity(virtualAccount);
-        accountDbo = virtualAccountMongoRepository.save(accountDbo);
-        VirtualAccount virtualAccountSaved = virtualAccountMapper.mapToDomain(accountDbo);
-        virtualAccountSaved.setUnderlyingAccount(virtualAccount.getUnderlyingAccount());
-        return virtualAccountSaved;
-    }
-
-    @Override
     public VirtualAccount updateVirtualAccount(VirtualAccount virtualAccount) {
         VirtualAccountDbo accountDbo = virtualAccountMapper.mapToEntity(virtualAccount);
         accountDbo = virtualAccountMongoRepository.save(accountDbo);

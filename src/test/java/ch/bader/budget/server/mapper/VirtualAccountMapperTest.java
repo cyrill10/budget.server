@@ -22,7 +22,7 @@ class VirtualAccountMapperTest {
     private VirtualAccountMapperImpl sut;
 
     @Test
-    public void shouldMapRealAccountToDto() {
+    void shouldMapRealAccountToDto() {
         //given
         RealAccount realAccount = RealAccount
             .builder()
@@ -56,7 +56,7 @@ class VirtualAccountMapperTest {
     }
 
     @Test
-    public void shouldMapDtoToRealAccount() {
+    void shouldMapDtoToRealAccount() {
         //given
         RealAccountBoundaryDto realAccountBoundaryDto = RealAccountBoundaryDto
             .builder()
@@ -94,7 +94,7 @@ class VirtualAccountMapperTest {
     }
 
     @Test
-    public void shouldMapRealAccountToDbo() {
+    void shouldMapRealAccountToDbo() {
         //given
         RealAccount realAccount = RealAccount
             .builder()
@@ -125,7 +125,7 @@ class VirtualAccountMapperTest {
     }
 
     @Test
-    public void shouldMapDboToRealAccount() {
+    void shouldMapDboToRealAccount() {
         //given
         VirtualAccountDbo dbo = VirtualAccountDbo
             .builder()

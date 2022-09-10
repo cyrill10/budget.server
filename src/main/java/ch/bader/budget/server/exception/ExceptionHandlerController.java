@@ -11,9 +11,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler(NoAccountException.class)
-	protected ResponseEntity<Object> handleMyException(NoAccountException ex, WebRequest req) {
-		Object resBody = "No Account found with the id: " + ex.id;
-		return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.NOT_FOUND, req);
-	}
+    @ExceptionHandler(NoAccountException.class)
+    protected ResponseEntity<Object> handleMyException(NoAccountException ex, WebRequest req) {
+        Object resBody = "No Account found with the id: " + ex.getId();
+        return handleExceptionInternal(ex, resBody, new HttpHeaders(), HttpStatus.NOT_FOUND, req);
+    }
 }

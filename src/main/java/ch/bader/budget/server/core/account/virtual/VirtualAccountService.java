@@ -1,4 +1,4 @@
-package ch.bader.budget.server.core.virtualAccount;
+package ch.bader.budget.server.core.account.virtual;
 
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.repository.VirtualAccountAdapter;
@@ -10,15 +10,11 @@ import java.util.List;
 
 @Service
 public class VirtualAccountService {
-    
+
     @Autowired
     @Qualifier("virtualAccountMongo")
     private VirtualAccountAdapter virtualAccountAdapter;
-
-
-    public VirtualAccount addVirtualAccount(VirtualAccount account) {
-        return virtualAccountAdapter.save(account);
-    }
+    
 
     public VirtualAccount updateVirtualAccount(VirtualAccount account) {
         return virtualAccountAdapter.updateVirtualAccount(account);

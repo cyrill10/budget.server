@@ -25,10 +25,7 @@ public class TransactionService {
     @Autowired
     @Qualifier("virtualAccountMongo")
     private VirtualAccountAdapter virtualAccountAdapter;
-
-    public Transaction createTransaction(Transaction transaction) {
-        return transactionAdapter.createTransaction(transaction);
-    }
+    
 
     public Transaction updateTransaction(Transaction transaction) {
         return transactionAdapter.updateTransaction(transaction);
