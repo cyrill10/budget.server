@@ -36,7 +36,7 @@ class ClosingProcessMapperTest {
         assertThat(dto).isNotNull();
         assertThat(dto.getId()).isEqualTo("id");
         assertThat(dto.getYear()).isEqualTo(2022);
-        assertThat(dto.getMonth()).isEqualTo(0);
+        assertThat(dto.getMonth()).isZero();
         assertThat(dto.getManualEntryStatus().getValue()).isEqualTo(ClosingProcessStatus.NEW.getValue());
         assertThat(dto.getUploadStatus().getValue()).isEqualTo(ClosingProcessStatus.DONE.getValue());
     }
