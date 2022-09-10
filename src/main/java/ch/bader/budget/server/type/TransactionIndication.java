@@ -1,7 +1,10 @@
 package ch.bader.budget.server.type;
 
+import lombok.Getter;
+
 import java.util.Arrays;
 
+@Getter
 public enum TransactionIndication implements ValueEnum<Integer> {
 
     EXPECTED(1, "E"), UNEXPECTED(2, "U");
@@ -13,16 +16,6 @@ public enum TransactionIndication implements ValueEnum<Integer> {
     TransactionIndication(int value, String name) {
         this.value = value;
         this.name = name;
-    }
-
-    @Override
-    public Integer getValue() {
-        return value;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     public static TransactionIndication forValue(Integer value) {
