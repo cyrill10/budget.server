@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.YearMonth;
 
+@SuppressWarnings("unused")
 public interface ClosingProcessMongoRepository extends MongoRepository<ClosingProcessDbo, String> {
 
     ClosingProcessDbo findByYearMonth(YearMonth yearMonth);

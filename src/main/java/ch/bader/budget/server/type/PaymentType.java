@@ -1,8 +1,5 @@
 package ch.bader.budget.server.type;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Arrays;
 
 public enum PaymentType implements ValueEnum<Integer> {
@@ -30,17 +27,6 @@ public enum PaymentType implements ValueEnum<Integer> {
 
     public static PaymentType forValue(Integer value) {
         return Arrays.stream(PaymentType.values()).filter(p -> p.getValue().equals(value)).findFirst().orElseThrow();
-    }
-
-    @JsonCreator
-    public static PaymentType forValues(@JsonProperty("name") String name, @JsonProperty("value") double value) {
-        for (PaymentType paymentType : PaymentType.values()) {
-            if (paymentType.name.equals(name) && Double.compare(paymentType.value, value) == 0) {
-                return paymentType;
-            }
-        }
-
-        return null;
     }
 
 }

@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.repository.Query;
 import java.time.LocalDate;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public interface TransactionMongoRepository extends MongoRepository<TransactionDbo, String> {
 
     List<TransactionDbo> findAllByDateBetween(LocalDate fromExclusive, LocalDate toExclusive);

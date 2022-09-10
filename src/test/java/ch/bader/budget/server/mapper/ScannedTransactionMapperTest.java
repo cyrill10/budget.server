@@ -2,10 +2,8 @@ package ch.bader.budget.server.mapper;
 
 import ch.bader.budget.server.adapter.mongo.entity.ScannedTransactionDbo;
 import ch.bader.budget.server.boundary.dto.ScannedTransactionBoundaryDto;
-import ch.bader.budget.server.domain.ClosingProcess;
 import ch.bader.budget.server.domain.ScannedTransaction;
 import ch.bader.budget.server.type.CardType;
-import ch.bader.budget.server.type.ClosingProcessStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,13 +23,6 @@ class ScannedTransactionMapperTest {
     @Test
     void shouldMapScannedTransactionToDto() {
         //given
-
-        ClosingProcess closingProcess = ClosingProcess.builder()
-                                                      .id("id")
-                                                      .yearMonth(YearMonth.of(2022, 1))
-                                                      .manualEntryStatus(ClosingProcessStatus.NEW)
-                                                      .uploadStatus(ClosingProcessStatus.DONE)
-                                                      .build();
 
         ScannedTransaction domain = ScannedTransaction.builder()
                                                       .id("id")
