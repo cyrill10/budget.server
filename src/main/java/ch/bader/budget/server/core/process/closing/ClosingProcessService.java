@@ -117,7 +117,7 @@ public class ClosingProcessService {
             closingProcessAdapter.save(closingProcess);
             return scannedTransactionAdapter.saveAll(scannedTransactions);
         }
-        return null;
+        return List.of();
     }
 
     public List<ScannedTransaction> getTransactions(YearMonth yearMonth) {
