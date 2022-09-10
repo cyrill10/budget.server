@@ -23,18 +23,19 @@ import static ch.bader.budget.server.TestUtils.asJsonString;
 import static ch.bader.budget.server.TestUtils.getAuthHeader;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ClosingProcessIT extends AbstractIT {
 
     @Test
-    public void shouldLoadDb() throws IOException, URISyntaxException {
+    void shouldLoadDb() {
         //arrange
-        populateDatabaseFull();
+        assertDoesNotThrow(this::populateDatabaseFull);
     }
 
     @Test
-    public void whenProcessExists_shouldGetClosingProcess() throws IOException, URISyntaxException {
+    void whenProcessExists_shouldGetClosingProcess() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -53,7 +54,7 @@ class ClosingProcessIT extends AbstractIT {
     }
 
     @Test
-    public void whenProcessDoesNotExists_shouldCreateAndGetClosingProcess() throws IOException, URISyntaxException {
+    void whenProcessDoesNotExists_shouldCreateAndGetClosingProcess() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -72,7 +73,7 @@ class ClosingProcessIT extends AbstractIT {
     }
 
     @Test
-    public void whenCloseFileUpload_shouldCloseUploadStatus() throws IOException, URISyntaxException {
+    void whenCloseFileUpload_shouldCloseUploadStatus() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -116,7 +117,7 @@ class ClosingProcessIT extends AbstractIT {
     }
 
     @Test
-    public void whenCloseTransferDetail_shouldCloseTransferDetailStatus() throws IOException, URISyntaxException {
+    void whenCloseTransferDetail_shouldCloseTransferDetailStatus() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -187,7 +188,7 @@ class ClosingProcessIT extends AbstractIT {
                    .body("[0].date", equalTo("2022-04-20"))
                    .body("[0].description", equalTo("COOP-1990 BE C.RYFFLIH, BERN"))
                    .body("[0].amount", equalTo(27.9F))
-                   .body("[0].cardType", equalTo("MasterCard"))
+                   .body("[0].cardType", equalTo("MASTER_CARD"))
                    .body("[0].transactionCreated", equalTo(false))
                    .body("[126].date", equalTo("2022-05-20"))
                    .body("[126].description", equalTo("TRAVEL COMFORT PLUS"))
@@ -214,7 +215,7 @@ class ClosingProcessIT extends AbstractIT {
                                        .body("[0].date", equalTo("2022-04-20"))
                                        .body("[0].description", equalTo("COOP-1990 BE C.RYFFLIH, BERN"))
                                        .body("[0].amount", equalTo(27.9F))
-                                       .body("[0].cardType", equalTo("MasterCard"))
+                                       .body("[0].cardType", equalTo("MASTER_CARD"))
                                        .body("[0].transactionCreated", equalTo(false))
                                        .body("[126].date", equalTo("2022-05-20"))
                                        .body("[126].description", equalTo("TRAVEL COMFORT PLUS"))
@@ -280,7 +281,7 @@ class ClosingProcessIT extends AbstractIT {
                    .body("[0].date", equalTo("2022-04-20"))
                    .body("[0].description", equalTo("COOP-1990 BE C.RYFFLIH, BERN"))
                    .body("[0].amount", equalTo(27.9F))
-                   .body("[0].cardType", equalTo("MasterCard"))
+                   .body("[0].cardType", equalTo("MASTER_CARD"))
                    .body("[0].transactionCreated", equalTo(false))
                    .body("[126].date", equalTo("2022-05-20"))
                    .body("[126].description", equalTo("TRAVEL COMFORT PLUS"))
@@ -343,7 +344,7 @@ class ClosingProcessIT extends AbstractIT {
                                        .body("[0].date", equalTo("2022-04-20"))
                                        .body("[0].description", equalTo("COOP-1990 BE C.RYFFLIH, BERN"))
                                        .body("[0].amount", equalTo(27.9F))
-                                       .body("[0].cardType", equalTo("MasterCard"))
+                                       .body("[0].cardType", equalTo("MASTER_CARD"))
                                        .body("[0].transactionCreated", equalTo(false))
                                        .body("[126].date", equalTo("2022-05-20"))
                                        .body("[126].description", equalTo("TRAVEL COMFORT PLUS"))
@@ -394,7 +395,7 @@ class ClosingProcessIT extends AbstractIT {
                    .body("[0].date", equalTo("2022-04-20"))
                    .body("[0].description", equalTo("COOP-1990 BE C.RYFFLIH, BERN"))
                    .body("[0].amount", equalTo(27.9F))
-                   .body("[0].cardType", equalTo("MasterCard"))
+                   .body("[0].cardType", equalTo("MASTER_CARD"))
                    .body("[0].transactionCreated", equalTo(false))
                    .body("[126].date", equalTo("2022-05-20"))
                    .body("[126].description", equalTo("TRAVEL COMFORT PLUS"))
@@ -446,7 +447,7 @@ class ClosingProcessIT extends AbstractIT {
 
 
     @Test
-    public void shouldGetTransferDetail() throws IOException, URISyntaxException {
+    void shouldGetTransferDetail() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 

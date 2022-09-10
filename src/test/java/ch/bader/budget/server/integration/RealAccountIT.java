@@ -16,18 +16,19 @@ import static ch.bader.budget.server.TestUtils.getAuthHeader;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isA;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RealAccountIT extends AbstractIT {
 
     @Test
-    public void shouldLoadDb() throws IOException, URISyntaxException {
+    void shouldLoadDb() {
         //arrange
-        populateDatabaseFull();
+        assertDoesNotThrow(this::populateDatabaseFull);
     }
 
     @Test
-    public void shouldAddAccount() {
+    void shouldAddAccount() {
         RealAccountBoundaryDto input = RealAccountBoundaryDto.builder()
                                                              .name("TestAccount")
                                                              .accountType(ValueEnumDto.builder()
@@ -47,7 +48,7 @@ class RealAccountIT extends AbstractIT {
     }
 
     @Test
-    public void shouldUpdateAccount() throws IOException, URISyntaxException {
+    void shouldUpdateAccount() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -82,7 +83,7 @@ class RealAccountIT extends AbstractIT {
 
 
     @Test
-    public void shouldGetAccount() throws IOException, URISyntaxException {
+    void shouldGetAccount() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -100,7 +101,7 @@ class RealAccountIT extends AbstractIT {
     }
 
     @Test
-    public void shouldGetAllAccounts() throws IOException, URISyntaxException {
+    void shouldGetAllAccounts() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -120,7 +121,7 @@ class RealAccountIT extends AbstractIT {
     }
 
     @Test
-    public void shouldGetAllAccountTyps() {
+    void shouldGetAllAccountTyps() {
         //act
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()

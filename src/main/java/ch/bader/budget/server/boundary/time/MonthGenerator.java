@@ -8,6 +8,10 @@ public class MonthGenerator {
 
     public final static LocalDate STARTDATE = LocalDate.of(2021, 12, 1);
 
+    private MonthGenerator() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static List<LocalDate> getallMonths() {
         LocalDate today = LocalDate.now();
         LocalDate todayInAYear = today.plusYears(1).withDayOfMonth(1);

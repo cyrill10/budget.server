@@ -21,6 +21,10 @@ public class TransactionCalculator {
 
     private static final BudgetedAmountFunction budgetedAmountFunction = new BudgetedAmountFunction();
 
+    private TransactionCalculator() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static List<TransactionElement> getTransactionsForMonth(List<Transaction> transactions,
                                                                    VirtualAccount virtualAccount,
                                                                    LocalDate from) {

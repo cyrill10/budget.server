@@ -1,5 +1,5 @@
 package ch.bader.budget.server.type;
 
 public enum CardType {
-    AMEX, MasterCard
+    AMEX, MASTER_CARD
 }
