@@ -25,8 +25,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Get git tag
+        id: tag
+        uses: dawidd6/action-get-tag@v1
+
       - name: Update version in pom.xml
-        run: mvn -B versions:set -DnewVersion=${{ github.event.release.tag_name }} -DgenerateBackupPoms=false
+        run: mvn -B versions:set -DnewVersion=${{ steps.tag.outputs.tag }} -DgenerateBackupPoms=false
 
 
       - name: Log in to the Container registry
