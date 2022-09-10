@@ -16,16 +16,19 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
 
+    public static final String BUDGET_PATH = "/budget/**";
+    public static final String USER = "USER";
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf()
             .disable()
             .authorizeRequests()
-            .antMatchers(HttpMethod.GET, "/budget/**").hasRole("USER")
-            .antMatchers(HttpMethod.POST, "/budget/**")
-            .hasRole("USER")
-            .antMatchers(HttpMethod.PUT, "/budget/**")
-            .hasRole("USER")
+            .antMatchers(HttpMethod.GET, BUDGET_PATH).hasRole(USER)
+            .antMatchers(HttpMethod.POST, BUDGET_PATH)
+            .hasRole(USER)
+            .antMatchers(HttpMethod.PUT, BUDGET_PATH)
+            .hasRole(USER)
             .and()
             .httpBasic()
             .and()
