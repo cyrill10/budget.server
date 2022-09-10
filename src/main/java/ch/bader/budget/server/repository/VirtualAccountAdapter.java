@@ -5,7 +5,6 @@ import ch.bader.budget.server.domain.VirtualAccount;
 import java.util.List;
 
 public interface VirtualAccountAdapter {
-    VirtualAccount save(VirtualAccount virtualAccount);
 
     VirtualAccount updateVirtualAccount(VirtualAccount account);
 
