@@ -21,7 +21,6 @@ import ch.bader.budget.server.type.PaymentStatus;
 import ch.bader.budget.server.type.PaymentType;
 import ch.bader.budget.server.type.TransactionIndication;
 import com.opencsv.bean.CsvToBeanBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,29 +38,35 @@ import java.util.stream.Collectors;
 @Service
 public class ClosingProcessService {
 
-    @Autowired
-    @Qualifier("closingProcessMongo")
+    final
     ClosingProcessAdapter closingProcessAdapter;
 
-    @Autowired
-    @Qualifier("scannedTransactionMongo")
+    final
     ScannedTransactionAdapter scannedTransactionAdapter;
 
-    @Autowired
-    @Qualifier("virtualAccountMongo")
-    private VirtualAccountAdapter virtualAccountAdapter;
+    private final VirtualAccountAdapter virtualAccountAdapter;
 
-    @Autowired
-    @Qualifier("transactionMongo")
+    final
     TransactionAdapter transactionAdapter;
 
-    @Autowired
-    @Qualifier("realAccountMongo")
-    private RealAccountAdapter realAccountAdapter;
+    private final RealAccountAdapter realAccountAdapter;
 
 
-    @Autowired
-    private TransactionService transactionService;
+    private final TransactionService transactionService;
+
+    public ClosingProcessService(@Qualifier("closingProcessMongo") ClosingProcessAdapter closingProcessAdapter,
+                                 @Qualifier("scannedTransactionMongo") ScannedTransactionAdapter scannedTransactionAdapter,
+                                 @Qualifier("virtualAccountMongo") VirtualAccountAdapter virtualAccountAdapter,
+                                 @Qualifier("transactionMongo") TransactionAdapter transactionAdapter,
+                                 @Qualifier("realAccountMongo") RealAccountAdapter realAccountAdapter,
+                                 TransactionService transactionService) {
+        this.closingProcessAdapter = closingProcessAdapter;
+        this.scannedTransactionAdapter = scannedTransactionAdapter;
+        this.virtualAccountAdapter = virtualAccountAdapter;
+        this.transactionAdapter = transactionAdapter;
+        this.realAccountAdapter = realAccountAdapter;
+        this.transactionService = transactionService;
+    }
 
     public ClosingProcess getClosingProcess(YearMonth yearMonth) {
         return closingProcessAdapter.getClosingProcess(yearMonth);
@@ -176,7 +181,7 @@ public class ClosingProcessService {
 
     private List<Transaction> createTransactions(List<ScannedTransaction> scannedTransactions,
                                                  VirtualAccount creditedAccount,
-                                                 VirtualAccount debitedAccount, VirtualAccount throughtAccount,
+                                                 VirtualAccount debitedAccount, VirtualAccount throughAccount,
                                                  LocalDate date) {
 
         return scannedTransactions.stream()
@@ -185,7 +190,7 @@ public class ClosingProcessService {
                                   .map(sc -> createThroughTransactions(sc,
                                       creditedAccount,
                                       debitedAccount,
-                                      throughtAccount,
+                                      throughAccount,
                                       date))
                                   .flatMap(List::stream)
                                   .collect(Collectors.toList());
@@ -193,7 +198,7 @@ public class ClosingProcessService {
 
     private Transaction createTransaction(ScannedTransaction scannedTransaction,
                                           VirtualAccount creditedAccount,
-                                          VirtualAccount debitedAccout, LocalDate date) {
+                                          VirtualAccount debitedAccount, LocalDate date) {
         return Transaction.builder()
                           .date(date)
                           .description(scannedTransaction.getDescription())
@@ -202,7 +207,7 @@ public class ClosingProcessService {
                           .paymentStatus(PaymentStatus.PAID)
                           .paymentType(PaymentType.DEPOSIT)
                           .creditedAccount(creditedAccount)
-                          .debitedAccount(debitedAccout)
+                          .debitedAccount(debitedAccount)
                           .budgetedAmount(BigDecimal.ZERO)
                           .creationDate(LocalDateTime.now())
                           .build();

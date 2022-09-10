@@ -72,7 +72,7 @@ public class TransactionRestResource {
     @ResponseStatus(HttpStatus.CREATED)
     public void dublicateTransaction(@RequestBody TransactionBoundaryDto dto) {
         Transaction transaction = transactionMapper.mapToDomain(dto);
-        transactionService.dublicateTransaction(transaction);
+        transactionService.duplicateTransaction(transaction);
     }
 
     @GetMapping(path = "/")

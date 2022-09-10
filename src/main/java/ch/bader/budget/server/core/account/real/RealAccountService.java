@@ -3,7 +3,6 @@ package ch.bader.budget.server.core.account.real;
 import ch.bader.budget.server.domain.RealAccount;
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.repository.RealAccountAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +12,11 @@ import java.util.Map;
 @Service
 public class RealAccountService {
 
-    @Autowired
-    @Qualifier("realAccountMongo")
-    private RealAccountAdapter realAccountAdapter;
+    private final RealAccountAdapter realAccountAdapter;
+
+    public RealAccountService(@Qualifier("realAccountMongo") RealAccountAdapter realAccountAdapter) {
+        this.realAccountAdapter = realAccountAdapter;
+    }
 
     public RealAccount addRealAccount(RealAccount account) {
         return realAccountAdapter.save(account);
