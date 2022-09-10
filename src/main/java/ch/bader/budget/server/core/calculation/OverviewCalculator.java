@@ -16,6 +16,10 @@ import java.util.stream.Collectors;
 
 public class OverviewCalculator {
 
+    private OverviewCalculator() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static List<OverviewElement> getOverviewForMonth(Map<RealAccount, List<VirtualAccount>> accountMap,
                                                             List<Transaction> allTransactions,
                                                             List<Transaction> allTransactionsTillEndOfYear,

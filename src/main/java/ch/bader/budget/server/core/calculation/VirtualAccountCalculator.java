@@ -11,6 +11,10 @@ import java.util.function.Function;
 
 public class VirtualAccountCalculator {
 
+    private VirtualAccountCalculator() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static Balance getBalanceAt(VirtualAccount account, List<Transaction> allTransactions,
                                        Function<Transaction, BigDecimal> effectiveBalanceTypeFunction,
                                        Function<Transaction, BigDecimal> budgetedBalanceTypeFunction,
