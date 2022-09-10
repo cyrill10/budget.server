@@ -29,13 +29,13 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 class ClosingProcessIT extends AbstractIT {
 
     @Test
-    public void shouldLoadDb() {
+    void shouldLoadDb() {
         //arrange
         assertDoesNotThrow(this::populateDatabaseFull);
     }
 
     @Test
-    public void whenProcessExists_shouldGetClosingProcess() throws IOException, URISyntaxException {
+    void whenProcessExists_shouldGetClosingProcess() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -54,7 +54,7 @@ class ClosingProcessIT extends AbstractIT {
     }
 
     @Test
-    public void whenProcessDoesNotExists_shouldCreateAndGetClosingProcess() throws IOException, URISyntaxException {
+    void whenProcessDoesNotExists_shouldCreateAndGetClosingProcess() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -73,7 +73,7 @@ class ClosingProcessIT extends AbstractIT {
     }
 
     @Test
-    public void whenCloseFileUpload_shouldCloseUploadStatus() throws IOException, URISyntaxException {
+    void whenCloseFileUpload_shouldCloseUploadStatus() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -117,7 +117,7 @@ class ClosingProcessIT extends AbstractIT {
     }
 
     @Test
-    public void whenCloseTransferDetail_shouldCloseTransferDetailStatus() throws IOException, URISyntaxException {
+    void whenCloseTransferDetail_shouldCloseTransferDetailStatus() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -447,7 +447,7 @@ class ClosingProcessIT extends AbstractIT {
 
 
     @Test
-    public void shouldGetTransferDetail() throws IOException, URISyntaxException {
+    void shouldGetTransferDetail() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 

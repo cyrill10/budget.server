@@ -22,13 +22,13 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 class RealAccountIT extends AbstractIT {
 
     @Test
-    public void shouldLoadDb() {
+    void shouldLoadDb() {
         //arrange
         assertDoesNotThrow(this::populateDatabaseFull);
     }
 
     @Test
-    public void shouldAddAccount() {
+    void shouldAddAccount() {
         RealAccountBoundaryDto input = RealAccountBoundaryDto.builder()
                                                              .name("TestAccount")
                                                              .accountType(ValueEnumDto.builder()
@@ -48,7 +48,7 @@ class RealAccountIT extends AbstractIT {
     }
 
     @Test
-    public void shouldUpdateAccount() throws IOException, URISyntaxException {
+    void shouldUpdateAccount() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -83,7 +83,7 @@ class RealAccountIT extends AbstractIT {
 
 
     @Test
-    public void shouldGetAccount() throws IOException, URISyntaxException {
+    void shouldGetAccount() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -101,7 +101,7 @@ class RealAccountIT extends AbstractIT {
     }
 
     @Test
-    public void shouldGetAllAccounts() throws IOException, URISyntaxException {
+    void shouldGetAllAccounts() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -121,7 +121,7 @@ class RealAccountIT extends AbstractIT {
     }
 
     @Test
-    public void shouldGetAllAccountTyps() {
+    void shouldGetAllAccountTyps() {
         //act
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()

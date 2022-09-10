@@ -16,7 +16,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractIT {
+abstract class AbstractIT {
 
     protected void populateDatabaseFull() throws IOException, URISyntaxException {
         populateMongoDbs();

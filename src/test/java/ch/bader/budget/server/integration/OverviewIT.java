@@ -24,13 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class OverviewIT extends AbstractIT {
 
     @Test
-    public void shouldLoadDb() {
+    void shouldLoadDb() {
         //arrange
         assertDoesNotThrow(this::populateDatabaseFull);
     }
 
     @Test
-    public void shouldGetOverview() throws IOException, URISyntaxException, JSONException {
+    void shouldGetOverview() throws IOException, URISyntaxException, JSONException {
         //arrange
         populateDatabaseFull();
 

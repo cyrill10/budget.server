@@ -24,13 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 class VirtualAccountIT extends AbstractIT {
 
     @Test
-    public void shouldLoadDb() {
+    void shouldLoadDb() {
         //arrange
         assertDoesNotThrow(this::populateDatabaseFull);
     }
 
     @Test
-    public void shouldAddAccount() {
+    void shouldAddAccount() {
         RealAccountBoundaryDto underlyingAccount = RealAccountBoundaryDto
             .builder()
             //4
@@ -61,7 +61,7 @@ class VirtualAccountIT extends AbstractIT {
     }
 
     @Test
-    public void shouldUpdateAccount() throws IOException, URISyntaxException {
+    void shouldUpdateAccount() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -118,7 +118,7 @@ class VirtualAccountIT extends AbstractIT {
 
 
     @Test
-    public void shouldGetAccount() throws IOException, URISyntaxException {
+    void shouldGetAccount() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -138,7 +138,7 @@ class VirtualAccountIT extends AbstractIT {
     }
 
     @Test
-    public void shouldGetAllAccounts() throws IOException, URISyntaxException {
+    void shouldGetAllAccounts() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act

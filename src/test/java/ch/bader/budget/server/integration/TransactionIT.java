@@ -29,13 +29,13 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 class TransactionIT extends AbstractIT {
 
     @Test
-    public void shouldLoadDb() {
+    void shouldLoadDb() {
         //arrange
         assertDoesNotThrow(this::populateDatabaseFull);
     }
 
     @Test
-    public void shouldAddTransaction() throws IOException, URISyntaxException {
+    void shouldAddTransaction() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -94,7 +94,7 @@ class TransactionIT extends AbstractIT {
     }
 
     @Test
-    public void shouldUpdateTransaction() throws IOException, URISyntaxException {
+    void shouldUpdateTransaction() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -185,7 +185,7 @@ class TransactionIT extends AbstractIT {
 
 
     @Test
-    public void shouldGetTransaction() throws IOException, URISyntaxException {
+    void shouldGetTransaction() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -208,7 +208,7 @@ class TransactionIT extends AbstractIT {
     }
 
     @Test
-    public void shouldDeleteTransaction() throws IOException, URISyntaxException {
+    void shouldDeleteTransaction() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -230,7 +230,7 @@ class TransactionIT extends AbstractIT {
     }
 
     @Test
-    public void shouldDuplicateTransaction() throws IOException, URISyntaxException {
+    void shouldDuplicateTransaction() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
 
@@ -293,7 +293,7 @@ class TransactionIT extends AbstractIT {
     }
 
     @Test
-    public void shouldGetAllTransactionsForMonth() throws IOException, URISyntaxException {
+    void shouldGetAllTransactionsForMonth() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -324,7 +324,7 @@ class TransactionIT extends AbstractIT {
     }
 
     @Test
-    public void shouldGetAllTransactionsForMonthAndVirtualAccount() throws IOException, URISyntaxException {
+    void shouldGetAllTransactionsForMonthAndVirtualAccount() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -373,7 +373,7 @@ class TransactionIT extends AbstractIT {
     }
 
     @Test
-    public void shouldGetAllTransactionsForMonthAndRealAccount() throws IOException, URISyntaxException {
+    void shouldGetAllTransactionsForMonthAndRealAccount() throws IOException, URISyntaxException {
         //arrange
         populateDatabaseFull();
         //act
@@ -414,7 +414,7 @@ class TransactionIT extends AbstractIT {
     }
 
     @Test
-    public void shouldGetPaymentTyps() {
+    void shouldGetPaymentTyps() {
         //act
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
@@ -431,7 +431,7 @@ class TransactionIT extends AbstractIT {
     }
 
     @Test
-    public void shouldGetIndicationTyps() {
+    void shouldGetIndicationTyps() {
         //act
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
@@ -446,7 +446,7 @@ class TransactionIT extends AbstractIT {
     }
 
     @Test
-    public void shouldGetStatusTyps() {
+    void shouldGetStatusTyps() {
         //act
         given().headers(getAuthHeader()).contentType(ContentType.JSON)
                .when()
