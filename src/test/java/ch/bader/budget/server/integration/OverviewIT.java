@@ -17,15 +17,16 @@ import java.net.URISyntaxException;
 
 import static ch.bader.budget.server.TestUtils.getAuthHeader;
 import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OverviewIT extends AbstractIT {
 
     @Test
-    public void shouldLoadDb() throws IOException, URISyntaxException {
+    public void shouldLoadDb() {
         //arrange
-        populateDatabaseFull();
+        assertDoesNotThrow(this::populateDatabaseFull);
     }
 
     @Test

@@ -23,14 +23,15 @@ import static ch.bader.budget.server.TestUtils.asJsonString;
 import static ch.bader.budget.server.TestUtils.getAuthHeader;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ClosingProcessIT extends AbstractIT {
 
     @Test
-    public void shouldLoadDb() throws IOException, URISyntaxException {
+    public void shouldLoadDb() {
         //arrange
-        populateDatabaseFull();
+        assertDoesNotThrow(this::populateDatabaseFull);
     }
 
     @Test

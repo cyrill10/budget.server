@@ -43,7 +43,7 @@ public class ScannedTransactionCsvBean {
     }
 
     public CardType getCardType() {
-        return cardNumber.endsWith("9709") ? CardType.AMEX : CardType.MasterCard;
+        return cardNumber.endsWith("9709") ? CardType.AMEX : CardType.MASTER_CARD;
     }
 
 }

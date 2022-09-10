@@ -37,7 +37,7 @@ class ScannedTransactionMapperTest {
                                                       .id("id")
                                                       .amount(BigDecimal.TEN)
                                                       .transactionCreated(true)
-                                                      .cardType(CardType.MasterCard)
+                                                      .cardType(CardType.MASTER_CARD)
                                                       .date(LocalDate.now())
                                                       .description("scannedTransactionDesc")
                                                       .yearMonth(YearMonth.of(2022, 1))
@@ -51,7 +51,7 @@ class ScannedTransactionMapperTest {
         assertThat(dto.getId()).isEqualTo("id");
         assertThat(dto.getAmount()).isEqualTo(BigDecimal.TEN);
         assertThat(dto.getTransactionCreated()).isEqualTo(true);
-        assertThat(dto.getCardType()).isEqualTo(CardType.MasterCard.name());
+        assertThat(dto.getCardType()).isEqualTo(CardType.MASTER_CARD.name());
         assertThat(dto.getDate()).isEqualTo(LocalDate.now());
         assertThat(dto.getDescription()).isEqualTo("scannedTransactionDesc");
     }
@@ -63,7 +63,7 @@ class ScannedTransactionMapperTest {
                                                       .id("6")
                                                       .amount(BigDecimal.TEN)
                                                       .transactionCreated(true)
-                                                      .cardType(CardType.MasterCard)
+                                                      .cardType(CardType.MASTER_CARD)
                                                       .date(LocalDate.now())
                                                       .description("scannedTransactionDesc")
                                                       .yearMonth(YearMonth.of(2022, 1))
@@ -77,7 +77,7 @@ class ScannedTransactionMapperTest {
         assertThat(dbo.getId()).isEqualTo("6");
         assertThat(dbo.getAmount()).isEqualTo(BigDecimal.TEN);
         assertThat(dbo.getTransactionCreated()).isEqualTo(true);
-        assertThat(dbo.getCardType()).isEqualTo(CardType.MasterCard.name());
+        assertThat(dbo.getCardType()).isEqualTo(CardType.MASTER_CARD.name());
         assertThat(dbo.getDate()).isEqualTo(LocalDate.now());
         assertThat(dbo.getDescription()).isEqualTo("scannedTransactionDesc");
         assertThat(dbo.getYearMonth()).isEqualTo(YearMonth.of(2022, 1));
@@ -90,7 +90,7 @@ class ScannedTransactionMapperTest {
                                                          .id("6")
                                                          .amount(BigDecimal.TEN)
                                                          .transactionCreated(true)
-                                                         .cardType(CardType.MasterCard.name())
+                                                         .cardType(CardType.MASTER_CARD.name())
                                                          .date(LocalDate.now())
                                                          .description("scannedTransactionDesc")
                                                          .yearMonth(YearMonth.of(2022, 1))
@@ -104,7 +104,7 @@ class ScannedTransactionMapperTest {
         assertThat(domain.getId()).isEqualTo("6");
         assertThat(domain.getAmount()).isEqualTo(BigDecimal.TEN);
         assertThat(domain.getTransactionCreated()).isEqualTo(true);
-        assertThat(domain.getCardType()).isEqualTo(CardType.MasterCard);
+        assertThat(domain.getCardType()).isEqualTo(CardType.MASTER_CARD);
         assertThat(domain.getDate()).isEqualTo(LocalDate.now());
         assertThat(domain.getDescription()).isEqualTo("scannedTransactionDesc");
         assertThat(domain.getYearMonth()).isEqualTo(YearMonth.of(2022, 1));
