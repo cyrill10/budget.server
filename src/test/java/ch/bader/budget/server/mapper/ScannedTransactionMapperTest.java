@@ -23,7 +23,7 @@ class ScannedTransactionMapperTest {
     private ScannedTransactionMapperImpl sut;
 
     @Test
-    public void shouldMapScannedTransactionToDto() {
+    void shouldMapScannedTransactionToDto() {
         //given
 
         ClosingProcess closingProcess = ClosingProcess.builder()
@@ -57,7 +57,7 @@ class ScannedTransactionMapperTest {
     }
 
     @Test
-    public void shouldMapScannedTransactionToDbo() {
+    void shouldMapScannedTransactionToDbo() {
         //given
         ScannedTransaction domain = ScannedTransaction.builder()
                                                       .id("6")
@@ -84,7 +84,7 @@ class ScannedTransactionMapperTest {
     }
 
     @Test
-    public void shouldMapDboToRealAccount() {
+    void shouldMapDboToRealAccount() {
         //given
         ScannedTransactionDbo dbo = ScannedTransactionDbo.builder()
                                                          .id("6")

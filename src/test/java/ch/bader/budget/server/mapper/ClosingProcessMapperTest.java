@@ -20,7 +20,7 @@ class ClosingProcessMapperTest {
     private ClosingProcessMapperImpl sut;
 
     @Test
-    public void shouldMapClosingProcessToDto() {
+    void shouldMapClosingProcessToDto() {
         //given
         ClosingProcess domain = ClosingProcess.builder()
                                               .id("id")
@@ -42,7 +42,7 @@ class ClosingProcessMapperTest {
     }
 
     @Test
-    public void shouldMapClosingProcessToDbo() {
+    void shouldMapClosingProcessToDbo() {
         //given
         ClosingProcess domain = ClosingProcess.builder()
                                               .id("5")
@@ -63,7 +63,7 @@ class ClosingProcessMapperTest {
     }
 
     @Test
-    public void shouldMapDboToClosingProcess() {
+    void shouldMapDboToClosingProcess() {
         //given
         ClosingProcessDbo dbo = ClosingProcessDbo.builder()
                                                  .id("5")

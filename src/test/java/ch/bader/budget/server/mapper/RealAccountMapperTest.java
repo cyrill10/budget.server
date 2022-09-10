@@ -19,7 +19,7 @@ class RealAccountMapperTest {
     private RealAccountMapperImpl sut;
 
     @Test
-    public void shouldMapRealAccountToDto() {
+    void shouldMapRealAccountToDto() {
         //given
         RealAccount domain = RealAccount.builder()
                                         .id("id")
@@ -38,7 +38,7 @@ class RealAccountMapperTest {
     }
 
     @Test
-    public void shouldMapDtoToRealAccount() {
+    void shouldMapDtoToRealAccount() {
         //given
         RealAccountBoundaryDto dto = RealAccountBoundaryDto.builder()
                                                            .id("id")
@@ -60,7 +60,7 @@ class RealAccountMapperTest {
     }
 
     @Test
-    public void shouldMapRealAccountToDbo() {
+    void shouldMapRealAccountToDbo() {
         //given
         RealAccount domain = RealAccount.builder()
                                         .id("id")
@@ -79,7 +79,7 @@ class RealAccountMapperTest {
     }
 
     @Test
-    public void shouldMapDboToRealAccount() {
+    void shouldMapDboToRealAccount() {
         //given
         RealAccountDbo dbo = RealAccountDbo.builder()
                                            .id("id")

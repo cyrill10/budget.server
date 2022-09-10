@@ -30,7 +30,7 @@ class TransactionMapperTest {
     private TransactionMapperImpl sut;
 
     @Test
-    public void shouldMapTransactionToDto() {
+    void shouldMapTransactionToDto() {
         //given
         RealAccount realAccount = RealAccount
             .builder()
@@ -94,7 +94,7 @@ class TransactionMapperTest {
     }
 
     @Test
-    public void shouldMapDtoToTransaction() {
+    void shouldMapDtoToTransaction() {
         //given
         RealAccountBoundaryDto realAccount = RealAccountBoundaryDto
             .builder()
@@ -157,7 +157,7 @@ class TransactionMapperTest {
     }
 
     @Test
-    public void shouldMapTransactionToDbo() {
+    void shouldMapTransactionToDbo() {
         //given
         RealAccount realAccount = RealAccount
             .builder()
@@ -220,7 +220,7 @@ class TransactionMapperTest {
     }
 
     @Test
-    public void shouldMapDboToRealAccount() {
+    void shouldMapDboToRealAccount() {
         //given
         LocalDate date = LocalDate.now();
         LocalDateTime dateTime = LocalDateTime.now();
