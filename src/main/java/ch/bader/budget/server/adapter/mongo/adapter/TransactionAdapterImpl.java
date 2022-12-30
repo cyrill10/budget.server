@@ -8,14 +8,13 @@ import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.mapper.TransactionMapper;
 import ch.bader.budget.server.repository.TransactionAdapter;
 import ch.bader.budget.server.repository.VirtualAccountAdapter;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service("transactionMongo")
+@Service
 public class TransactionAdapterImpl implements TransactionAdapter {
 
     private final TransactionMapper transactionMapper;
@@ -26,7 +25,7 @@ public class TransactionAdapterImpl implements TransactionAdapter {
 
     public TransactionAdapterImpl(TransactionMapper transactionMapper,
                                   TransactionMongoRepository transactionMongoRepository,
-                                  @Qualifier("virtualAccountMongo") VirtualAccountAdapter virtualAccountAdapter) {
+                                  VirtualAccountAdapter virtualAccountAdapter) {
         this.transactionMapper = transactionMapper;
         this.transactionMongoRepository = transactionMongoRepository;
         this.virtualAccountAdapter = virtualAccountAdapter;
@@ -36,7 +35,7 @@ public class TransactionAdapterImpl implements TransactionAdapter {
     @Override
     public Transaction updateTransaction(Transaction transaction) {
         TransactionDbo transactionDbo = transactionMapper.mapToEntity(
-            transaction);
+                transaction);
         transactionDbo = transactionMongoRepository.save(transactionDbo);
         Transaction transactionSaved = transactionMapper.mapToDomain(transactionDbo);
         transactionSaved.setCreditedAccount(transaction.getCreditedAccount());
@@ -52,9 +51,9 @@ public class TransactionAdapterImpl implements TransactionAdapter {
     @Override
     public void saveTransactions(List<Transaction> transactionList) {
         List<TransactionDbo> newEntites = transactionList.stream()
-                                                         .map(transactionMapper::mapToEntity)
-                                                         .collect(
-                                                             Collectors.toList());
+                .map(transactionMapper::mapToEntity)
+                .collect(
+                        Collectors.toList());
         transactionMongoRepository.saveAll(newEntites);
     }
 
@@ -72,7 +71,7 @@ public class TransactionAdapterImpl implements TransactionAdapter {
     @Override
     public List<Transaction> getAllTransactions(LocalDate date) {
         List<TransactionDbo> transactionDbos = transactionMongoRepository.findAllByDateBetween(date.minusDays(1),
-            date.plusMonths(1));
+                date.plusMonths(1));
 
         return addAccountsAndTransform(transactionDbos);
     }
@@ -80,7 +79,7 @@ public class TransactionAdapterImpl implements TransactionAdapter {
     @Override
     public List<Transaction> getAllTransactionsUntilDate(LocalDate unitlExclusive) {
         List<TransactionDbo> transactionDbos = transactionMongoRepository
-            .findAllByDateBetween(MonthGenerator.STARTDATE.minusDays(1), unitlExclusive);
+                .findAllByDateBetween(MonthGenerator.STARTDATE.minusDays(1), unitlExclusive);
 
         return addAccountsAndTransform(transactionDbos);
 
@@ -89,7 +88,7 @@ public class TransactionAdapterImpl implements TransactionAdapter {
     @Override
     public List<Transaction> getAllTransactionInInterval(LocalDate fromInclusive, LocalDate toExclusive) {
         List<TransactionDbo> transactionDbos = transactionMongoRepository
-            .findAllByDateBetween(fromInclusive.minusDays(1), toExclusive);
+                .findAllByDateBetween(fromInclusive.minusDays(1), toExclusive);
 
         return addAccountsAndTransform(transactionDbos);
 
@@ -99,9 +98,9 @@ public class TransactionAdapterImpl implements TransactionAdapter {
     public List<Transaction> getAllTransactionsForVirtualAccountUntilDate(String virtualAccountId,
                                                                           LocalDate unitlExclusive) {
         List<TransactionDbo> transactionDbos = transactionMongoRepository.findAllByDateBetweenAndVirtualAccountId(
-            MonthGenerator.STARTDATE.minusDays(1),
-            unitlExclusive,
-            List.of(virtualAccountId));
+                MonthGenerator.STARTDATE.minusDays(1),
+                unitlExclusive,
+                List.of(virtualAccountId));
         return addAccountsAndTransform(transactionDbos);
     }
 
@@ -109,9 +108,9 @@ public class TransactionAdapterImpl implements TransactionAdapter {
     public List<Transaction> getAllTransactionsForVirtualAccountsUntilDate(List<String> accountIds,
                                                                            LocalDate unitlExclusive) {
         List<TransactionDbo> transactionDbos = transactionMongoRepository.findAllByDateBetweenAndVirtualAccountId(
-            MonthGenerator.STARTDATE.minusDays(1),
-            unitlExclusive,
-            accountIds);
+                MonthGenerator.STARTDATE.minusDays(1),
+                unitlExclusive,
+                accountIds);
         return addAccountsAndTransform(transactionDbos);
     }
 
@@ -119,15 +118,15 @@ public class TransactionAdapterImpl implements TransactionAdapter {
                                                          List<VirtualAccount> virtualAccounts) {
         Transaction transaction = transactionMapper.mapToDomain(transactionDbo);
         VirtualAccount debitedAccount = virtualAccounts
-            .stream()
-            .filter(va -> va.getId().equals(transactionDbo.getDebitedAccountId()))
-            .findAny()
-            .orElseThrow();
+                .stream()
+                .filter(va -> va.getId().equals(transactionDbo.getDebitedAccountId()))
+                .findAny()
+                .orElseThrow();
         VirtualAccount creditedAccount = virtualAccounts
-            .stream()
-            .filter(va -> va.getId().equals(transactionDbo.getCreditedAccountId()))
-            .findAny()
-            .orElseThrow();
+                .stream()
+                .filter(va -> va.getId().equals(transactionDbo.getCreditedAccountId()))
+                .findAny()
+                .orElseThrow();
         transaction.setDebitedAccount(debitedAccount);
         transaction.setCreditedAccount(creditedAccount);
         return transaction;
@@ -137,10 +136,10 @@ public class TransactionAdapterImpl implements TransactionAdapter {
         List<VirtualAccount> virtualAccounts = virtualAccountAdapter.getAllVirtualAccountsWithTheirUnderlyingAccount();
 
         return transactionDbos
-            .stream()
-            .map(t -> mapToDomainAndAddVirtualAccounts(t, virtualAccounts))
-            .sorted()
-            .collect(Collectors.toList());
+                .stream()
+                .map(t -> mapToDomainAndAddVirtualAccounts(t, virtualAccounts))
+                .sorted()
+                .collect(Collectors.toList());
     }
 
 }

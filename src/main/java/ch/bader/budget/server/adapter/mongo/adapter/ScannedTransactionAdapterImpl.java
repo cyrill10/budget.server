@@ -5,14 +5,14 @@ import ch.bader.budget.server.adapter.mongo.repository.ScannedTransactionMongoRe
 import ch.bader.budget.server.domain.ScannedTransaction;
 import ch.bader.budget.server.mapper.ScannedTransactionMapper;
 import ch.bader.budget.server.repository.ScannedTransactionAdapter;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@Component("scannedTransactionMongo")
+@Service
 public class ScannedTransactionAdapterImpl implements ScannedTransactionAdapter {
 
     final
@@ -30,9 +30,9 @@ public class ScannedTransactionAdapterImpl implements ScannedTransactionAdapter 
     @Override
     public List<ScannedTransaction> saveAll(List<ScannedTransaction> transactionList) {
         List<ScannedTransactionDbo> entities = transactionList.stream()
-                                                              .map(scannedTransactionMapper::mapToEntity)
-                                                              .collect(
-                                                                  Collectors.toList());
+                .map(scannedTransactionMapper::mapToEntity)
+                .collect(
+                        Collectors.toList());
         entities = scannedTransactionMongoRepository.saveAll(entities);
         return entities.stream().map(scannedTransactionMapper::mapToDomain).collect(Collectors.toList());
     }
@@ -40,19 +40,19 @@ public class ScannedTransactionAdapterImpl implements ScannedTransactionAdapter 
     @Override
     public List<ScannedTransaction> getTransactionsForYearMonth(YearMonth yearMonth) {
         return scannedTransactionMongoRepository
-            .findAllByYearMonth(yearMonth)
-            .stream()
-            .map(scannedTransactionMapper::mapToDomain)
-            .sorted()
-            .collect(Collectors.toList());
+                .findAllByYearMonth(yearMonth)
+                .stream()
+                .map(scannedTransactionMapper::mapToDomain)
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<ScannedTransaction> findAllById(List<String> transactionIds) {
         return StreamSupport
-            .stream(scannedTransactionMongoRepository.findAllById(transactionIds).spliterator(), false)
-            .map(scannedTransactionMapper::mapToDomain)
-            .sorted()
-            .collect(Collectors.toList());
+                .stream(scannedTransactionMongoRepository.findAllById(transactionIds).spliterator(), false)
+                .map(scannedTransactionMapper::mapToDomain)
+                .sorted()
+                .collect(Collectors.toList());
     }
 }

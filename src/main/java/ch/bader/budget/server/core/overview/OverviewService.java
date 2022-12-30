@@ -7,7 +7,6 @@ import ch.bader.budget.server.domain.Transaction;
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.repository.RealAccountAdapter;
 import ch.bader.budget.server.repository.TransactionAdapter;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,8 +21,8 @@ public class OverviewService {
 
     private final TransactionAdapter transactionAdapter;
 
-    public OverviewService(@Qualifier("realAccountMongo") RealAccountAdapter realAccountAdapter,
-                           @Qualifier("transactionMongo") TransactionAdapter transactionAdapter) {
+    public OverviewService(RealAccountAdapter realAccountAdapter,
+                           TransactionAdapter transactionAdapter) {
         this.realAccountAdapter = realAccountAdapter;
         this.transactionAdapter = transactionAdapter;
     }
@@ -33,12 +32,12 @@ public class OverviewService {
         Map<RealAccount, List<VirtualAccount>> accountMap = realAccountAdapter.getAccountMap();
         List<Transaction> allTransactions = transactionAdapter.getAllTransactionsUntilDate(firstOfNextMonth);
         List<Transaction> allTransactionsTillEndOfYear = transactionAdapter.getAllTransactionInInterval(
-            firstOfNextMonth,
-            firstOfNextMonth.withMonth(1).withDayOfMonth(1).plusYears(1));
+                firstOfNextMonth,
+                firstOfNextMonth.withMonth(1).withDayOfMonth(1).plusYears(1));
 
         return OverviewCalculator.getOverviewForMonth(accountMap,
-            allTransactions,
-            allTransactionsTillEndOfYear,
-            firstOfNextMonth);
+                allTransactions,
+                allTransactionsTillEndOfYear,
+                firstOfNextMonth);
     }
 }
