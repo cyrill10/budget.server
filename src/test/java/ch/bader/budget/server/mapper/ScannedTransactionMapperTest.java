@@ -25,14 +25,14 @@ class ScannedTransactionMapperTest {
         //given
 
         ScannedTransaction domain = ScannedTransaction.builder()
-                                                      .id("id")
-                                                      .amount(BigDecimal.TEN)
-                                                      .transactionCreated(true)
-                                                      .cardType(CardType.MASTER_CARD)
-                                                      .date(LocalDate.now())
-                                                      .description("scannedTransactionDesc")
-                                                      .yearMonth(YearMonth.of(2022, 1))
-                                                      .build();
+                .id("id")
+                .amount(BigDecimal.TEN)
+                .transactionCreated(true)
+                .cardType(CardType.VISA)
+                .date(LocalDate.now())
+                .description("scannedTransactionDesc")
+                .yearMonth(YearMonth.of(2022, 1))
+                .build();
 
         //when
         ScannedTransactionBoundaryDto dto = sut.mapToDto(domain);
@@ -42,7 +42,7 @@ class ScannedTransactionMapperTest {
         assertThat(dto.getId()).isEqualTo("id");
         assertThat(dto.getAmount()).isEqualTo(BigDecimal.TEN);
         assertThat(dto.getTransactionCreated()).isTrue();
-        assertThat(dto.getCardType()).isEqualTo(CardType.MASTER_CARD.name());
+        assertThat(dto.getCardType()).isEqualTo(CardType.VISA.name());
         assertThat(dto.getDate()).isEqualTo(LocalDate.now());
         assertThat(dto.getDescription()).isEqualTo("scannedTransactionDesc");
     }
@@ -51,14 +51,14 @@ class ScannedTransactionMapperTest {
     void shouldMapScannedTransactionToDbo() {
         //given
         ScannedTransaction domain = ScannedTransaction.builder()
-                                                      .id("6")
-                                                      .amount(BigDecimal.TEN)
-                                                      .transactionCreated(true)
-                                                      .cardType(CardType.MASTER_CARD)
-                                                      .date(LocalDate.now())
-                                                      .description("scannedTransactionDesc")
-                                                      .yearMonth(YearMonth.of(2022, 1))
-                                                      .build();
+                .id("6")
+                .amount(BigDecimal.TEN)
+                .transactionCreated(true)
+                .cardType(CardType.VISA)
+                .date(LocalDate.now())
+                .description("scannedTransactionDesc")
+                .yearMonth(YearMonth.of(2022, 1))
+                .build();
 
         //when
         ScannedTransactionDbo dbo = sut.mapToEntity(domain);
@@ -68,7 +68,7 @@ class ScannedTransactionMapperTest {
         assertThat(dbo.getId()).isEqualTo("6");
         assertThat(dbo.getAmount()).isEqualTo(BigDecimal.TEN);
         assertThat(dbo.getTransactionCreated()).isTrue();
-        assertThat(dbo.getCardType()).isEqualTo(CardType.MASTER_CARD.name());
+        assertThat(dbo.getCardType()).isEqualTo(CardType.VISA.name());
         assertThat(dbo.getDate()).isEqualTo(LocalDate.now());
         assertThat(dbo.getDescription()).isEqualTo("scannedTransactionDesc");
         assertThat(dbo.getYearMonth()).isEqualTo(YearMonth.of(2022, 1));
@@ -78,14 +78,14 @@ class ScannedTransactionMapperTest {
     void shouldMapDboToRealAccount() {
         //given
         ScannedTransactionDbo dbo = ScannedTransactionDbo.builder()
-                                                         .id("6")
-                                                         .amount(BigDecimal.TEN)
-                                                         .transactionCreated(true)
-                                                         .cardType(CardType.MASTER_CARD.name())
-                                                         .date(LocalDate.now())
-                                                         .description("scannedTransactionDesc")
-                                                         .yearMonth(YearMonth.of(2022, 1))
-                                                         .build();
+                .id("6")
+                .amount(BigDecimal.TEN)
+                .transactionCreated(true)
+                .cardType(CardType.VISA.name())
+                .date(LocalDate.now())
+                .description("scannedTransactionDesc")
+                .yearMonth(YearMonth.of(2022, 1))
+                .build();
 
         //when
         ScannedTransaction domain = sut.mapToDomain(dbo);
@@ -95,7 +95,7 @@ class ScannedTransactionMapperTest {
         assertThat(domain.getId()).isEqualTo("6");
         assertThat(domain.getAmount()).isEqualTo(BigDecimal.TEN);
         assertThat(domain.getTransactionCreated()).isTrue();
-        assertThat(domain.getCardType()).isEqualTo(CardType.MASTER_CARD);
+        assertThat(domain.getCardType()).isEqualTo(CardType.VISA);
         assertThat(domain.getDate()).isEqualTo(LocalDate.now());
         assertThat(domain.getDescription()).isEqualTo("scannedTransactionDesc");
         assertThat(domain.getYearMonth()).isEqualTo(YearMonth.of(2022, 1));
