@@ -23,19 +23,15 @@ import java.util.stream.Collectors;
 @Service
 public class ClosingProcessService {
 
-    final
-    ClosingProcessAdapter closingProcessAdapter;
+    private final ClosingProcessAdapter closingProcessAdapter;
 
-    final
-    ScannedTransactionAdapter scannedTransactionAdapter;
+    private final ScannedTransactionAdapter scannedTransactionAdapter;
 
     private final VirtualAccountAdapter virtualAccountAdapter;
 
-    final
-    TransactionAdapter transactionAdapter;
+    private final TransactionAdapter transactionAdapter;
 
     private final RealAccountAdapter realAccountAdapter;
-
 
     private final TransactionService transactionService;
 
@@ -133,26 +129,32 @@ public class ClosingProcessService {
                     dto.getThroughAccountId());
         }
 
+        List<Transaction> transactions = createTransactions(scannedTransactions, transactionDate, creditedAccount, debitedAccount, throughAccount);
+        
+        scannedTransactionAdapter.saveAll(scannedTransactions);
+        transactionAdapter.saveTransactions(transactions);
+    }
+
+    private List<Transaction> createTransactions(List<ScannedTransaction> scannedTransactions, LocalDate transactionDate, VirtualAccount creditedAccount, VirtualAccount debitedAccount, VirtualAccount throughAccount) {
         List<Transaction> transactions;
         if (throughAccount != null) {
-            transactions = createTransactions(scannedTransactions,
+            transactions = createTransactionsWithThroughAccount(scannedTransactions,
                     creditedAccount,
                     debitedAccount,
                     throughAccount,
                     transactionDate);
         } else {
-            transactions = createTransactions(scannedTransactions,
+            transactions = createTransactionsWithoutThroughAccount(scannedTransactions,
                     creditedAccount,
                     debitedAccount,
                     transactionDate);
         }
-        scannedTransactionAdapter.saveAll(scannedTransactions);
-        transactionAdapter.saveTransactions(transactions);
+        return transactions;
     }
 
-    private List<Transaction> createTransactions(List<ScannedTransaction> scannedTransactions,
-                                                 VirtualAccount creditedAccount,
-                                                 VirtualAccount debitedAccount, LocalDate date) {
+    private List<Transaction> createTransactionsWithoutThroughAccount(List<ScannedTransaction> scannedTransactions,
+                                                                      VirtualAccount creditedAccount,
+                                                                      VirtualAccount debitedAccount, LocalDate date) {
         return scannedTransactions.stream()
                 .sorted()
                 .map(ScannedTransaction::createTransaction)
@@ -164,10 +166,10 @@ public class ClosingProcessService {
 
     }
 
-    private List<Transaction> createTransactions(List<ScannedTransaction> scannedTransactions,
-                                                 VirtualAccount creditedAccount,
-                                                 VirtualAccount debitedAccount, VirtualAccount throughAccount,
-                                                 LocalDate date) {
+    private List<Transaction> createTransactionsWithThroughAccount(List<ScannedTransaction> scannedTransactions,
+                                                                   VirtualAccount creditedAccount,
+                                                                   VirtualAccount debitedAccount, VirtualAccount throughAccount,
+                                                                   LocalDate date) {
 
         return scannedTransactions.stream()
                 .sorted()
