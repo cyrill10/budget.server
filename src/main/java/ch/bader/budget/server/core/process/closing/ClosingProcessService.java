@@ -68,20 +68,20 @@ public class ClosingProcessService {
     public List<TransferDetails> getTransferDetails(YearMonth yearMonth) {
         List<RealAccount> realAccounts = realAccountAdapter.getAccountsByTyp(AccountType.SAVING);
         return realAccounts.stream().map(r -> {
-                    List<TransactionElement> transactionElements = transactionService.getAllTransactionsForMonthAndRealAccount(
+                    List<TransactionListElement> transactionListElements = transactionService.getAllTransactionsForMonthAndRealAccount(
                             yearMonth.atDay(1), r.getId());
-                    return extractTransferDetails(r.getName(), transactionElements);
+                    return extractTransferDetails(r.getName(), transactionListElements);
                 }
         ).sorted().collect(Collectors.toList());
     }
 
-    private TransferDetails extractTransferDetails(String accountName, List<TransactionElement> transactionElements) {
-        TransactionElement balanceBefore = transactionElements.get(0);
-        TransactionElement balanceAfter = transactionElements.get(transactionElements.size() - 1);
+    private TransferDetails extractTransferDetails(String accountName, List<TransactionListElement> transactionListElements) {
+        TransactionListElement balanceBefore = transactionListElements.get(0);
+        TransactionListElement balanceAfter = transactionListElements.get(transactionListElements.size() - 1);
 
         return TransferDetails
                 .builder()
-                .transferAmount(balanceAfter.getBalance().subtract(balanceBefore.getBalance()))
+                .transferAmount(balanceAfter.getEffectiveBalance().subtract(balanceBefore.getEffectiveBalance()))
                 .accountName(accountName)
                 .build();
     }
@@ -130,7 +130,7 @@ public class ClosingProcessService {
         }
 
         List<Transaction> transactions = createTransactions(scannedTransactions, transactionDate, creditedAccount, debitedAccount, throughAccount);
-        
+
         scannedTransactionAdapter.saveAll(scannedTransactions);
         transactionAdapter.saveTransactions(transactions);
     }

@@ -12,7 +12,7 @@ public class BudgetedAmountFunction implements Function<Transaction, BigDecimal>
     public BigDecimal apply(Transaction t) {
         LocalDate firstDayOfThisMonth = LocalDate.now().withDayOfMonth(1);
         if (firstDayOfThisMonth.isAfter(t.getDate())) {
-            return t.getEffectiveAmount();
+            return new EffectiveAmountFunction().apply(t);
         }
         return t.getBudgetedAmount();
     }

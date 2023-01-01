@@ -4,7 +4,7 @@ import ch.bader.budget.server.boundary.dto.TransactionBoundaryDto;
 import ch.bader.budget.server.boundary.dto.TransactionElementBoundaryDto;
 import ch.bader.budget.server.core.transaction.TransactionService;
 import ch.bader.budget.server.domain.Transaction;
-import ch.bader.budget.server.domain.TransactionElement;
+import ch.bader.budget.server.domain.TransactionListElement;
 import ch.bader.budget.server.mapper.TransactionElementMapper;
 import ch.bader.budget.server.mapper.TransactionMapper;
 import ch.bader.budget.server.type.PaymentStatus;
@@ -12,15 +12,7 @@ import ch.bader.budget.server.type.PaymentType;
 import ch.bader.budget.server.type.TransactionIndication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -44,7 +36,8 @@ public class TransactionRestResource {
     final
     TransactionElementMapper transactionElementMapper;
 
-    public TransactionRestResource(TransactionService transactionService, TransactionMapper transactionMapper,
+    public TransactionRestResource(TransactionService transactionService,
+                                   TransactionMapper transactionMapper,
                                    TransactionElementMapper transactionElementMapper) {
         this.transactionService = transactionService;
         this.transactionMapper = transactionMapper;
@@ -76,7 +69,7 @@ public class TransactionRestResource {
 
     @PostMapping(path = "/dublicate")
     @ResponseStatus(HttpStatus.CREATED)
-    public void dublicateTransaction(@RequestBody TransactionBoundaryDto dto) {
+    public void duplicateTransaction(@RequestBody TransactionBoundaryDto dto) {
         Transaction transaction = transactionMapper.mapToDomain(dto);
         transactionService.duplicateTransaction(transaction);
     }
@@ -93,36 +86,49 @@ public class TransactionRestResource {
     }
 
     @GetMapping(path = "/list")
-    public List<TransactionBoundaryDto> getAllTransactions(@RequestParam(name = "date") long dateLong) {
-        LocalDate date = Instant.ofEpochMilli(dateLong).atZone(ZoneId.systemDefault()).toLocalDate().withDayOfMonth(1);
+    public List<TransactionBoundaryDto> getAllTransactions(
+            @RequestParam(name = "date") long dateLong) {
+        LocalDate date = Instant.ofEpochMilli(dateLong)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate()
+                .withDayOfMonth(1);
         List<Transaction> transactions = transactionService.getAllTransactions(date);
-        return transactions.stream().map(transactionMapper::mapToDto).collect(Collectors.toList());
+        return transactions.stream()
+                .map(transactionMapper::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping(path = "/listByMonthAndVirtualAccount")
     public List<TransactionElementBoundaryDto> getAllTransactionsForMonthAndVirtualAccount(
-        @RequestParam(name = "date") long dateLong,
-        @RequestParam String accountId) {
-        LocalDate date = Instant.ofEpochMilli(dateLong).atZone(ZoneId.systemDefault()).toLocalDate().withDayOfMonth(1);
-        List<TransactionElement> transactionElements = transactionService.getAllTransactionsForMonthAndVirtualAccount(
-            date,
-            accountId);
+            @RequestParam(name = "date") long dateLong,
+            @RequestParam String accountId) {
+        LocalDate date = Instant.ofEpochMilli(dateLong)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate()
+                .withDayOfMonth(1);
+        List<TransactionListElement> transactionListElements =
+                transactionService.getAllTransactionsForMonthAndVirtualAccount(
+                        date,
+                        accountId);
 
-        return transactionElements.stream()
-                                  .map(transactionElementMapper::mapToDto)
-                                  .collect(Collectors.toList());
+        return transactionListElements.stream()
+                .map(transactionElementMapper::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping(path = "/listByMonthAndRealAccount")
     public List<TransactionElementBoundaryDto> getAllTransactionsForMonthAndRealAccount(
-        @RequestParam(name = "date") long dateLong,
-        @RequestParam String accountId) {
-        LocalDate date = Instant.ofEpochMilli(dateLong).atZone(ZoneId.systemDefault()).toLocalDate().withDayOfMonth(1);
+            @RequestParam(name = "date") long dateLong,
+            @RequestParam String accountId) {
+        LocalDate date = Instant.ofEpochMilli(dateLong)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate()
+                .withDayOfMonth(1);
         return transactionService.getAllTransactionsForMonthAndRealAccount(date, accountId)
-                                 .stream()
-                                 .map(transactionElementMapper::mapToDto)
-                                 .collect(
-                                     Collectors.toList());
+                .stream()
+                .map(transactionElementMapper::mapToDto)
+                .collect(
+                        Collectors.toList());
     }
 
     @GetMapping(path = "/type/list")

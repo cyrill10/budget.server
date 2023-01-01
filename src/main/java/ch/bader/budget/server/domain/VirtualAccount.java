@@ -1,5 +1,6 @@
 package ch.bader.budget.server.domain;
 
+import ch.bader.budget.server.core.calculation.Balance;
 import lombok.Builder;
 import lombok.Data;
 
@@ -18,6 +19,10 @@ public class VirtualAccount implements Comparable<VirtualAccount> {
 
     public boolean isPrebudgetedAccount() {
         return this.getUnderlyingAccount().isPrebudgetedAccount();
+    }
+
+    public boolean isAlienAccount() {
+        return this.getUnderlyingAccount().isAlienAccount();
     }
 
     public boolean isDeleted() {
@@ -41,5 +46,12 @@ public class VirtualAccount implements Comparable<VirtualAccount> {
             return onlyLastMonthFilter;
         }
         return noFilter;
+    }
+
+    public Balance getInitialBalance() {
+        if (this.getUnderlyingAccount().getAccountType().isAlienAccount() || this.isPrebudgetedAccount()) {
+            return new Balance(BigDecimal.ZERO, BigDecimal.ZERO);
+        }
+        return new Balance(getBalance(), getBalance());
     }
 }

@@ -23,4 +23,8 @@ public class RealAccount implements Comparable<RealAccount> {
         }
         return compareType;
     }
+
+    public boolean isAlienAccount() {
+        return this.getAccountType().isAlienAccount();
+    }
 }
