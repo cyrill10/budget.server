@@ -33,17 +33,17 @@ public class ScannedTransactionCsvBean {
 
     public ScannedTransaction mapTopScannedTransaction(ClosingProcess closingProcess) {
         return ScannedTransaction.builder()
-                                 .date(transactionDate)
-                                 .transactionCreated(false)
-                                 .amount(amount)
-                                 .cardType(getCardType())
-                                 .description(description)
-                                 .yearMonth(closingProcess.getYearMonth())
-                                 .build();
+                .date(transactionDate)
+                .transactionCreated(false)
+                .amount(amount)
+                .cardType(getCardType())
+                .description(description)
+                .yearMonth(closingProcess.getYearMonth())
+                .build();
     }
 
     public CardType getCardType() {
-        return cardNumber.endsWith("9709") ? CardType.AMEX : CardType.MASTER_CARD;
+        return cardNumber.endsWith("9709") ? CardType.AMEX : CardType.VISA;
     }
 
 }

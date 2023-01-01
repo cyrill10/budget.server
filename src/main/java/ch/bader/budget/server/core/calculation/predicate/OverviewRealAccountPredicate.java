@@ -1,4 +1,4 @@
-package ch.bader.budget.server.core.calculation.implementation.predicate;
+package ch.bader.budget.server.core.calculation.predicate;
 
 import ch.bader.budget.server.domain.RealAccount;
 

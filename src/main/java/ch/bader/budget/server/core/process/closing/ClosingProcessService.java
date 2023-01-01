@@ -2,26 +2,11 @@ package ch.bader.budget.server.core.process.closing;
 
 import ch.bader.budget.server.boundary.dto.SaveScannedTransactionBoundaryDto;
 import ch.bader.budget.server.core.transaction.TransactionService;
-import ch.bader.budget.server.domain.ClosingProcess;
-import ch.bader.budget.server.domain.RealAccount;
-import ch.bader.budget.server.domain.ScannedTransaction;
-import ch.bader.budget.server.domain.Transaction;
-import ch.bader.budget.server.domain.TransactionElement;
-import ch.bader.budget.server.domain.TransferDetails;
-import ch.bader.budget.server.domain.VirtualAccount;
+import ch.bader.budget.server.domain.*;
 import ch.bader.budget.server.process.closing.ScannedTransactionCsvBean;
-import ch.bader.budget.server.repository.ClosingProcessAdapter;
-import ch.bader.budget.server.repository.RealAccountAdapter;
-import ch.bader.budget.server.repository.ScannedTransactionAdapter;
-import ch.bader.budget.server.repository.TransactionAdapter;
-import ch.bader.budget.server.repository.VirtualAccountAdapter;
-import ch.bader.budget.server.type.AccountType;
-import ch.bader.budget.server.type.ClosingProcessStatus;
-import ch.bader.budget.server.type.PaymentStatus;
-import ch.bader.budget.server.type.PaymentType;
-import ch.bader.budget.server.type.TransactionIndication;
+import ch.bader.budget.server.repository.*;
+import ch.bader.budget.server.type.*;
 import com.opencsv.bean.CsvToBeanBuilder;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,27 +23,23 @@ import java.util.stream.Collectors;
 @Service
 public class ClosingProcessService {
 
-    final
-    ClosingProcessAdapter closingProcessAdapter;
+    private final ClosingProcessAdapter closingProcessAdapter;
 
-    final
-    ScannedTransactionAdapter scannedTransactionAdapter;
+    private final ScannedTransactionAdapter scannedTransactionAdapter;
 
     private final VirtualAccountAdapter virtualAccountAdapter;
 
-    final
-    TransactionAdapter transactionAdapter;
+    private final TransactionAdapter transactionAdapter;
 
     private final RealAccountAdapter realAccountAdapter;
 
-
     private final TransactionService transactionService;
 
-    public ClosingProcessService(@Qualifier("closingProcessMongo") ClosingProcessAdapter closingProcessAdapter,
-                                 @Qualifier("scannedTransactionMongo") ScannedTransactionAdapter scannedTransactionAdapter,
-                                 @Qualifier("virtualAccountMongo") VirtualAccountAdapter virtualAccountAdapter,
-                                 @Qualifier("transactionMongo") TransactionAdapter transactionAdapter,
-                                 @Qualifier("realAccountMongo") RealAccountAdapter realAccountAdapter,
+    public ClosingProcessService(ClosingProcessAdapter closingProcessAdapter,
+                                 ScannedTransactionAdapter scannedTransactionAdapter,
+                                 VirtualAccountAdapter virtualAccountAdapter,
+                                 TransactionAdapter transactionAdapter,
+                                 RealAccountAdapter realAccountAdapter,
                                  TransactionService transactionService) {
         this.closingProcessAdapter = closingProcessAdapter;
         this.scannedTransactionAdapter = scannedTransactionAdapter;
@@ -87,22 +68,22 @@ public class ClosingProcessService {
     public List<TransferDetails> getTransferDetails(YearMonth yearMonth) {
         List<RealAccount> realAccounts = realAccountAdapter.getAccountsByTyp(AccountType.SAVING);
         return realAccounts.stream().map(r -> {
-                List<TransactionElement> transactionElements = transactionService.getAllTransactionsForMonthAndRealAccount(
-                    yearMonth.atDay(1), r.getId());
-                return extractTransferDetails(r.getName(), transactionElements);
-            }
+                    List<TransactionListElement> transactionListElements = transactionService.getAllTransactionsForMonthAndRealAccount(
+                            yearMonth.atDay(1), r.getId());
+                    return extractTransferDetails(r.getName(), transactionListElements);
+                }
         ).sorted().collect(Collectors.toList());
     }
 
-    private TransferDetails extractTransferDetails(String accountName, List<TransactionElement> transactionElements) {
-        TransactionElement balanceBefore = transactionElements.get(0);
-        TransactionElement balanceAfter = transactionElements.get(transactionElements.size() - 1);
+    private TransferDetails extractTransferDetails(String accountName, List<TransactionListElement> transactionListElements) {
+        TransactionListElement balanceBefore = transactionListElements.get(0);
+        TransactionListElement balanceAfter = transactionListElements.get(transactionListElements.size() - 1);
 
         return TransferDetails
-            .builder()
-            .transferAmount(balanceAfter.getBalance().subtract(balanceBefore.getBalance()))
-            .accountName(accountName)
-            .build();
+                .builder()
+                .transferAmount(balanceAfter.getEffectiveBalance().subtract(balanceBefore.getEffectiveBalance()))
+                .accountName(accountName)
+                .build();
     }
 
     public List<ScannedTransaction> uploadFile(YearMonth yearMonth, MultipartFile file) throws IOException {
@@ -110,13 +91,13 @@ public class ClosingProcessService {
         if (closingProcess.getUploadStatus().equals(ClosingProcessStatus.NEW)) {
             Reader reader = new InputStreamReader(file.getInputStream());
             List<ScannedTransaction> scannedTransactions = new CsvToBeanBuilder<ScannedTransactionCsvBean>(reader)
-                .withType(ScannedTransactionCsvBean.class)
-                .build()
-                .stream()
-                .filter(stb -> !stb.getDescription().contains("IHRE ZAHLUNG – BESTEN DANK"))
-                .map(stb -> stb.mapTopScannedTransaction(closingProcess))
-                .sorted()
-                .collect(Collectors.toList());
+                    .withType(ScannedTransactionCsvBean.class)
+                    .build()
+                    .stream()
+                    .filter(stb -> !stb.getDescription().contains("IHRE ZAHLUNG – BESTEN DANK"))
+                    .map(stb -> stb.mapTopScannedTransaction(closingProcess))
+                    .sorted()
+                    .collect(Collectors.toList());
 
             closingProcess.setUploadStatus(ClosingProcessStatus.STARTED);
             closingProcessAdapter.save(closingProcess);
@@ -133,9 +114,9 @@ public class ClosingProcessService {
     public void saveScannedTransactions(SaveScannedTransactionBoundaryDto dto) {
         List<ScannedTransaction> scannedTransactions = scannedTransactionAdapter.findAllById(dto.getTransactionIds());
         YearMonth yearMonth = scannedTransactions.stream()
-                                                 .findFirst()
-                                                 .orElseThrow()
-                                                 .getYearMonth();
+                .findFirst()
+                .orElseThrow()
+                .getYearMonth();
 
         LocalDate transactionDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonthValue(), 10);
 
@@ -145,72 +126,78 @@ public class ClosingProcessService {
 
         if (dto.getThroughAccountId() != null) {
             throughAccount = virtualAccountAdapter.getAccountById(
-                dto.getThroughAccountId());
+                    dto.getThroughAccountId());
         }
 
-        List<Transaction> transactions;
-        if (throughAccount != null) {
-            transactions = createTransactions(scannedTransactions,
-                creditedAccount,
-                debitedAccount,
-                throughAccount,
-                transactionDate);
-        } else {
-            transactions = createTransactions(scannedTransactions,
-                creditedAccount,
-                debitedAccount,
-                transactionDate);
-        }
+        List<Transaction> transactions = createTransactions(scannedTransactions, transactionDate, creditedAccount, debitedAccount, throughAccount);
+
         scannedTransactionAdapter.saveAll(scannedTransactions);
         transactionAdapter.saveTransactions(transactions);
     }
 
-    private List<Transaction> createTransactions(List<ScannedTransaction> scannedTransactions,
-                                                 VirtualAccount creditedAccount,
-                                                 VirtualAccount debitedAccount, LocalDate date) {
+    private List<Transaction> createTransactions(List<ScannedTransaction> scannedTransactions, LocalDate transactionDate, VirtualAccount creditedAccount, VirtualAccount debitedAccount, VirtualAccount throughAccount) {
+        List<Transaction> transactions;
+        if (throughAccount != null) {
+            transactions = createTransactionsWithThroughAccount(scannedTransactions,
+                    creditedAccount,
+                    debitedAccount,
+                    throughAccount,
+                    transactionDate);
+        } else {
+            transactions = createTransactionsWithoutThroughAccount(scannedTransactions,
+                    creditedAccount,
+                    debitedAccount,
+                    transactionDate);
+        }
+        return transactions;
+    }
+
+    private List<Transaction> createTransactionsWithoutThroughAccount(List<ScannedTransaction> scannedTransactions,
+                                                                      VirtualAccount creditedAccount,
+                                                                      VirtualAccount debitedAccount, LocalDate date) {
         return scannedTransactions.stream()
-                                  .sorted()
-                                  .map(ScannedTransaction::createTransaction)
-                                  .map(sc -> createTransaction(sc,
-                                      creditedAccount,
-                                      debitedAccount,
-                                      date)).collect(Collectors.toList());
+                .sorted()
+                .map(ScannedTransaction::createTransaction)
+                .map(sc -> createTransaction(sc,
+                        creditedAccount,
+                        debitedAccount,
+                        date)).collect(Collectors.toList());
 
 
     }
 
-    private List<Transaction> createTransactions(List<ScannedTransaction> scannedTransactions,
-                                                 VirtualAccount creditedAccount,
-                                                 VirtualAccount debitedAccount, VirtualAccount throughAccount,
-                                                 LocalDate date) {
+    private List<Transaction> createTransactionsWithThroughAccount(List<ScannedTransaction> scannedTransactions,
+                                                                   VirtualAccount creditedAccount,
+                                                                   VirtualAccount debitedAccount, VirtualAccount throughAccount,
+                                                                   LocalDate date) {
 
         return scannedTransactions.stream()
-                                  .sorted()
-                                  .map(ScannedTransaction::createTransaction)
-                                  .map(sc -> createThroughTransactions(sc,
-                                      creditedAccount,
-                                      debitedAccount,
-                                      throughAccount,
-                                      date))
-                                  .flatMap(List::stream)
-                                  .collect(Collectors.toList());
+                .sorted()
+                .map(ScannedTransaction::createTransaction)
+                .map(sc -> createThroughTransactions(sc,
+                        creditedAccount,
+                        debitedAccount,
+                        throughAccount,
+                        date))
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
     }
 
     private Transaction createTransaction(ScannedTransaction scannedTransaction,
                                           VirtualAccount creditedAccount,
                                           VirtualAccount debitedAccount, LocalDate date) {
         return Transaction.builder()
-                          .date(date)
-                          .description(scannedTransaction.getDescription())
-                          .effectiveAmount(scannedTransaction.getAmount())
-                          .indication(TransactionIndication.EXPECTED)
-                          .paymentStatus(PaymentStatus.PAID)
-                          .paymentType(PaymentType.DEPOSIT)
-                          .creditedAccount(creditedAccount)
-                          .debitedAccount(debitedAccount)
-                          .budgetedAmount(BigDecimal.ZERO)
-                          .creationDate(LocalDateTime.now())
-                          .build();
+                .date(date)
+                .description(scannedTransaction.getDescription())
+                .effectiveAmount(scannedTransaction.getAmount())
+                .indication(TransactionIndication.EXPECTED)
+                .paymentStatus(PaymentStatus.PAID)
+                .paymentType(PaymentType.DEPOSIT)
+                .creditedAccount(creditedAccount)
+                .debitedAccount(debitedAccount)
+                .budgetedAmount(BigDecimal.ZERO)
+                .creationDate(LocalDateTime.now())
+                .build();
     }
 
     private List<Transaction> createThroughTransactions(ScannedTransaction scannedTransaction,

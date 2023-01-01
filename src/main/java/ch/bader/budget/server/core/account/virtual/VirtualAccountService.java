@@ -2,7 +2,6 @@ package ch.bader.budget.server.core.account.virtual;
 
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.repository.VirtualAccountAdapter;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +11,7 @@ public class VirtualAccountService {
 
     private final VirtualAccountAdapter virtualAccountAdapter;
 
-    public VirtualAccountService(@Qualifier("virtualAccountMongo") VirtualAccountAdapter virtualAccountAdapter) {
+    public VirtualAccountService(VirtualAccountAdapter virtualAccountAdapter) {
         this.virtualAccountAdapter = virtualAccountAdapter;
     }
 

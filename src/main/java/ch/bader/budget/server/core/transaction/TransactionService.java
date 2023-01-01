@@ -1,12 +1,11 @@
 package ch.bader.budget.server.core.transaction;
 
-import ch.bader.budget.server.core.calculation.TransactionCalculator;
+import ch.bader.budget.server.core.calculation.TransactionListService;
 import ch.bader.budget.server.domain.Transaction;
-import ch.bader.budget.server.domain.TransactionElement;
+import ch.bader.budget.server.domain.TransactionListElement;
 import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.repository.TransactionAdapter;
 import ch.bader.budget.server.repository.VirtualAccountAdapter;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,15 +16,18 @@ import java.util.stream.Collectors;
 @Service
 public class TransactionService {
 
-    final
-    TransactionAdapter transactionAdapter;
+    private final TransactionAdapter transactionAdapter;
 
     private final VirtualAccountAdapter virtualAccountAdapter;
 
-    public TransactionService(@Qualifier("transactionMongo") TransactionAdapter transactionAdapter,
-                              @Qualifier("virtualAccountMongo") VirtualAccountAdapter virtualAccountAdapter) {
+    private final TransactionListService transactionListService;
+
+    public TransactionService(TransactionAdapter transactionAdapter,
+                              VirtualAccountAdapter virtualAccountAdapter,
+                              TransactionListService transactionListService) {
         this.transactionAdapter = transactionAdapter;
         this.virtualAccountAdapter = virtualAccountAdapter;
+        this.transactionListService = transactionListService;
     }
 
 
@@ -40,9 +42,9 @@ public class TransactionService {
     public void duplicateTransaction(Transaction transaction) {
         LocalDate startDate = transaction.getDate();
         LocalDate endDate = transaction.getDate()
-                                       .plusYears(1)
-                                       .withDayOfMonth(1)
-                                       .withMonth(1);
+                .plusYears(1)
+                .withDayOfMonth(1)
+                .withMonth(1);
         List<Transaction> newTransactions = new ArrayList<>();
 
         while (startDate.isBefore(endDate)) {
@@ -58,27 +60,45 @@ public class TransactionService {
     }
 
     public List<Transaction> getAllTransactions(LocalDate date) {
-        return transactionAdapter.getAllTransactions(date).stream().sorted().collect(Collectors.toList());
+        return transactionAdapter.getAllTransactions(date)
+                .stream()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
-    public List<TransactionElement> getAllTransactionsForMonthAndVirtualAccount(LocalDate date, String accountId) {
+    public List<TransactionListElement> getAllTransactionsForMonthAndVirtualAccount(
+            LocalDate date, String accountId) {
         VirtualAccount virtualAccount = virtualAccountAdapter.getAccountById(accountId);
 
-        List<Transaction> allTransactionsForAccount = transactionAdapter.getAllTransactionsForVirtualAccountUntilDate(
-            accountId,
-            date.plusMonths(1));
+        List<Transaction> allTransactionsForAccount =
+                transactionAdapter.getAllTransactionsForVirtualAccountUntilDate(
+                        accountId,
+                        date.plusMonths(1));
 
-        return TransactionCalculator.getTransactionsForMonth(allTransactionsForAccount, virtualAccount, date);
+
+        return transactionListService.getTransactionListElementsForMonth(
+                allTransactionsForAccount, List.of(virtualAccount),
+                virtualAccount.getUnderlyingAccount(), date);
     }
 
-    public List<TransactionElement> getAllTransactionsForMonthAndRealAccount(LocalDate date, String accountId) {
-        List<VirtualAccount> virtualAccounts = virtualAccountAdapter.getAllVirtualAccountsForRealAccount(
-            accountId);
-        List<Transaction> allTransactionsForRealAccount = transactionAdapter.getAllTransactionsForVirtualAccountsUntilDate(
-            virtualAccounts.stream().map(VirtualAccount::getId).collect(
-                Collectors.toList()),
-            date.plusMonths(1));
+    public List<TransactionListElement> getAllTransactionsForMonthAndRealAccount(
+            LocalDate date, String accountId) {
+        List<VirtualAccount> virtualAccounts =
+                virtualAccountAdapter.getAllVirtualAccountsForRealAccount(
+                        accountId);
+        List<Transaction> allTransactionsForRealAccount =
+                transactionAdapter.getAllTransactionsForVirtualAccountsUntilDate(
+                        virtualAccounts.stream().map(VirtualAccount::getId).collect(
+                                Collectors.toList()),
+                        date.plusMonths(1));
 
-        return TransactionCalculator.getTransactionsForMonth(allTransactionsForRealAccount, virtualAccounts, date);
+
+        return transactionListService.getTransactionListElementsForMonth(
+                allTransactionsForRealAccount,
+                virtualAccounts,
+                virtualAccounts.stream()
+                        .map(VirtualAccount::getUnderlyingAccount)
+                        .findAny()
+                        .orElseThrow(), date);
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.YearMonth;
 
-@Service("closingProcessMongo")
+@Service
 public class ClosingProcessAdapterImpl implements ClosingProcessAdapter {
 
     private final ClosingProcessMongoRepository closingProcessMongoRepository;
@@ -29,11 +29,11 @@ public class ClosingProcessAdapterImpl implements ClosingProcessAdapter {
         ClosingProcessDbo dbo = closingProcessMongoRepository.findByYearMonth(yearMonth);
         if (dbo == null) {
             ClosingProcess newClosingProcess = ClosingProcess.builder()
-                                                             .yearMonth(yearMonth)
-                                                             .manualEntryStatus(ClosingProcessStatus.NEW)
-                                                             .uploadStatus(ClosingProcessStatus.NEW)
-                                                             .transferStatus(ClosingProcessStatus.NEW)
-                                                             .build();
+                    .yearMonth(yearMonth)
+                    .manualEntryStatus(ClosingProcessStatus.NEW)
+                    .uploadStatus(ClosingProcessStatus.NEW)
+                    .transferStatus(ClosingProcessStatus.NEW)
+                    .build();
             dbo = closingProcessMongoRepository.save(closingProcessMapper.mapToEntity(newClosingProcess));
         }
         return closingProcessMapper.mapToDomain(dbo);

@@ -1,5 +1,6 @@
 package ch.bader.budget.server.domain;
 
+import ch.bader.budget.server.core.calculation.Balance;
 import lombok.Builder;
 import lombok.Data;
 
@@ -20,16 +21,21 @@ public class VirtualAccount implements Comparable<VirtualAccount> {
         return this.getUnderlyingAccount().isPrebudgetedAccount();
     }
 
+    public boolean isAlienAccount() {
+        return this.getUnderlyingAccount().isAlienAccount();
+    }
+
     public boolean isDeleted() {
         return Boolean.TRUE.equals(isDeleted);
     }
 
     private static BiPredicate<Transaction, LocalDate> noFilter = (transaction, date) -> true;
 
-    private static BiPredicate<Transaction, LocalDate> onlyLastMonthFilter = (transaction, date) -> {
-        LocalDate firstOfLastMonth = date.minusMonths(1);
-        return !transaction.getDate().isBefore(firstOfLastMonth);
-    };
+    private static BiPredicate<Transaction, LocalDate> onlyLastMonthFilter =
+            (transaction, date) -> {
+                LocalDate firstOfLastMonth = date.minusMonths(1);
+                return !transaction.getDate().isBefore(firstOfLastMonth);
+            };
 
     @Override
     public int compareTo(VirtualAccount o) {
@@ -41,5 +47,12 @@ public class VirtualAccount implements Comparable<VirtualAccount> {
             return onlyLastMonthFilter;
         }
         return noFilter;
+    }
+
+    public Balance getInitialBalance() {
+        if (this.getUnderlyingAccount().getAccountType().isAlienAccount()) {
+            return new Balance(BigDecimal.ZERO, BigDecimal.ZERO);
+        }
+        return new Balance(getBalance(), getBalance());
     }
 }

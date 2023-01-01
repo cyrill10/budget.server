@@ -7,13 +7,12 @@ import ch.bader.budget.server.domain.VirtualAccount;
 import ch.bader.budget.server.mapper.VirtualAccountMapper;
 import ch.bader.budget.server.repository.RealAccountAdapter;
 import ch.bader.budget.server.repository.VirtualAccountAdapter;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service("virtualAccountMongo")
+@Service
 public class VirtualAccountAdapterImpl implements VirtualAccountAdapter {
 
     private final VirtualAccountMapper virtualAccountMapper;
@@ -24,7 +23,7 @@ public class VirtualAccountAdapterImpl implements VirtualAccountAdapter {
 
     public VirtualAccountAdapterImpl(VirtualAccountMapper virtualAccountMapper,
                                      VirtualAccountMongoRepository virtualAccountMongoRepository,
-                                     @Qualifier("realAccountMongo") RealAccountAdapter realAccountAdapter) {
+                                     RealAccountAdapter realAccountAdapter) {
         this.virtualAccountMapper = virtualAccountMapper;
         this.virtualAccountMongoRepository = virtualAccountMongoRepository;
         this.realAccountAdapter = realAccountAdapter;
@@ -43,8 +42,8 @@ public class VirtualAccountAdapterImpl implements VirtualAccountAdapter {
     @Override
     public VirtualAccount getAccountById(String id) {
         VirtualAccountDbo accountDbo = virtualAccountMongoRepository
-            .findById(id)
-            .orElseThrow();
+                .findById(id)
+                .orElseThrow();
         VirtualAccount virtualAccount = virtualAccountMapper.mapToDomain(accountDbo);
         return addRealAccountToVirtualAccount(virtualAccount, accountDbo.getUnderlyingAccountId());
 
@@ -53,16 +52,16 @@ public class VirtualAccountAdapterImpl implements VirtualAccountAdapter {
     @Override
     public List<VirtualAccount> getAllVirtualAccountsWithTheirUnderlyingAccount() {
         List<VirtualAccountDbo> virtualAccountDbos = virtualAccountMongoRepository
-            .findAll();
+                .findAll();
         List<RealAccount> realAccounts = realAccountAdapter.
-            findAll();
+                findAll();
 
         return virtualAccountDbos.stream().map(vadbo -> {
             RealAccount ra = realAccounts
-                .stream()
-                .filter(a -> a.getId().equals(vadbo.getUnderlyingAccountId()))
-                .findFirst()
-                .orElseThrow();
+                    .stream()
+                    .filter(a -> a.getId().equals(vadbo.getUnderlyingAccountId()))
+                    .findFirst()
+                    .orElseThrow();
 
             VirtualAccount va = virtualAccountMapper.mapToDomain(vadbo);
             va.setUnderlyingAccount(ra);

@@ -1,4 +1,4 @@
-package ch.bader.budget.server.core.calculation.implementation.predicate;
+package ch.bader.budget.server.core.calculation.predicate;
 
 import ch.bader.budget.server.domain.Transaction;
 
@@ -15,7 +15,8 @@ public class TransactionInMonthPredicate implements Predicate<Transaction> {
 
     @Override
     public boolean test(Transaction t) {
-        return t.getDate().isAfter(date.minusDays(1)) && t.getDate().isBefore(date.plusMonths(1));
+        return t.getDate().isAfter(date.minusDays(1)) &&
+                t.getDate().isBefore(date.plusMonths(1));
     }
 
 }
