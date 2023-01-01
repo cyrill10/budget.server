@@ -3,6 +3,7 @@ package ch.bader.budget.server.core.calculation;
 import ch.bader.budget.server.core.calculation.implementation.function.BudgetedAmountFunction;
 import ch.bader.budget.server.core.calculation.implementation.function.EffectiveAmountFunction;
 import ch.bader.budget.server.core.calculation.implementation.predicate.TransactionInMonthPredicate;
+import ch.bader.budget.server.domain.RealAccount;
 import ch.bader.budget.server.domain.Transaction;
 import ch.bader.budget.server.domain.TransactionListElement;
 import ch.bader.budget.server.domain.VirtualAccount;
@@ -16,12 +17,6 @@ import java.util.List;
 @Service
 public class TransactionListService {
 
-    private static final EffectiveAmountFunction effectiveAmountFunction =
-            new EffectiveAmountFunction();
-
-    private static final BudgetedAmountFunction budgetedAmountFunction =
-            new BudgetedAmountFunction();
-
     private final BalanceService balanceService;
 
     public TransactionListService(BalanceService balanceService) {
@@ -30,9 +25,11 @@ public class TransactionListService {
 
     public List<TransactionListElement> getTransactionListElementsForMonth(
             List<Transaction> transactions, List<VirtualAccount> virtualAccounts,
+            RealAccount underlyingAccount,
             LocalDate firstOfMonth) {
         Balance balance =
-                balanceService.calculateBalanceAt(transactions, virtualAccounts, firstOfMonth);
+                balanceService.calculateBalanceAt(transactions, virtualAccounts,
+                        underlyingAccount, firstOfMonth);
 
         Balance transactionsWithAlien = new Balance(BigDecimal.ZERO, BigDecimal.ZERO);
 
@@ -46,7 +43,8 @@ public class TransactionListService {
 
         transactions.stream().filter(transactionInMonthPredicate).forEach(transaction -> {
             TransactionListElement transactionListElement =
-                    createTransactionElement(transaction, virtualAccounts, balance);
+                    createTransactionElement(transaction, virtualAccounts, underlyingAccount,
+                            balance);
             updateAlienTransaction(transactionsWithAlien, transaction, transactionListElement);
             transactionList.add(transactionListElement);
 
@@ -82,9 +80,13 @@ public class TransactionListService {
 
     public TransactionListElement createTransactionElement(Transaction transaction,
                                                            List<VirtualAccount> virtualAccounts,
+                                                           RealAccount underlyingAccount,
                                                            Balance accountBalance) {
         BigDecimal amount = BigDecimal.ZERO;
         BigDecimal budgetedAmount = BigDecimal.ZERO;
+        EffectiveAmountFunction effectiveAmountFunction = new EffectiveAmountFunction();
+        BudgetedAmountFunction budgetedAmountFunction =
+                new BudgetedAmountFunction(underlyingAccount.isPrebudgetedAccount());
         if (virtualAccounts.contains(transaction.getDebitedAccount())) {
             amount = transaction.getEffectiveAmount();
             budgetedAmount = transaction.getBudgetedAmount();

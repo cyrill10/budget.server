@@ -31,10 +31,11 @@ public class VirtualAccount implements Comparable<VirtualAccount> {
 
     private static BiPredicate<Transaction, LocalDate> noFilter = (transaction, date) -> true;
 
-    private static BiPredicate<Transaction, LocalDate> onlyLastMonthFilter = (transaction, date) -> {
-        LocalDate firstOfLastMonth = date.minusMonths(1);
-        return !transaction.getDate().isBefore(firstOfLastMonth);
-    };
+    private static BiPredicate<Transaction, LocalDate> onlyLastMonthFilter =
+            (transaction, date) -> {
+                LocalDate firstOfLastMonth = date.minusMonths(1);
+                return !transaction.getDate().isBefore(firstOfLastMonth);
+            };
 
     @Override
     public int compareTo(VirtualAccount o) {
@@ -49,7 +50,7 @@ public class VirtualAccount implements Comparable<VirtualAccount> {
     }
 
     public Balance getInitialBalance() {
-        if (this.getUnderlyingAccount().getAccountType().isAlienAccount() || this.isPrebudgetedAccount()) {
+        if (this.getUnderlyingAccount().getAccountType().isAlienAccount()) {
             return new Balance(BigDecimal.ZERO, BigDecimal.ZERO);
         }
         return new Balance(getBalance(), getBalance());

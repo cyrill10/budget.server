@@ -36,21 +36,27 @@ class OverviewIT extends AbstractIT {
 
         String mills2022May1 = "1651363200000";
         JSONArray expectedJson = new JSONArray(JsonPath
-            .from(TestUtils.loadFileAsString("json/overview.json"))
-            .getList(""));
+                .from(TestUtils.loadFileAsString("json/overview.json"))
+                .getList(""));
 
         //act + assert
-        JSONArray response = new JSONArray(given().headers(getAuthHeader()).contentType(ContentType.JSON)
-                                                  .when()
-                                                  .param("dateLong", mills2022May1)
-                                                  .get("/budget/overview/list/")
-                                                  .then()
-                                                  .statusCode(HttpStatus.SC_OK)
-                                                  .extract().jsonPath().getList(""));
+        JSONArray response =
+                new JSONArray(given().headers(getAuthHeader()).contentType(ContentType.JSON)
+                        .when()
+                        .param("dateLong", mills2022May1)
+                        .get("/budget/overview/list/")
+                        .then()
+                        .statusCode(HttpStatus.SC_OK)
+                        .extract().jsonPath().getList(""));
 
         JSONCompareResult compareResult = JSONCompare.compareJSON(expectedJson,
-            response,
-            JSONCompareMode.LENIENT);
+                response,
+                JSONCompareMode.LENIENT);
+        compareResult.getFieldFailures()
+                .forEach(fieldComparisonFailure -> System.out.println("Failed " +
+                        fieldComparisonFailure.getField() + " Expected: " +
+                        fieldComparisonFailure.getExpected() + " Actual: " +
+                        fieldComparisonFailure.getActual()));
         assertTrue(compareResult.passed());
     }
 }

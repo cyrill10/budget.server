@@ -77,7 +77,8 @@ public class TransactionService {
 
 
         return transactionListService.getTransactionListElementsForMonth(
-                allTransactionsForAccount, List.of(virtualAccount), date);
+                allTransactionsForAccount, List.of(virtualAccount),
+                virtualAccount.getUnderlyingAccount(), date);
     }
 
     public List<TransactionListElement> getAllTransactionsForMonthAndRealAccount(
@@ -94,6 +95,10 @@ public class TransactionService {
 
         return transactionListService.getTransactionListElementsForMonth(
                 allTransactionsForRealAccount,
-                virtualAccounts, date);
+                virtualAccounts,
+                virtualAccounts.stream()
+                        .map(VirtualAccount::getUnderlyingAccount)
+                        .findAny()
+                        .orElseThrow(), date);
     }
 }

@@ -16,6 +16,10 @@ public class Balance {
         this(BigDecimal.ZERO, BigDecimal.ZERO);
     }
 
+    public Balance(Balance copyBalance) {
+        this(copyBalance.getEffective(), copyBalance.getBudgeted());
+    }
+
 
     public void add(BigDecimal effective, BigDecimal budgeted) {
         this.effective = this.effective.add(effective);
@@ -29,7 +33,9 @@ public class Balance {
 
     public Balance add(Balance balance) {
         this.effective = this.effective.add(balance.effective);
-        this.budgeted = this.budgeted.add(balance.budgeted);
+        if (this.budgeted != null && balance.budgeted != null) {
+            this.budgeted = this.budgeted.add(balance.budgeted);
+        }
         return this;
     }
 }

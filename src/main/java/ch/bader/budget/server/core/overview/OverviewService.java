@@ -1,6 +1,6 @@
 package ch.bader.budget.server.core.overview;
 
-import ch.bader.budget.server.core.calculation.OverviewCalculator;
+import ch.bader.budget.server.core.calculation.OverviewCalculationService;
 import ch.bader.budget.server.domain.OverviewElement;
 import ch.bader.budget.server.domain.RealAccount;
 import ch.bader.budget.server.domain.Transaction;
@@ -16,28 +16,28 @@ import java.util.Map;
 @Service
 public class OverviewService {
 
-
     private final RealAccountAdapter realAccountAdapter;
 
     private final TransactionAdapter transactionAdapter;
 
+    private final OverviewCalculationService overviewCalculationService;
+
     public OverviewService(RealAccountAdapter realAccountAdapter,
-                           TransactionAdapter transactionAdapter) {
+                           TransactionAdapter transactionAdapter,
+                           OverviewCalculationService overviewCalculationService) {
         this.realAccountAdapter = realAccountAdapter;
         this.transactionAdapter = transactionAdapter;
+        this.overviewCalculationService = overviewCalculationService;
     }
 
     public List<OverviewElement> getAllTransactions(LocalDate date) {
         LocalDate firstOfNextMonth = date.plusMonths(1);
         Map<RealAccount, List<VirtualAccount>> accountMap = realAccountAdapter.getAccountMap();
-        List<Transaction> allTransactions = transactionAdapter.getAllTransactionsUntilDate(firstOfNextMonth);
-        List<Transaction> allTransactionsTillEndOfYear = transactionAdapter.getAllTransactionInInterval(
-                firstOfNextMonth,
-                firstOfNextMonth.withMonth(1).withDayOfMonth(1).plusYears(1));
+        List<Transaction> allTransactionsTilEndOfYear =
+                transactionAdapter.getAllTransactionsUntilDate(
+                        firstOfNextMonth.withMonth(1).withDayOfMonth(1).plusYears(1));
 
-        return OverviewCalculator.getOverviewForMonth(accountMap,
-                allTransactions,
-                allTransactionsTillEndOfYear,
-                firstOfNextMonth);
+        return overviewCalculationService.calculateOverview(accountMap,
+                allTransactionsTilEndOfYear, date);
     }
 }
