@@ -1,4 +1,4 @@
-package ch.bader.budget.server.core.calculation.implementation.function;
+package ch.bader.budget.server.core.calculation.function;
 
 import ch.bader.budget.server.domain.Transaction;
 import lombok.AllArgsConstructor;

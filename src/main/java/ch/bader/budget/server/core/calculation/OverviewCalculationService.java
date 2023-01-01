@@ -1,6 +1,6 @@
 package ch.bader.budget.server.core.calculation;
 
-import ch.bader.budget.server.core.calculation.implementation.predicate.OverviewRealAccountPredicate;
+import ch.bader.budget.server.core.calculation.predicate.OverviewRealAccountPredicate;
 import ch.bader.budget.server.domain.OverviewElement;
 import ch.bader.budget.server.domain.RealAccount;
 import ch.bader.budget.server.domain.Transaction;

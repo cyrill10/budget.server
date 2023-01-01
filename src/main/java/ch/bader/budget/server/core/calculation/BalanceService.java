@@ -1,7 +1,7 @@
 package ch.bader.budget.server.core.calculation;
 
-import ch.bader.budget.server.core.calculation.implementation.function.BudgetedAmountFunction;
-import ch.bader.budget.server.core.calculation.implementation.function.EffectiveAmountFunction;
+import ch.bader.budget.server.core.calculation.function.BudgetedAmountFunction;
+import ch.bader.budget.server.core.calculation.function.EffectiveAmountFunction;
 import ch.bader.budget.server.domain.RealAccount;
 import ch.bader.budget.server.domain.Transaction;
 import ch.bader.budget.server.domain.VirtualAccount;
