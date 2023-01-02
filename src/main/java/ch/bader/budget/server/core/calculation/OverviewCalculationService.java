@@ -59,15 +59,15 @@ public class OverviewCalculationService {
 
         virtualAccounts.forEach(virtualAccount -> {
                     if (virtualAccount.isPrebudgetedAccount()) {
-                        addBalancePrebudgetedAccount(realAccount, allTransactionsTillDate,
-                                firstOfMonth, firstOfNextMonth, realAccountBalanceEndOfMonth,
-                                realAccountBalanceEndOfYear, overviewElements, virtualAccount);
+                        addBalancePrebudgetedAccount(virtualAccount, allTransactionsTillDate,
+                                firstOfMonth, realAccountBalanceEndOfMonth,
+                                realAccountBalanceEndOfYear, overviewElements);
                     } else {
-                        addBalanceNormalAccount(realAccount, allTransactionsTillDate,
+                        addBalanceNormalAccount(virtualAccount, allTransactionsTillDate,
                                 allTransactionsTillEndOfYear,
                                 firstOfNextMonth, realAccountBalanceEndOfMonth,
                                 realAccountBalanceEndOfYear,
-                                overviewElements, virtualAccount);
+                                overviewElements);
                     }
                 }
         );
@@ -83,23 +83,22 @@ public class OverviewCalculationService {
         return overviewElements;
     }
 
-    private void addBalanceNormalAccount(RealAccount realAccount,
+    private void addBalanceNormalAccount(VirtualAccount virtualAccount,
                                          List<Transaction> allTransactionsTillDate,
                                          List<Transaction> allTransactionsTillEndOfYear,
                                          LocalDate firstOfNextMonth,
                                          Balance realAccountBalanceEndOfMonth,
                                          Balance realAccountBalanceEndOfYear,
-                                         LinkedList<OverviewElement> overviewElements,
-                                         VirtualAccount virtualAccount) {
+                                         LinkedList<OverviewElement> overviewElements) {
         Balance balanceEndOfTheMonth =
                 balanceService.calculateBalanceAt(allTransactionsTillDate,
-                        List.of(virtualAccount), realAccount,
+                        List.of(virtualAccount), virtualAccount.getUnderlyingAccount(),
                         firstOfNextMonth);
 
         Balance balanceEndOfYear =
                 balanceService.calculateBalanceWithinRange(balanceEndOfTheMonth,
                         allTransactionsTillEndOfYear,
-                        List.of(virtualAccount), realAccount,
+                        List.of(virtualAccount), virtualAccount.getUnderlyingAccount(),
                         firstOfNextMonth,
                         firstOfNextMonth.withMonth(1).withDayOfMonth(1).plusYears(1));
 
@@ -115,21 +114,20 @@ public class OverviewCalculationService {
                 virtualAccount.getId()));
     }
 
-    private void addBalancePrebudgetedAccount(RealAccount realAccount,
+    private void addBalancePrebudgetedAccount(VirtualAccount virtualAccount,
                                               List<Transaction> allTransactionsTillDate,
                                               LocalDate firstOfMonth,
-                                              LocalDate firstOfNextMonth,
                                               Balance realAccountBalanceEndOfMonth,
                                               Balance realAccountBalanceEndOfYear,
-                                              LinkedList<OverviewElement> overviewElements,
-                                              VirtualAccount virtualAccount) {
+                                              LinkedList<OverviewElement> overviewElements) {
         Balance balanceBeginningOfMonth =
                 new Balance();
 
         Balance balanceEndOfTheMonth =
                 balanceService.calculateBalanceWithinRange(balanceBeginningOfMonth,
-                        allTransactionsTillDate, List.of(virtualAccount), realAccount,
-                        firstOfMonth, firstOfNextMonth);
+                        allTransactionsTillDate, List.of(virtualAccount),
+                        virtualAccount.getUnderlyingAccount(),
+                        firstOfMonth, firstOfMonth.plusMonths(1));
 
         Balance differenceBudgetedAndEffective = new Balance(balanceEndOfTheMonth.getBudgeted()
                 .subtract(balanceEndOfTheMonth.getEffective()), null);
