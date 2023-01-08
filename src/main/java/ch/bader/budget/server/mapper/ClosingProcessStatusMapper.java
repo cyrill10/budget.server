@@ -5,7 +5,7 @@ import ch.bader.budget.server.boundary.dto.ValueEnumDto;
 import ch.bader.budget.server.type.ClosingProcessStatus;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface ClosingProcessStatusMapper {
 
     ValueEnumDbo mapToDbo(ClosingProcessStatus domain);

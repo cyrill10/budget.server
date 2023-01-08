@@ -6,7 +6,7 @@ import ch.bader.budget.server.domain.VirtualAccount;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = RealAccountMapper.class)
+@Mapper(uses = RealAccountMapper.class)
 public interface VirtualAccountMapper {
 
     VirtualAccount mapToDomain(VirtualAccountBoundaryDto dto);

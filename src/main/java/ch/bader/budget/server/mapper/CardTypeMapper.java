@@ -3,7 +3,7 @@ package ch.bader.budget.server.mapper;
 import ch.bader.budget.server.type.CardType;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface CardTypeMapper {
 
     default String mapToString(CardType domain) {

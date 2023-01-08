@@ -5,7 +5,7 @@ import ch.bader.budget.server.boundary.dto.ValueEnumDto;
 import ch.bader.budget.server.type.TransactionIndication;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface TransactionIndicationMapper {
 
     ValueEnumDbo mapToDbo(TransactionIndication domain);

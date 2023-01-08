@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 
 import java.time.YearMonth;
 
-@Mapper(componentModel = "spring", uses = {CardTypeMapper.class, ClosingProcessMapper.class}, imports = YearMonth.class)
+@Mapper(uses = {CardTypeMapper.class, ClosingProcessMapper.class}, imports = YearMonth.class)
 public interface ScannedTransactionMapper {
 
     ScannedTransactionBoundaryDto mapToDto(ScannedTransaction domain);

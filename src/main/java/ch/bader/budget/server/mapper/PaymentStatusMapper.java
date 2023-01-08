@@ -5,7 +5,7 @@ import ch.bader.budget.server.boundary.dto.ValueEnumDto;
 import ch.bader.budget.server.type.PaymentStatus;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface PaymentStatusMapper {
 
     ValueEnumDbo mapToDbo(PaymentStatus domain);

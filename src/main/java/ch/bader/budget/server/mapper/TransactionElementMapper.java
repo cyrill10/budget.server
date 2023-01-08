@@ -5,7 +5,7 @@ import ch.bader.budget.server.domain.TransactionListElement;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface TransactionElementMapper {
 
     @Mapping(target = "amount", source = "effectiveAmount")

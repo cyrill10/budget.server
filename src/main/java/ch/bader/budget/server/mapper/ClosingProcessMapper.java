@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 
 import java.time.YearMonth;
 
-@Mapper(componentModel = "spring", uses = ClosingProcessStatusMapper.class, imports = YearMonth.class)
+@Mapper(uses = ClosingProcessStatusMapper.class, imports = YearMonth.class)
 public interface ClosingProcessMapper {
 
     @Mapping(target = "year", expression = "java(domain.getYearMonth().getYear())")

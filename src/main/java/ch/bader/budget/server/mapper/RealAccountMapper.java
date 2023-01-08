@@ -5,7 +5,7 @@ import ch.bader.budget.server.boundary.dto.RealAccountBoundaryDto;
 import ch.bader.budget.server.domain.RealAccount;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = AccountTypeMapper.class)
+@Mapper(uses = AccountTypeMapper.class)
 public interface RealAccountMapper {
 
     RealAccount mapToDomain(RealAccountBoundaryDto dto);
