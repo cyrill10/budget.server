@@ -23,12 +23,16 @@ public class TransactionAdapterImpl implements TransactionAdapter {
 
     private final VirtualAccountAdapter virtualAccountAdapter;
 
+    private final MonthGenerator monthGenerator;
+
     public TransactionAdapterImpl(TransactionMapper transactionMapper,
                                   TransactionMongoRepository transactionMongoRepository,
-                                  VirtualAccountAdapter virtualAccountAdapter) {
+                                  VirtualAccountAdapter virtualAccountAdapter,
+                                  MonthGenerator monthGenerator) {
         this.transactionMapper = transactionMapper;
         this.transactionMongoRepository = transactionMongoRepository;
         this.virtualAccountAdapter = virtualAccountAdapter;
+        this.monthGenerator = monthGenerator;
     }
 
 
@@ -61,8 +65,10 @@ public class TransactionAdapterImpl implements TransactionAdapter {
     public Transaction getTransactionById(String id) {
         TransactionDbo transactionDbo = transactionMongoRepository.findById(id).orElseThrow();
         Transaction transaction = transactionMapper.mapToDomain(transactionDbo);
-        VirtualAccount debitedAccount = virtualAccountAdapter.getAccountById(transactionDbo.getDebitedAccountId());
-        VirtualAccount creditedAccount = virtualAccountAdapter.getAccountById(transactionDbo.getCreditedAccountId());
+        VirtualAccount debitedAccount =
+                virtualAccountAdapter.getAccountById(transactionDbo.getDebitedAccountId());
+        VirtualAccount creditedAccount =
+                virtualAccountAdapter.getAccountById(transactionDbo.getCreditedAccountId());
         transaction.setDebitedAccount(debitedAccount);
         transaction.setCreditedAccount(creditedAccount);
         return transaction;
@@ -70,8 +76,9 @@ public class TransactionAdapterImpl implements TransactionAdapter {
 
     @Override
     public List<Transaction> getAllTransactions(LocalDate date) {
-        List<TransactionDbo> transactionDbos = transactionMongoRepository.findAllByDateBetween(date.minusDays(1),
-                date.plusMonths(1));
+        List<TransactionDbo> transactionDbos =
+                transactionMongoRepository.findAllByDateBetween(date.minusDays(1),
+                        date.plusMonths(1));
 
         return addAccountsAndTransform(transactionDbos);
     }
@@ -79,14 +86,16 @@ public class TransactionAdapterImpl implements TransactionAdapter {
     @Override
     public List<Transaction> getAllTransactionsUntilDate(LocalDate unitlExclusive) {
         List<TransactionDbo> transactionDbos = transactionMongoRepository
-                .findAllByDateBetween(MonthGenerator.STARTDATE.minusDays(1), unitlExclusive);
+                .findAllByDateBetween(monthGenerator.getStartDate().minusDays(1),
+                        unitlExclusive);
 
         return addAccountsAndTransform(transactionDbos);
 
     }
 
     @Override
-    public List<Transaction> getAllTransactionInInterval(LocalDate fromInclusive, LocalDate toExclusive) {
+    public List<Transaction> getAllTransactionInInterval(LocalDate fromInclusive,
+                                                         LocalDate toExclusive) {
         List<TransactionDbo> transactionDbos = transactionMongoRepository
                 .findAllByDateBetween(fromInclusive.minusDays(1), toExclusive);
 
@@ -95,22 +104,26 @@ public class TransactionAdapterImpl implements TransactionAdapter {
     }
 
     @Override
-    public List<Transaction> getAllTransactionsForVirtualAccountUntilDate(String virtualAccountId,
-                                                                          LocalDate unitlExclusive) {
-        List<TransactionDbo> transactionDbos = transactionMongoRepository.findAllByDateBetweenAndVirtualAccountId(
-                MonthGenerator.STARTDATE.minusDays(1),
-                unitlExclusive,
-                List.of(virtualAccountId));
+    public List<Transaction> getAllTransactionsForVirtualAccountUntilDate(
+            String virtualAccountId,
+            LocalDate unitlExclusive) {
+        List<TransactionDbo> transactionDbos =
+                transactionMongoRepository.findAllByDateBetweenAndVirtualAccountId(
+                        monthGenerator.getStartDate().minusDays(1),
+                        unitlExclusive,
+                        List.of(virtualAccountId));
         return addAccountsAndTransform(transactionDbos);
     }
 
     @Override
-    public List<Transaction> getAllTransactionsForVirtualAccountsUntilDate(List<String> accountIds,
-                                                                           LocalDate unitlExclusive) {
-        List<TransactionDbo> transactionDbos = transactionMongoRepository.findAllByDateBetweenAndVirtualAccountId(
-                MonthGenerator.STARTDATE.minusDays(1),
-                unitlExclusive,
-                accountIds);
+    public List<Transaction> getAllTransactionsForVirtualAccountsUntilDate(
+            List<String> accountIds,
+            LocalDate unitlExclusive) {
+        List<TransactionDbo> transactionDbos =
+                transactionMongoRepository.findAllByDateBetweenAndVirtualAccountId(
+                        monthGenerator.getStartDate().minusDays(1),
+                        unitlExclusive,
+                        accountIds);
         return addAccountsAndTransform(transactionDbos);
     }
 
@@ -133,7 +146,8 @@ public class TransactionAdapterImpl implements TransactionAdapter {
     }
 
     private List<Transaction> addAccountsAndTransform(List<TransactionDbo> transactionDbos) {
-        List<VirtualAccount> virtualAccounts = virtualAccountAdapter.getAllVirtualAccountsWithTheirUnderlyingAccount();
+        List<VirtualAccount> virtualAccounts =
+                virtualAccountAdapter.getAllVirtualAccountsWithTheirUnderlyingAccount();
 
         return transactionDbos
                 .stream()
