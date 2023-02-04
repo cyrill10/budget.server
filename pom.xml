@@ -16,9 +16,7 @@
     <description>Budget Server</description>
 
     <properties>
-        <java.version>11</java.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <java.version>17</java.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
         <lombok.version>1.18.26</lombok.version>
         <org.testcontainers.version>1.17.6</org.testcontainers.version>
