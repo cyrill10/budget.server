@@ -13,8 +13,14 @@ import java.util.List;
 public class DateRestResource {
 
 
+    private final MonthGenerator monthGenerator;
+
+    public DateRestResource(MonthGenerator monthGenerator) {
+        this.monthGenerator = monthGenerator;
+    }
+
     @GetMapping(path = "/month/list")
     public List<LocalDate> getAllMonths() {
-        return MonthGenerator.getallMonths();
+        return monthGenerator.getallMonths();
     }
 }

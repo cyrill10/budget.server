@@ -1,6 +1,5 @@
 package ch.bader.budget.server.integration;
 
-import ch.bader.budget.server.boundary.time.MonthGenerator;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import org.apache.http.HttpStatus;
@@ -24,21 +23,20 @@ class DateIT {
     @Test
     void shouldReturnMonths() {
         // Given
-
-        LocalDate firstDay = MonthGenerator.STARTDATE;
+        LocalDate firstDay = LocalDate.of(2021, 12, 1);
         LocalDate expectedLastDate = LocalDate.now().plusYears(1).withDayOfMonth(1);
 
         long diff = ChronoUnit.MONTHS.between(
-            firstDay,
-            expectedLastDate);
+                firstDay,
+                expectedLastDate);
         // When & Then
         JsonPath response = given().headers(getAuthHeader()).contentType(ContentType.JSON)
-                                   .when()
-                                   .get("/budget/date/month/list")
-                                   .then()
-                                   .statusCode(HttpStatus.SC_OK)
-                                   .body("[0]", equalTo(firstDay.toString()))
-                                   .extract().jsonPath();
+                .when()
+                .get("/budget/date/month/list")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("[0]", equalTo(firstDay.toString()))
+                .extract().jsonPath();
 
         List<String> list = response.get("$");
         assertEquals(diff, list.size());
