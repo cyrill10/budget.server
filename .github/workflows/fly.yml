@@ -1,0 +1,23 @@
+name: Fly Deploy
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+jobs:
+  deploy:
+    name: Deploy app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get git tag
+        id: tag
+        uses: dawidd6/action-get-tag@v1
+
+      - name: Update version in pom.xml
+        run: mvn -B versions:set -DnewVersion=${{ steps.tag.outputs.tag }} -DgenerateBackupPoms=false
+
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
